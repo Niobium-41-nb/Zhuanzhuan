@@ -42,6 +42,34 @@
       </div>
     </section>
 
+    <!-- ===== Announcements ===== -->
+    <section class="section" v-if="announcements.length">
+      <div class="notice-board">
+        <div class="notice-tape"></div>
+        <span class="notice-label">公告</span>
+        <div class="notice-track-wrap">
+          <div class="notice-track">
+            <div
+              v-for="item in announcements"
+              :key="item.id"
+              class="notice-item"
+            >
+              <span class="notice-title">{{ item.title }}</span>
+              <span class="notice-date">{{ formatTime(item.createdAt) }}</span>
+            </div>
+            <div
+              v-for="item in announcements"
+              :key="'dup-' + item.id"
+              class="notice-item"
+            >
+              <span class="notice-title">{{ item.title }}</span>
+              <span class="notice-date">{{ formatTime(item.createdAt) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== Categories ===== -->
     <section class="section">
       <div class="section-header">
@@ -108,6 +136,7 @@ const router = useRouter()
 const keyword = ref('')
 const activeCategory = ref('0')
 const categories = ref<any[]>([])
+const announcements = ref<any[]>([])
 const products = ref<any[]>([])
 const loaded = ref(false)
 
@@ -130,6 +159,10 @@ onMounted(async () => {
   try {
     const catRes = await productApi.getCategories()
     categories.value = catRes.data || []
+  } catch (_) {}
+  try {
+    const annRes: any = await indexApi.getAnnouncements()
+    announcements.value = annRes.data || []
   } catch (_) {}
   try {
     const statRes: any = await indexApi.getStatistics()
@@ -175,6 +208,111 @@ function formatTime(t: string) {
 </script>
 
 <style scoped>
+/* ===== Bulletin Board (Announcements) ===== */
+.notice-board {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #F8F5F0;
+  border: 1px solid #E8E0D0;
+  border-radius: 6px;
+  padding: 12px 20px 12px 24px;
+  margin-bottom: 36px;
+  transition: box-shadow 0.3s;
+}
+
+.notice-board:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Signature: green "tape" strip on the left edge */
+.notice-tape {
+  position: absolute;
+  left: -1px;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  background: var(--c-primary);
+  border-radius: 2px;
+  transition: top 0.3s, bottom 0.3s;
+}
+
+.notice-board:hover .notice-tape {
+  top: 6px;
+  bottom: 14px;
+}
+
+.notice-label {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--c-primary);
+  opacity: 0.5;
+  padding-right: 4px;
+  border-right: 1px solid #E0D8C8;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.notice-track-wrap {
+  flex: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+}
+
+.notice-track {
+  display: flex;
+  width: max-content;
+  animation: noticeScroll 40s linear infinite;
+}
+
+.notice-board:hover .notice-track {
+  animation-play-state: paused;
+}
+
+@keyframes noticeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.notice-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 6px 20px;
+  cursor: default;
+  border-right: 1px solid #E8E0D0;
+  transition: background 0.2s;
+}
+
+.notice-item:last-child { border-right: none; }
+
+.notice-item:hover {
+  background: rgba(45,106,79,0.05);
+}
+
+.notice-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--c-primary-dark);
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notice-date {
+  font-size: 12px;
+  color: #9C8F7D;
+  flex-shrink: 0;
+}
+
 /* ===== Hero Section ===== */
 .hero {
   position: relative;

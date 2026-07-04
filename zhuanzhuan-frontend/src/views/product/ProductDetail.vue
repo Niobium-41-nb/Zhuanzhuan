@@ -61,6 +61,10 @@
         </div>
 
         <div class="product-actions">
+          <button class="btn-cart" @click="addToCart" :disabled="product.status !== '在售'">
+            <el-icon><ShoppingCart /></el-icon>
+            {{ product.status === '在售' ? '加入购物车' : '已售罄' }}
+          </button>
           <button class="btn-buy" @click="buyNow" :disabled="product.status !== '在售'">
             <span class="btn-label">{{ product.status === '在售' ? '立即购买' : '已售罄' }}</span>
             <span class="btn-sub" v-if="product.status === '在售'">与卖家沟通后下单</span>
@@ -102,8 +106,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Star, StarFilled } from '@element-plus/icons-vue'
-import { productApi, orderApi } from '@/api'
+import { Star, StarFilled, ShoppingCart } from '@element-plus/icons-vue'
+import { productApi, orderApi, cartApi } from '@/api'
 import { isLoggedIn } from '@/utils/auth'
 import { getCategoryCover } from '@/utils/productImage'
 
@@ -155,6 +159,14 @@ async function buyNow() {
     const res = await orderApi.create({ productId: product.value.id })
     ElMessage.success('下单成功')
     router.push(`/order/${res.data.orderId}`)
+  } catch (_) {}
+}
+
+async function addToCart() {
+  if (!isLoggedIn()) { router.push('/login'); return }
+  try {
+    await cartApi.add({ productId: product.value.id })
+    ElMessage.success('已加入购物车')
   } catch (_) {}
 }
 </script>
@@ -322,6 +334,36 @@ async function buyNow() {
 .product-actions {
   display: flex;
   gap: 12px;
+}
+
+.btn-cart {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 20px;
+  background: var(--c-primary-bg);
+  color: var(--c-primary);
+  border: 1px solid var(--c-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.btn-cart:hover:not(:disabled) {
+  background: var(--c-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.25);
+}
+
+.btn-cart:disabled {
+  border-color: var(--c-muted);
+  color: var(--c-muted);
+  background: transparent;
+  cursor: not-allowed;
 }
 
 .btn-buy {
