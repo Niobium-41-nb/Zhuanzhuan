@@ -12,42 +12,17 @@
         <h1 class="auth-title">欢迎回来</h1>
         <p class="auth-desc">登录你的转转账号</p>
       </div>
-
-      <el-tabs v-model="loginMode" class="auth-tabs" @tab-change="resetForm">
-        <el-tab-pane label="密码登录" name="password">
-          <el-form ref="formRef" :model="form" :rules="rules" label-width="0" class="auth-form">
-            <el-form-item prop="account">
-              <el-input v-model="form.account" placeholder="用户名 / 邮箱 / 手机号" size="large" :prefix-icon="User" />
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input v-model="form.password" type="password" placeholder="密码" size="large" show-password :prefix-icon="Lock" />
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="large" @click="handleLogin" :loading="loading" class="auth-submit">登录</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-
-        <el-tab-pane label="验证码登录" name="code">
-          <el-form ref="codeFormRef" :model="codeForm" :rules="codeRules" label-width="0" class="auth-form">
-            <el-form-item prop="phone">
-              <el-input v-model="codeForm.phone" placeholder="手机号" size="large" :prefix-icon="Iphone" maxlength="11" />
-            </el-form-item>
-            <el-form-item prop="code">
-              <div class="code-row">
-                <el-input v-model="codeForm.code" placeholder="验证码" size="large" :prefix-icon="Key" class="code-input" />
-                <el-button class="code-btn" :disabled="codeSending" @click="sendSmsCode">
-                  {{ codeBtnText }}
-                </el-button>
-              </div>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="large" @click="handleCodeLogin" :loading="codeLoading" class="auth-submit">登录</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
-
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="0" class="auth-form">
+        <el-form-item prop="account">
+          <el-input v-model="form.account" placeholder="用户名 / 邮箱 / 手机号" size="large" :prefix-icon="User" />
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input v-model="form.password" type="password" placeholder="密码" size="large" show-password :prefix-icon="Lock" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="large" @click="handleLogin" :loading="loading" class="auth-submit">登录</el-button>
+        </el-form-item>
+      </el-form>
       <div class="auth-footer">
         还没有账号？<router-link to="/register">立即注册</router-link>
       </div>
@@ -59,16 +34,11 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { User, Lock, Iphone, Key } from '@element-plus/icons-vue'
+import { User, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
-import { userApi } from '@/api'
 
 const router = useRouter()
 const userStore = useUserStore()
-
-const loginMode = ref('password')
-
-// === 密码登录 ===
 const formRef = ref()
 const loading = ref(false)
 const form = reactive({ account: '', password: '' })
@@ -88,68 +58,6 @@ async function handleLogin() {
   } catch (_) {} finally {
     loading.value = false
   }
-}
-
-// === 验证码登录 ===
-const codeFormRef = ref()
-const codeLoading = ref(false)
-const codeSending = ref(false)
-const codeBtnText = ref('获取验证码')
-const codeForm = reactive({ phone: '', code: '' })
-const codeRules = {
-  phone: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
-    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }
-  ],
-  code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-}
-
-async function sendSmsCode() {
-  if (!/^1[3-9]\d{9}$/.test(codeForm.phone)) {
-    ElMessage.warning('请输入正确的手机号')
-    return
-  }
-  codeSending.value = true
-  try {
-    await userApi.sendCode({ target: codeForm.phone, type: 'sms' })
-    ElMessage.success('验证码已发送')
-    let count = 60
-    codeBtnText.value = `${count}s`
-    const timer = setInterval(() => {
-      count--
-      codeBtnText.value = `${count}s`
-      if (count <= 0) {
-        clearInterval(timer)
-        codeBtnText.value = '获取验证码'
-        codeSending.value = false
-      }
-    }, 1000)
-  } catch (_) {
-    codeSending.value = false
-    codeBtnText.value = '获取验证码'
-  }
-}
-
-async function handleCodeLogin() {
-  const valid = await codeFormRef.value.validate().catch(() => false)
-  if (!valid) return
-  codeLoading.value = true
-  try {
-    await userStore.loginByPhone({ account: codeForm.phone, code: codeForm.code })
-    ElMessage.success('登录成功')
-    router.push('/')
-  } catch (_) {} finally {
-    codeLoading.value = false
-  }
-}
-
-function resetForm() {
-  form.account = ''
-  form.password = ''
-  codeForm.phone = ''
-  codeForm.code = ''
-  formRef.value?.clearValidate()
-  codeFormRef.value?.clearValidate()
 }
 </script>
 
@@ -247,41 +155,6 @@ function resetForm() {
   height: 48px;
   font-size: 16px;
   font-weight: 600;
-  border-radius: var(--radius-sm);
-}
-
-.auth-tabs {
-  margin-bottom: 8px;
-}
-
-.auth-tabs :deep(.el-tabs__item) {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--c-text-secondary);
-}
-
-.auth-tabs :deep(.el-tabs__item.is-active) {
-  color: var(--c-primary);
-}
-
-.auth-tabs :deep(.el-tabs__active-bar) {
-  background: var(--c-primary);
-}
-
-.code-row {
-  display: flex;
-  gap: 12px;
-}
-
-.code-input {
-  flex: 1;
-}
-
-.code-btn {
-  flex-shrink: 0;
-  width: 120px;
-  height: 48px;
-  font-size: 14px;
   border-radius: var(--radius-sm);
 }
 

@@ -1,0 +1,575 @@
+{
+  "info": {
+    "name": "转转 - 校园二手交易平台 API",
+    "description": "转转后端接口完整测试集合\n\n## 使用说明\n1. 先运行 `POST /api/v1/user/register` 注册用户\n2. 再运行 `POST /api/v1/user/login` 获取 token\n3. 在集合变量 `accessToken` 中会自动保存 token\n4. 后续需要认证的接口会自动携带 token\n\n## 环境变量\n- `{{baseUrl}}` = http://localhost:8080/api/v1\n- `{{accessToken}}` = 登录后自动设置\n- `{{refreshToken}}` = 用于刷新 token",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" },
+    { "key": "userId", "value": "1", "type": "string" },
+    { "key": "productId", "value": "1", "type": "string" },
+    { "key": "orderId", "value": "1", "type": "string" },
+    { "key": "addressId", "value": "1", "type": "string" },
+    { "key": "cartId", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "🏠 首页",
+      "item": [
+        {
+          "name": "首页推荐",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Status 200', () => pm.response.to.have.status(200))"], "type": "text/javascript" } }],
+          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/index/recommend", "host": ["{{baseUrl}}"], "path": ["index", "recommend"] } }
+        },
+        {
+          "name": "首页统计",
+          "event": [{ "listen": "test", "script": { "exec": ["pm.test('Status 200', () => pm.response.to.have.status(200))"], "type": "text/javascript" } }],
+          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/index/statistics", "host": ["{{baseUrl}}"], "path": ["index", "statistics"] } }
+        },
+        {
+          "name": "公告列表",
+          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/announcement/list", "host": ["{{baseUrl}}"], "path": ["announcement", "list"] } }
+        }
+      ]
+    },
+    {
+      "name": "👤 用户认证",
+      "item": [
+        {
+          "name": "发送邮箱验证码",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"target\": \"test@example.com\",\n  \"type\": \"register\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/code", "host": ["{{baseUrl}}"], "path": ["user", "code"] }
+          }
+        },
+        {
+          "name": "用户注册",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('注册成功', () => {",
+                "  const res = pm.response.json();",
+                "  pm.expect(res.code).to.eql(200);",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"Test123456\",\n  \"code\": \"123456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/register", "host": ["{{baseUrl}}"], "path": ["user", "register"] }
+          }
+        },
+        {
+          "name": "用户登录",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const res = pm.response.json();",
+                "if (res.code === 200 && res.data) {",
+                "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                "  pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
+                "  pm.collectionVariables.set('userId', String(res.data.user.userId));",
+                "}"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"account\": \"testuser\",\n  \"password\": \"Test123456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/login", "host": ["{{baseUrl}}"], "path": ["user", "login"] }
+          }
+        },
+        {
+          "name": "刷新 Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/refresh", "host": ["{{baseUrl}}"], "path": ["user", "refresh"] }
+          }
+        },
+        {
+          "name": "重置密码",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"target\": \"test@example.com\",\n  \"code\": \"123456\",\n  \"newPassword\": \"NewPass789\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/password/reset", "host": ["{{baseUrl}}"], "path": ["user", "password", "reset"] }
+          }
+        },
+        {
+          "name": "退出登录",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/user/logout", "host": ["{{baseUrl}}"], "path": ["user", "logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 用户信息",
+      "item": [
+        {
+          "name": "获取个人信息",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/user/info", "host": ["{{baseUrl}}"], "path": ["user", "info"] }
+          }
+        },
+        {
+          "name": "更新个人信息",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"nickname\": \"新昵称\",\n  \"bio\": \"这是一个测试用户\",\n  \"gender\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/user/info", "host": ["{{baseUrl}}"], "path": ["user", "info"] }
+          }
+        },
+        {
+          "name": "上传头像",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"avatar\": \"https://example.com/avatar.jpg\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/avatar", "host": ["{{baseUrl}}"], "path": ["user", "avatar"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📍 收货地址",
+      "item": [
+        {
+          "name": "获取地址列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/user/address", "host": ["{{baseUrl}}"], "path": ["user", "address"] }
+          }
+        },
+        {
+          "name": "新增地址",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": ["const res = pm.response.json();", "if (res.data) pm.collectionVariables.set('addressId', String(res.data.id));"],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"receiver\": \"张三\",\n  \"phone\": \"13800138000\",\n  \"province\": \"广东省\",\n  \"city\": \"广州市\",\n  \"district\": \"番禺区\",\n  \"detail\": \"大学城某某路100号\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/address", "host": ["{{baseUrl}}"], "path": ["user", "address"] }
+          }
+        },
+        {
+          "name": "更新地址",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"receiver\": \"李四\",\n  \"phone\": \"13900139000\",\n  \"detail\": \"大学城某某路200号\"\n}" },
+            "url": { "raw": "{{baseUrl}}/user/address/{{addressId}}", "host": ["{{baseUrl}}"], "path": ["user", "address", "{{addressId}}"] }
+          }
+        },
+        {
+          "name": "设为默认地址",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/user/address/{{addressId}}/default", "host": ["{{baseUrl}}"], "path": ["user", "address", "{{addressId}}", "default"] }
+          }
+        },
+        {
+          "name": "删除地址",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/user/address/{{addressId}}", "host": ["{{baseUrl}}"], "path": ["user", "address", "{{addressId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📦 商品",
+      "item": [
+        {
+          "name": "获取分类",
+          "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/category/list", "host": ["{{baseUrl}}"], "path": ["category", "list"] } }
+        },
+        {
+          "name": "商品列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/product/list?page=1&size=20", "host": ["{{baseUrl}}"], "path": ["product", "list"], "query": [{ "key": "page", "value": "1" }, { "key": "size", "value": "20" }] }
+          }
+        },
+        {
+          "name": "商品搜索（关键词）",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/product/list?keyword=手机&page=1&size=10", "host": ["{{baseUrl}}"], "path": ["product", "list"], "query": [{ "key": "keyword", "value": "手机" }, { "key": "page", "value": "1" }, { "key": "size", "value": "10" }] }
+          }
+        },
+        {
+          "name": "商品搜索（分类筛选）",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/product/list?categoryId=1&page=1&size=10", "host": ["{{baseUrl}}"], "path": ["product", "list"], "query": [{ "key": "categoryId", "value": "1" }, { "key": "page", "value": "1" }, { "key": "size", "value": "10" }] }
+          }
+        },
+        {
+          "name": "发布商品",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": ["const res = pm.response.json();", "if (res.data) pm.collectionVariables.set('productId', String(res.data.id));"],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"全新iPhone 15 Pro Max 256G\",\n  \"description\": \"全新未拆封，因为换手机了所以出掉\",\n  \"price\": 8999.00,\n  \"originalPrice\": 9999.00,\n  \"condition\": \"全新\",\n  \"categoryId\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/product", "host": ["{{baseUrl}}"], "path": ["product"] }
+          }
+        },
+        {
+          "name": "商品详情",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/product/{{productId}}", "host": ["{{baseUrl}}"], "path": ["product", "{{productId}}"] }
+          }
+        },
+        {
+          "name": "编辑商品",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"iPhone 15 Pro Max 256G 降价了\",\n  \"price\": 8499.00,\n  \"condition\": \"全新\",\n  \"categoryId\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/product/{{productId}}", "host": ["{{baseUrl}}"], "path": ["product", "{{productId}}"] }
+          }
+        },
+        {
+          "name": "切换收藏",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": {{productId}}\n}" },
+            "url": { "raw": "{{baseUrl}}/product/favorite", "host": ["{{baseUrl}}"], "path": ["product", "favorite"] }
+          }
+        },
+        {
+          "name": "收藏列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/product/favorite/list", "host": ["{{baseUrl}}"], "path": ["product", "favorite", "list"] }
+          }
+        },
+        {
+          "name": "更新商品状态",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"已下架\"\n}" },
+            "url": { "raw": "{{baseUrl}}/product/{{productId}}/status", "host": ["{{baseUrl}}"], "path": ["product", "{{productId}}", "status"] }
+          }
+        },
+        {
+          "name": "删除商品",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/product/{{productId}}", "host": ["{{baseUrl}}"], "path": ["product", "{{productId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛒 购物车",
+      "item": [
+        {
+          "name": "添加购物车",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": ["const res = pm.response.json();", "if (res.data) pm.collectionVariables.set('cartId', String(res.data.id));"],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": {{productId}},\n  \"quantity\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/cart", "host": ["{{baseUrl}}"], "path": ["cart"] }
+          }
+        },
+        {
+          "name": "购物车列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/cart/list", "host": ["{{baseUrl}}"], "path": ["cart", "list"] }
+          }
+        },
+        {
+          "name": "更新购物车",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"quantity\": 2,\n  \"selected\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/cart/{{cartId}}", "host": ["{{baseUrl}}"], "path": ["cart", "{{cartId}}"] }
+          }
+        },
+        {
+          "name": "删除购物车项",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/cart/{{cartId}}", "host": ["{{baseUrl}}"], "path": ["cart", "{{cartId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 订单",
+      "item": [
+        {
+          "name": "创建订单",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": ["const res = pm.response.json();", "if (res.data) pm.collectionVariables.set('orderId', String(res.data.orderId));"],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": {{productId}},\n  \"addressId\": {{addressId}}\n}" },
+            "url": { "raw": "{{baseUrl}}/order", "host": ["{{baseUrl}}"], "path": ["order"] }
+          }
+        },
+        {
+          "name": "订单列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/order/list?page=1&size=10&role=buyer", "host": ["{{baseUrl}}"], "path": ["order", "list"], "query": [{ "key": "page", "value": "1" }, { "key": "size", "value": "10" }, { "key": "role", "value": "buyer" }] }
+          }
+        },
+        {
+          "name": "订单详情",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/order/{{orderId}}", "host": ["{{baseUrl}}"], "path": ["order", "{{orderId}}"] }
+          }
+        },
+        {
+          "name": "取消订单",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/order/{{orderId}}/cancel", "host": ["{{baseUrl}}"], "path": ["order", "{{orderId}}", "cancel"] }
+          }
+        },
+        {
+          "name": "支付订单",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/order/{{orderId}}/pay", "host": ["{{baseUrl}}"], "path": ["order", "{{orderId}}", "pay"] }
+          }
+        },
+        {
+          "name": "订单日志",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/order/{{orderId}}/log", "host": ["{{baseUrl}}"], "path": ["order", "{{orderId}}", "log"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💬 消息",
+      "item": [
+        {
+          "name": "未读消息数",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/message/unread/count", "host": ["{{baseUrl}}"], "path": ["message", "unread", "count"] }
+          }
+        },
+        {
+          "name": "会话列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/message/conversations", "host": ["{{baseUrl}}"], "path": ["message", "conversations"] }
+          }
+        },
+        {
+          "name": "发送消息",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"toUserId\": 2,\n  \"content\": \"你好，请问商品还在吗？\"\n}" },
+            "url": { "raw": "{{baseUrl}}/message/send", "host": ["{{baseUrl}}"], "path": ["message", "send"] }
+          }
+        },
+        {
+          "name": "标记已读",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/message/read/2", "host": ["{{baseUrl}}"], "path": ["message", "read", "2"] }
+          }
+        },
+        {
+          "name": "未读通知数",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/notification/unread/count", "host": ["{{baseUrl}}"], "path": ["notification", "unread", "count"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔧 管理后台",
+      "item": [
+        {
+          "name": "用户管理列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/users?page=1&size=10", "host": ["{{baseUrl}}"], "path": ["admin", "users"], "query": [{ "key": "page", "value": "1" }, { "key": "size", "value": "10" }] }
+          }
+        },
+        {
+          "name": "商品审核列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/product/review", "host": ["{{baseUrl}}"], "path": ["admin", "product", "review"] }
+          }
+        },
+        {
+          "name": "订单管理列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/orders?page=1&size=10", "host": ["{{baseUrl}}"], "path": ["admin", "orders"], "query": [{ "key": "page", "value": "1" }, { "key": "size", "value": "10" }] }
+          }
+        },
+        {
+          "name": "数据总览统计",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/statistics", "host": ["{{baseUrl}}"], "path": ["admin", "statistics"] }
+          }
+        },
+        {
+          "name": "详细统计数据",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/statistics/detail", "host": ["{{baseUrl}}"], "path": ["admin", "statistics", "detail"] }
+          }
+        },
+        {
+          "name": "公告管理列表",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/announcement", "host": ["{{baseUrl}}"], "path": ["admin", "announcement"] }
+          }
+        },
+        {
+          "name": "发布公告",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"系统升级通知\",\n  \"content\": \"平台将于今晚2:00-4:00进行系统升级\",\n  \"status\": 1\n}" },
+            "url": { "raw": "{{baseUrl}}/admin/announcement", "host": ["{{baseUrl}}"], "path": ["admin", "announcement"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📎 文件上传",
+      "item": [
+        {
+          "name": "上传图片",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": [] }] },
+            "url": { "raw": "{{baseUrl}}/upload/image", "host": ["{{baseUrl}}"], "path": ["upload", "image"] }
+          }
+        }
+      ]
+    }
+  ]
+}

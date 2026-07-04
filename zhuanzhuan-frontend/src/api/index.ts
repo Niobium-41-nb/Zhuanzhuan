@@ -14,11 +14,7 @@ export const userApi = {
   addAddress(data: any) { return request.post('/user/address', data) },
   updateAddress(id: number, data: any) { return request.put(`/user/address/${id}`, data) },
   deleteAddress(id: number) { return request.delete(`/user/address/${id}`) },
-  setDefaultAddress(id: number) { return request.put(`/user/address/${id}/default`) },
-  // === 手机号相关 ===
-  loginByPhone(data: any) { return request.post('/user/phone/login', data) },
-  sendBindCode(data: any) { return request.post('/user/phone/bind-code', data) },
-  bindPhone(data: any) { return request.post('/user/phone/bind', data) }
+  setDefaultAddress(id: number) { return request.put(`/user/address/${id}/default`) }
 }
 
 export const productApi = {

@@ -17,13 +17,4 @@ public interface UserService extends IService<User> {
     UserVO getUserInfo(Long userId);
     UserVO updateUserInfo(Long userId, UserUpdateDTO dto);
     String uploadAvatar(Long userId, String avatarUrl);
-
-    /** 短信验证码登录 */
-    LoginVO loginByPhone(LoginDTO dto);
-
-    /** 发送手机短信验证码 */
-    void sendSmsCode(String phone, String type);
-
-    /** 绑定手机号到当前用户 */
-    UserVO bindPhone(Long userId, String phone, String code);
 }

@@ -68,26 +68,41 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public IPage<ProductListVO> getProductList(int page, int size, String keyword, Long categoryId,
                                                 BigDecimal minPrice, BigDecimal maxPrice, String condition,
                                                 String sort, String order, Long userId, String status) {
-        Page<Product> pageParam = new Page<>(page, size);
         String queryStatus = status != null ? status : "在售";
+        // 先查商品分页
+        Page<Product> pageParam = new Page<>(page, size);
         IPage<Product> productPage = productMapper.selectPageWithCondition(
                 pageParam, keyword, categoryId, minPrice, maxPrice, condition, queryStatus, userId, sort, order);
 
+        List<Product> products = productPage.getRecords();
+
+        // 批量加载分类名（1 次查询替代 N 次）
+        Set<Long> catIds = products.stream().map(Product::getCategoryId).collect(Collectors.toSet());
+        Map<Long, String> catNameMap = catIds.isEmpty() ? Collections.emptyMap()
+                : categoryMapper.selectBatchIds(catIds).stream()
+                        .collect(Collectors.toMap(Category::getId, Category::getName));
+
+        // 批量加载卖家信息（1 次查询替代 N 次）
+        Set<Long> sellerIds = products.stream().map(Product::getUserId).collect(Collectors.toSet());
+        Map<Long, User> sellerMap = sellerIds.isEmpty() ? Collections.emptyMap()
+                : userMapper.selectBatchIds(sellerIds).stream()
+                        .collect(Collectors.toMap(User::getId, u -> u));
+
+        // 组装 VO
         IPage<ProductListVO> voPage = new Page<>(page, size);
         voPage.setTotal(productPage.getTotal());
-        voPage.setRecords(productPage.getRecords().stream().map(p -> {
+        voPage.setRecords(products.stream().map(p -> {
             ProductListVO vo = new ProductListVO();
             BeanUtil.copyProperties(p, vo);
-            Category cat = categoryMapper.selectById(p.getCategoryId());
-            if (cat != null) vo.setCategoryName(cat.getName());
-            User seller = userMapper.selectById(p.getUserId());
+            vo.setCategoryName(catNameMap.get(p.getCategoryId()));
+            User seller = sellerMap.get(p.getUserId());
             if (seller != null) {
-                Map<String, Object> sellerMap = new HashMap<>();
-                sellerMap.put("userId", seller.getId());
-                sellerMap.put("nickname", seller.getNickname() != null ? seller.getNickname() : seller.getUsername());
-                sellerMap.put("avatar", seller.getAvatar());
-                sellerMap.put("creditScore", seller.getCreditScore());
-                vo.setSeller(sellerMap);
+                Map<String, Object> s = new HashMap<>();
+                s.put("userId", seller.getId());
+                s.put("nickname", seller.getNickname() != null ? seller.getNickname() : seller.getUsername());
+                s.put("avatar", seller.getAvatar());
+                s.put("creditScore", seller.getCreditScore());
+                vo.setSeller(s);
             }
             return vo;
         }).collect(Collectors.toList()));

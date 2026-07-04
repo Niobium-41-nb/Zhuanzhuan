@@ -12,6 +12,18 @@ import java.util.List;
 
 public interface ProductMapper extends BaseMapper<Product> {
 
+    /** JOIN 查询商品列表 + 分类名 + 卖家信息（避免 N+1） */
+    IPage<com.zhuanzhuan.modules.product.vo.ProductListVO> selectPageWithJoin(Page<?> page,
+            @Param("keyword") String keyword,
+            @Param("categoryId") Long categoryId,
+            @Param("minPrice") java.math.BigDecimal minPrice,
+            @Param("maxPrice") java.math.BigDecimal maxPrice,
+            @Param("condition") String condition,
+            @Param("status") String status,
+            @Param("userId") Long userId,
+            @Param("sort") String sort,
+            @Param("order") String order);
+
     IPage<Product> selectPageWithCondition(Page<Product> page, @Param("keyword") String keyword,
                                             @Param("categoryId") Long categoryId,
                                             @Param("minPrice") java.math.BigDecimal minPrice,
