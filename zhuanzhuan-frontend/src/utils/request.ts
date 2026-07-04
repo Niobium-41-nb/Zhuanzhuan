@@ -108,6 +108,8 @@ request.interceptors.response.use(
       ElMessage.error('服务器错误，请稍后重试')
     } else if (error.response.status === 403) {
       ElMessage.error('权限不足')
+    } else if (error.response.status === 429) {
+      ElMessage.error('操作过于频繁，请稍后再试')
     } else if (error.response.status === 404) {
       ElMessage.error('请求的资源不存在')
     } else {
