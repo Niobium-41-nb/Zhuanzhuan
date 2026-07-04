@@ -1,0 +1,311 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper,UTF8]{ctexart}
+
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{float}
+
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\leftmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\small\bfseries}{\thesubsubsection}{1em}{}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{4cm}
+{\Huge\bfseries 转转校园二手交易平台\\[0.5cm]}
+{\LARGE 用户使用说明书}\\[2cm]
+{\large 文档版本：V1.0}\\
+{\large 修改日期：2026-07-04}\\
+{\large 修改人：产品团队}\\[5cm]
+\vfill
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{平台简介}
+
+\textbf{转转}是一款面向高校学生的校园二手物品交易平台，旨在为在校师生提供一个安全、便捷、可靠的二手物品买卖渠道。
+
+\subsection{平台特色}
+
+\begin{itemize}
+    \item \textbf{校园专属}：仅面向校内师生，交易环境纯净
+    \item \textbf{安全可靠}：实名认证加信誉体系，保障交易安全
+    \item \textbf{便捷高效}：支持商品搜索、分类筛选、站内信沟通
+    \item \textbf{全程追踪}：订单状态实时更新，交易流程透明可控
+\end{itemize}
+
+\subsection{主要功能}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{功能模块} & \textbf{说明} \\
+\midrule
+商品浏览 & 分类浏览、关键词搜索、价格筛选 \\
+商品发布 & 上传图片、填写描述、自主定价 \\
+购物车 & 暂存心仪商品、批量管理 \\
+订单管理 & 下单、支付、发货、收货、评价 \\
+站内信 & 与卖家/买家实时沟通 \\
+个人中心 & 信息管理、地址管理、收藏管理 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{快速入门}
+
+\subsection{访问平台}
+
+打开浏览器，在地址栏输入平台网址即可进入转转首页。
+
+\textbf{推荐浏览器}：Chrome 80+ / Firefox 80+ / Edge 80+ / Safari 14+
+
+\subsection{首页概览}
+
+首页自上而下包含以下区域：
+\begin{enumerate}
+    \item \textbf{顶部导航栏}：Logo、菜单导航、登录/注册入口
+    \item \textbf{搜索栏}：输入关键词搜索商品
+    \item \textbf{数据统计}：平台用户数、在售商品数、成交订单数
+    \item \textbf{商品分类}：按类别展示商品入口
+    \item \textbf{推荐商品}：精选推荐商品列表
+    \item \textbf{页脚}：使用指南、联系我们
+\end{enumerate}
+
+\section{用户注册与登录}
+
+\subsection{注册账号}
+
+\begin{enumerate}
+    \item 点击首页右上角的「注册」按钮
+    \item 填写用户名、邮箱或手机号、密码
+    \item 获取验证码（邮箱或短信）
+    \item 填写收到的 6 位验证码
+    \item 点击「注册」按钮完成注册
+\end{enumerate}
+
+\textbf{密码要求}：长度 8-20 位，必须包含字母和数字。
+
+\subsection{登录账号}
+
+\begin{enumerate}
+    \item 点击首页右上角的「登录」按钮
+    \item 输入账号（用户名 / 邮箱 / 手机号）
+    \item 输入密码
+    \item 点击「登录」按钮
+\end{enumerate}
+
+\subsection{找回密码}
+
+\begin{enumerate}
+    \item 在登录页面点击「忘记密码」
+    \item 输入注册时使用的邮箱或手机号
+    \item 获取验证码
+    \item 输入新密码并确认
+    \item 点击「重置密码」完成
+\end{enumerate}
+
+\section{个人中心}
+
+\subsection{编辑个人资料}
+
+登录后点击右上角头像，选择「个人中心」，可编辑以下信息：
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{项目} & \textbf{说明} \\
+\midrule
+头像 & 点击头像上传，支持 JPG/PNG/GIF/WebP 格式 \\
+昵称 & 给自己取一个个性化昵称（最多 20 字） \\
+简介 & 简单介绍自己（最多 200 字） \\
+性别 & 保密/男/女 \\
+手机号 & 绑定手机号用于账号安全 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{收货地址管理}
+
+在个人中心侧边栏点击「收货地址」：
+\begin{itemize}
+    \item \textbf{新增地址}：填写收件人、手机号、所在地区、详细地址
+    \item \textbf{设为默认}：设置常用地址为默认收货地址
+    \item \textbf{编辑地址}：修改已保存的地址信息
+    \item \textbf{删除地址}：移除不再使用的地址
+\end{itemize}
+
+\subsection{我的收藏}
+
+在商品详情页点击「收藏」按钮，商品会保存到「我的收藏」中。
+
+\subsection{我的订单}
+
+在个人中心可查看所有订单，按角色分为「买家订单」和「卖家订单」。
+
+\section{浏览与搜索商品}
+
+\subsection{分类浏览}
+
+在首页商品分类区域，点击感兴趣的分类图标查看该分类下的全部商品。
+
+商品分类包括：电子产品、书籍教材、生活用品、服饰鞋包、运动户外、其他。
+
+\subsection{关键词搜索}
+
+在首页搜索框中输入关键词，按回车或点击「搜索」按钮进行搜索。
+
+\subsection{高级筛选}
+
+在商品列表页可通过以下条件组合筛选：
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{筛选条件} & \textbf{说明} \\
+\midrule
+分类 & 按一级分类筛选 \\
+价格区间 & 设置最低价和最高价 \\
+成色 & 全新/几乎全新/轻微使用痕迹/明显使用痕迹/老旧 \\
+排序 & 按发布时间、价格、浏览量、收藏数排序 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{商品详情}
+
+点击商品卡片进入详情页，可查看商品图片、标题描述、价格成色、卖家信息等。
+
+\section{发布商品}
+
+\subsection{发布流程}
+
+\begin{enumerate}
+    \item 登录后点击导航栏的「发布」按钮
+    \item 填写商品信息（标题、描述、价格、成色、分类、图片）
+    \item 点击「发布」按钮提交审核
+\end{enumerate}
+
+\subsection{审核流程}
+
+商品发布后进入「待审核」状态，管理员审核通过后才会在商品列表中展示。一般情况下 1-2 小时内完成审核。
+
+\section{购物车}
+
+\begin{itemize}
+    \item 在商品详情页点击「加入购物车」将商品加入购物车
+    \item 在购物车页面可修改数量、选中/取消选中、删除商品
+    \item 勾选商品后点击「去结算」提交订单
+\end{itemize}
+
+\section{下单与交易}
+
+\subsection{订单状态}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lXl}
+\toprule
+\textbf{状态} & \textbf{说明} & \textbf{操作方} \\
+\midrule
+待付款 & 订单已创建，等待买家付款 & 买家 \\
+待发货 & 买家已付款，等待卖家发货 & 卖家 \\
+待收货 & 卖家已发货，等待买家收货 & 买家 \\
+已完成 & 交易完成 & 系统 \\
+已取消 & 订单已被取消 & 买家/卖家 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{买家操作}
+\begin{itemize}
+    \item \textbf{付款}：在「待付款」状态下点击「去付款」
+    \item \textbf{确认收货}：收到商品后点击「确认收货」
+    \item \textbf{取消订单}：在「待付款」状态下可取消
+    \item \textbf{评价}：交易完成后可对卖家进行 1-5 星评价
+\end{itemize}
+
+\subsection{卖家操作}
+\begin{itemize}
+    \item \textbf{发货}：在「待发货」状态下填写物流信息并发货
+    \item \textbf{查看订单}：在「我的订单」中查看买家信息
+\end{itemize}
+
+\section{站内信}
+
+\begin{itemize}
+    \item 在商品详情页点击「联系卖家」发送消息
+    \item 在导航栏消息图标查看未读消息数
+    \item 点击消息图标进入消息中心查看所有会话
+    \item 支持文字消息发送、已读状态查看
+\end{itemize}
+
+\section{常见问题}
+
+\subsection{账号问题}
+
+\textbf{Q：忘记密码怎么办？}\\
+A：在登录页面点击「忘记密码」，通过注册邮箱或手机号验证后即可重置密码。
+
+\textbf{Q：账号被禁用了怎么办？}\\
+A：请联系平台客服了解禁用原因并申请解封。
+
+\subsection{交易问题}
+
+\textbf{Q：如何联系卖家？}\\
+A：在商品详情页点击「联系卖家」按钮，通过站内信与卖家沟通。
+
+\textbf{Q：付款后卖家不发货怎么办？}\\
+A：在订单详情页点击「申请退款」，平台将介入处理。
+
+\subsection{商品问题}
+
+\textbf{Q：商品发布后多久审核通过？}\\
+A：一般情况下 1-2 小时内完成审核。
+
+\textbf{Q：如何修改已发布的商品信息？}\\
+A：在商品详情页点击「编辑」按钮即可修改。
+
+\subsection{技术问题}
+
+\textbf{Q：页面加载异常怎么办？}\\
+A：尝试刷新页面或清除浏览器缓存后重试。
+
+\textbf{Q：图片上传失败怎么办？}\\
+A：请检查图片格式（JPG/PNG/GIF/WebP）和大小（不超过 5MB）。
+
+\section*{联系我们}
+
+如遇任何问题，可通过以下方式联系我们：
+\begin{itemize}
+    \item \textbf{在线反馈}：在个人中心→意见反馈中提交问题
+    \item \textbf{客服邮箱}：support@zhuanzhuan.edu
+    \item \textbf{工作时间}：周一至周五 9:00--18:00
+\end{itemize}
+
+\end{document}
