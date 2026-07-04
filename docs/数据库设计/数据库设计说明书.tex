@@ -1,0 +1,469 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper,UTF8]{ctexart}
+
+% ==================== 宏包引入 ====================
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{float}
+
+% ==================== 超链接设置 ====================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+% ==================== 页眉页脚 ====================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small 校园二手物品交易平台 --- 数据库设计说明书}
+\fancyfoot[C]{\thepage}
+
+% ==================== 标题格式 ====================
+\titleformat{\section}{\heiti\Large}{\bfseries\thesection}{1em}{}
+\titleformat{\subsection}{\heiti\large}{\bfseries\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\heiti\normalsize}{\bfseries\thesubsubsection}{1em}{}
+
+% ==================== 代码块样式 ====================
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    xleftmargin=2em,
+    aboveskip=1em,
+    belowskip=1em,
+    language=SQL
+}
+
+% ==================== 文档信息 ====================
+\title{\textbf{\Huge 数据库设计说明书}\\[8pt]
+       \normalsize 校园二手物品交易平台}
+\author{项目组}
+\date{版本：V1.0\\[4pt] 日期：2026-07-04}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% ==================== 目录 ====================
+\tableofcontents
+\newpage
+
+% ==================== 1. 引言 ====================
+\section{引言}
+
+\subsection{编写目的}
+
+本文档旨在对校园二手物品交易平台的数据库进行详细设计，明确数据库的表结构设计、索引策略、存储引擎选择、字符集配置、缓存策略及数据字典等信息，为后端开发人员提供数据持久层的实现依据。
+
+\subsection{适用范围}
+
+本文档适用于本项目的数据库设计人员、后端开发工程师及运维人员。
+
+\subsection{参考文档}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|}
+        \hline
+        \textbf{序号} & \textbf{文档名称} \\
+        \hline
+        1 & 《软件需求规格说明书》 \\
+        \hline
+        2 & 《系统架构设计说明书》 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsection{环境说明}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{项目} & \textbf{内容} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    数据库管理系统 & MySQL 8.0.35+ \\
+    存储引擎 & InnoDB（支持事务、行级锁） \\
+    默认字符集 & utf8mb4（支持完整Unicode） \\
+    默认排序规则 & utf8mb4\_unicode\_ci \\
+    隔离级别 & READ COMMITTED（读已提交） \\
+\end{longtable}
+
+% ==================== 2. 全局设计规范 ====================
+\section{全局设计规范}
+
+\subsection{命名规范}
+
+\begin{longtable}{p{0.15\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}}
+    \toprule
+    \textbf{对象} & \textbf{命名规范} & \textbf{示例} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    数据库 & 小写英文，项目名缩写 & zhuanzhuan \\
+    表名 & 小写英文单数，下划线分隔 & user, order\_log \\
+    字段名 & 小写英文，下划线分隔 & user\_id, created\_at \\
+    唯一键 & uk\_字段名 & uk\_email \\
+    索引 & idx\_字段名 & idx\_user\_id \\
+\end{longtable}
+
+\subsection{公共字段规范}
+
+所有业务表均包含以下公共字段：
+
+\begin{longtable}{p{0.15\textwidth}|p{0.2\textwidth}|p{0.15\textwidth}|p{0.35\textwidth}}
+    \toprule
+    \textbf{字段名} & \textbf{类型} & \textbf{约束} & \textbf{说明} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    id & BIGINT(20) & PK, AUTO\_INCREMENT & 主键ID \\
+    created\_at & DATETIME & NOT NULL & 创建时间 \\
+    updated\_at & DATETIME & NOT NULL & 更新时间 \\
+    deleted\_at & DATETIME & DEFAULT NULL & 删除时间（软删除） \\
+\end{longtable}
+
+\subsection{存储引擎与字符集}
+
+\begin{lstlisting}
+CREATE DATABASE IF NOT EXISTS zhuanzhuan
+    DEFAULT CHARACTER SET utf8mb4
+    DEFAULT COLLATE utf8mb4_unicode_ci;
+\end{lstlisting}
+
+% ==================== 3. 表结构 ====================
+\section{数据库表详细设计}
+
+\subsection{用户表 (user)}
+
+存储系统用户的注册信息与账户状态。
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & AUTO\_INC & 用户ID \\
+    \hline
+    username & VARCHAR & 50 & \checkmark & & 用户名 \\
+    \hline
+    password\_hash & VARCHAR & 255 & \checkmark & & 密码哈希值 \\
+    \hline
+    email & VARCHAR & 100 & & NULL & 邮箱 \\
+    \hline
+    phone & VARCHAR & 20 & & NULL & 手机号 \\
+    \hline
+    avatar & VARCHAR & 255 & & NULL & 头像URL \\
+    \hline
+    nickname & VARCHAR & 50 & & NULL & 昵称 \\
+    \hline
+    role & ENUM & & \checkmark & user & 角色 \\
+    \hline
+    credit\_score & INT & 11 & & 100 & 信誉分 \\
+    \hline
+    status & TINYINT & 4 & \checkmark & 1 & 状态 \\
+    \hline
+    created\_at & DATETIME & & \checkmark & NOW & 创建时间 \\
+    \hline
+\end{longtable}
+
+\textbf{索引：} 主键PRIMARY，唯一索引 uk\_username、uk\_email、uk\_phone，索引 idx\_status
+
+\subsection{商品表 (product)}
+
+存储二手商品的详细信息。
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & AUTO\_INC & 商品ID \\
+    \hline
+    user\_id & BIGINT & 20 & \checkmark & & 卖家ID \\
+    \hline
+    category\_id & BIGINT & 20 & \checkmark & & 分类ID \\
+    \hline
+    title & VARCHAR & 100 & \checkmark & & 商品标题 \\
+    \hline
+    description & TEXT & & & NULL & 商品描述 \\
+    \hline
+    price & DECIMAL & 10,2 & \checkmark & & 价格 \\
+    \hline
+    condition & ENUM & & \checkmark & & 成色 \\
+    \hline
+    status & ENUM & & \checkmark & 待审核 & 商品状态 \\
+    \hline
+    view\_count & INT & 11 & & 0 & 浏览量 \\
+    \hline
+    created\_at & DATETIME & & \checkmark & NOW & 发布时间 \\
+    \hline
+\end{longtable}
+
+\textbf{索引：} 主键PRIMARY，索引 idx\_user\_id、idx\_category\_id、idx\_status、idx\_created\_at、idx\_price，全文索引 ft\_title\_desc
+
+\subsection{商品图片表 (product\_image)}
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & AUTO\_INC & 图片ID \\
+    \hline
+    product\_id & BIGINT & 20 & \checkmark & & 商品ID \\
+    \hline
+    url & VARCHAR & 255 & \checkmark & & 图片URL \\
+    \hline
+    sort\_order & INT & 11 & & 0 & 排序序号 \\
+    \hline
+    created\_at & DATETIME & & \checkmark & NOW & 上传时间 \\
+    \hline
+\end{longtable}
+
+\textbf{索引：} idx\_product\_id
+
+\subsection{商品分类表 (category)}
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & AUTO\_INC & 分类ID \\
+    \hline
+    name & VARCHAR & 50 & \checkmark & & 分类名称 \\
+    \hline
+    parent\_id & BIGINT & 20 & & 0 & 父分类ID \\
+    \hline
+    level & TINYINT & 4 & \checkmark & 1 & 层级 \\
+    \hline
+    sort\_order & INT & 11 & & 0 & 排序 \\
+    \hline
+    status & TINYINT & 4 & \checkmark & 1 & 状态 \\
+    \hline
+\end{longtable}
+
+\textbf{索引：} idx\_parent\_id
+
+\subsection{订单表 (order)}
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{非空} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & AUTO\_INC & 订单ID \\
+    \hline
+    order\_no & VARCHAR & 32 & \checkmark & & 订单号 \\
+    \hline
+    buyer\_id & BIGINT & 20 & \checkmark & & 买家ID \\
+    \hline
+    seller\_id & BIGINT & 20 & \checkmark & & 卖家ID \\
+    \hline
+    product\_id & BIGINT & 20 & \checkmark & & 商品ID \\
+    \hline
+    total\_price & DECIMAL & 10,2 & \checkmark & & 总价 \\
+    \hline
+    shipping\_name & VARCHAR & 50 & & NULL & 收件人 \\
+    \hline
+    status & ENUM & & \checkmark & 待付款 & 订单状态 \\
+    \hline
+    created\_at & DATETIME & & \checkmark & NOW & 创建时间 \\
+    \hline
+\end{longtable}
+
+\textbf{索引：} 唯一索引 uk\_order\_no，索引 idx\_buyer\_id、idx\_seller\_id、idx\_status、idx\_created\_at
+
+\subsection{其他表}
+
+系统还包括以下业务表：
+
+\begin{longtable}{|c|p{0.2\textwidth}|p{0.6\textwidth}|}
+    \toprule
+    \textbf{序号} & \textbf{表名} & \textbf{说明} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    6 & order\_log & 订单日志表，记录订单状态变更历史 \\
+    7 & cart & 购物车表，存储用户加入购物车的商品 \\
+    8 & message & 消息表，存储用户之间的站内信消息 \\
+    9 & notification & 通知表，存储系统通知信息 \\
+    10 & favorite & 收藏表，存储商品收藏记录 \\
+    11 & address & 收货地址表，存储用户收货地址 \\
+    12 & review & 交易评价表，存储交易评价信息 \\
+    13 & announcement & 公告表，存储系统公告 \\
+\end{longtable}
+
+% ==================== 4. Redis 缓存 ====================
+\section{Redis 缓存设计}
+
+\begin{longtable}{p{0.15\textwidth}|p{0.3\textwidth}|p{0.1\textwidth}|p{0.15\textwidth}|p{0.2\textwidth}}
+    \toprule
+    \textbf{缓存对象} & \textbf{Key 模式} & \textbf{数据类型} & \textbf{过期时间} & \textbf{更新策略} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    验证码 & captcha:\{email\} & String & 5分钟 & 生成时写入 \\
+    用户会话 & session:\{userId\} & String & 7天 & 登录时写入 \\
+    热点商品 & product:\{id\} & String & 30分钟 & Cache-Aside \\
+    分类树 & category:tree & String & 24小时 & Cache-Aside \\
+    首页推荐 & index:recommend & ZSet & 10分钟 & 定时刷新 \\
+    浏览量 & view:product:\{id\} & String & 持久化 & 定时刷入DB \\
+    接口防刷 & rate:limit:\{ip\} & String & 1分钟 & 请求时自增 \\
+\end{longtable}
+
+% ==================== 5. 优化建议 ====================
+\section{SQL 优化建议}
+
+\subsection{索引优化}
+
+\begin{itemize}[itemsep=3pt]
+    \item 高频查询字段（status、created\_at）建立索引
+    \item 组合查询条件建立联合索引，例如 (status, created\_at)
+    \item 商品表建立全文索引用于搜索
+    \item 定期检查并删除冗余索引
+\end{itemize}
+
+\subsection{查询优化}
+
+\begin{itemize}[itemsep=3pt]
+    \item 避免 SELECT *，只查询需要的字段
+    \item 使用 EXPLAIN 分析执行计划，确保走索引
+    \item 大分页查询使用覆盖索引 + 子查询优化
+    \item 复杂统计使用缓存或异步计算
+\end{itemize}
+
+\subsection{数据库维护}
+
+\begin{itemize}[itemsep=3pt]
+    \item 定期执行 OPTIMIZE TABLE 回收碎片
+    \item 监控慢查询日志，优化慢 SQL
+    \item 每日自动备份，保留最近7天
+\end{itemize}
+
+% ==================== 附录 ====================
+\newpage
+\appendix
+\section{数据字典汇总}
+
+\begin{longtable}{|c|c|c|p{0.45\textwidth}|}
+    \hline
+    \textbf{序号} & \textbf{表名} & \textbf{中文名} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{序号} & \textbf{表名} & \textbf{中文名} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    1 & user & 用户表 & 系统用户注册信息 \\
+    \hline
+    2 & product & 商品表 & 二手商品信息 \\
+    \hline
+    3 & product\_image & 商品图片表 & 商品多图信息 \\
+    \hline
+    4 & category & 商品分类表 & 多级商品分类 \\
+    \hline
+    5 & order & 订单表 & 交易订单信息 \\
+    \hline
+    6 & order\_log & 订单日志表 & 订单状态变更历史 \\
+    \hline
+    7 & cart & 购物车表 & 用户购物车 \\
+    \hline
+    8 & message & 消息表 & 站内信消息 \\
+    \hline
+    9 & notification & 通知表 & 系统通知 \\
+    \hline
+    10 & favorite & 收藏表 & 商品收藏记录 \\
+    \hline
+    11 & address & 收货地址表 & 用户收货地址 \\
+    \hline
+    12 & review & 评价表 & 交易评价 \\
+    \hline
+    13 & announcement & 公告表 & 系统公告 \\
+    \hline
+\end{longtable}
+
+\section{版本记录}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{版本} & \textbf{日期} & \textbf{修改内容} & \textbf{修改人} \\
+    \hline
+    V1.0 & 2026-07-04 & 初始版本 & 项目组 \\
+    \hline
+\end{longtable}
+
+\vfill
+\begin{center}
+    \textit{建库与建表脚本参见 docs/数据库设计/zhuanzhuan.sql}
+\end{center}
+
+\end{document}

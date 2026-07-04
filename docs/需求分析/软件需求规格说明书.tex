@@ -1,0 +1,744 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper,UTF8]{ctexart}
+
+% ==================== 宏包引入 ====================
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{float}
+
+% ==================== 超链接设置 ====================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+% ==================== 页眉页脚 ====================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small 校园二手物品交易平台 --- 软件需求规格说明书}
+\fancyfoot[C]{\thepage}
+
+% ==================== 标题格式 ====================
+\titleformat{\section}{\heiti\Large}{\bfseries\thesection}{1em}{}
+\titleformat{\subsection}{\heiti\large}{\bfseries\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\heiti\normalsize}{\bfseries\thesubsubsection}{1em}{}
+
+% ==================== 文档信息 ====================
+\title{\textbf{\Huge 软件需求规格说明书}\\[8pt]
+       \large （SRS --- Software Requirements Specification）\\[12pt]
+       \normalsize 依据 GB/T 45802-2025 编写}
+\author{项目名称：校园二手物品交易平台的设计与实现}
+\date{版本：V1.0\\[4pt] 日期：2026-07-04}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% ==================== 目录 ====================
+\tableofcontents
+\newpage
+
+% ==================== 1. 引言 ====================
+\section{引言}
+
+\subsection{目的}
+
+本软件需求规格说明书（SRS）的目的是全面、系统地描述"校园二手物品交易平台"的功能需求、非功能需求、外部接口需求和约束条件，为后续的系统设计、编码实现、测试验收提供统一的依据和基准。
+
+\subsection{范围}
+
+本项目是一个基于 \textbf{Vue3 + SpringBoot + MySQL + Redis} 技术栈的校园二手物品交易平台综合实训项目，旨在实现一个功能完善、界面友好、安全可靠的校园 C2C 二手交易 Web 应用。
+
+本系统覆盖以下功能域：
+\begin{itemize}[itemsep=3pt]
+    \item 用户管理
+    \item 商品管理
+    \item 订单交易
+    \item 消息与沟通
+    \item 后台管理
+    \item 系统安全与审计
+\end{itemize}
+
+\subsection{术语与定义}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{术语} & \textbf{定义} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{术语} & \textbf{定义} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    SRS & Software Requirements Specification，软件需求规格说明书 \\
+    JWT & JSON Web Token，一种无状态认证令牌 \\
+    RESTful & 基于 REST 架构风格的 API 设计规范 \\
+    C2C & Consumer to Consumer，消费者对消费者的交易模式 \\
+    OSS & Object Storage Service，对象存储服务 \\
+    CRUD & Create/Read/Update/Delete，增删改查操作 \\
+    XSS & Cross-Site Scripting，跨站脚本攻击 \\
+    CSRF & Cross-Site Request Forgery，跨站请求伪造 \\
+    RBAC & Role-Based Access Control，基于角色的访问控制 \\
+\end{longtable}
+
+\subsection{参考文献}
+
+\begin{itemize}[itemsep=3pt]
+    \item GB/T 45802-2025《系统与软件工程 生存周期过程 需求工程》
+    \item ISO/IEC/IEEE 29148:2018 系统与软件工程——需求工程
+    \item 《Vue.js 3 设计与实现》
+    \item 《SpringBoot 实战》
+    \item 《MySQL 必知必会》
+    \item 《Redis 设计与实现》
+    \item RESTful API 设计规范
+\end{itemize}
+
+\subsection{文档概述}
+
+本文档共分为以下章节：第 2 章进行总体描述，包括产品视角、用户特征和约束；第 3 章详细规定各功能模块的具体需求；第 4 章规定外部接口需求；第 5 章规定非功能需求；第 6 章规定数据需求；第 7 章说明需求验证与确认方法。
+
+% ==================== 2. 总体描述 ====================
+\section{总体描述}
+
+\subsection{产品视角}
+
+本系统是一个独立的校园二手物品交易 Web 应用平台，采用前后端分离架构。系统不依赖其他外部系统运行，但通过与数据库（MySQL）和缓存（Redis）的交互实现数据持久化与高性能访问。
+
+\textbf{系统上下文：}
+\begin{itemize}[itemsep=3pt]
+    \item \textbf{前端：} Vue3 单页应用（SPA），运行于用户浏览器
+    \item \textbf{后端：} SpringBoot RESTful API 服务
+    \item \textbf{数据库：} MySQL 关系型数据库
+    \item \textbf{缓存层：} Redis 缓存服务
+    \item \textbf{文件存储：} 本地存储或云 OSS
+\end{itemize}
+
+\subsection{产品功能概要}
+
+系统功能划分为以下四大模块：
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|X|X|}
+        \hline
+        \textbf{用户端功能} & \textbf{交易功能} & \textbf{沟通功能} & \textbf{后台管理功能} \\
+        \hline
+        注册/登录 & 商品发布 & 站内信 & 用户管理 \\
+        个人信息管理 & 商品浏览 & 系统通知 & 商品审核 \\
+        密码找回 & 收藏商品 & 未读标记 & 订单管理 \\
+        地址管理 & 购物车 &  & 数据统计 \\
+        信誉评分 & 下单购买 &  & 公告管理 \\
+        \hline
+    \end{tabularx}
+    \caption{系统功能模块概要}
+\end{table}
+
+\subsection{用户特征}
+
+\begin{longtable}{p{0.15\textwidth}|p{0.35\textwidth}|p{0.2\textwidth}|p{0.15\textwidth}}
+    \toprule
+    \textbf{角色} & \textbf{描述} & \textbf{技术能力} & \textbf{使用频率} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{角色} & \textbf{描述} & \textbf{技术能力} & \textbf{使用频率} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    游客 & 未注册浏览者，可浏览商品但不能交易 & 低 & 偶尔 \\
+    买家 & 已注册用户，可浏览和购买商品 & 中等 & 经常 \\
+    卖家 & 已认证用户，可发布和管理商品 & 中等 & 频繁 \\
+    管理员 & 系统运营人员，拥有后台权限 & 高 & 每日 \\
+\end{longtable}
+
+\subsection{约束条件}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{约束项} & \textbf{内容} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{约束项} & \textbf{内容} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    技术栈约束 & 前端使用 Vue3，后端使用 SpringBoot \\
+    数据库约束 & 使用 MySQL 关系型数据库 \\
+    缓存约束 & 使用 Redis 作为缓存层 \\
+    认证约束 & 使用 JWT + SpringSecurity 实现认证授权 \\
+    架构约束 & 采用前后端分离架构 \\
+    兼容性约束 & 兼容 PC 端主流浏览器 \\
+\end{longtable}
+
+\subsection{假设与依赖}
+
+\begin{itemize}[itemsep=3pt]
+    \item 假设目标用户具备基本的 Web 浏览操作能力
+    \item 假设校园网络环境能够正常访问 Web 应用
+    \item 依赖 MySQL 提供可靠的数据持久化服务
+    \item 依赖 Redis 提供高性能缓存服务
+    \item 依赖邮件/短信服务提供验证码发送功能（或使用模拟实现）
+\end{itemize}
+
+% ==================== 3. 功能需求 ====================
+\section{功能需求}
+
+\subsection{用户管理模块}
+
+\subsubsection{用户注册}
+
+\begin{longtable}{p{0.18\textwidth}|p{0.72\textwidth}}
+    \toprule
+    \textbf{需求标识} & FR-UM-01 \\
+    \midrule
+    \textbf{名称} & 用户注册 \\
+    \midrule
+    \textbf{描述} & 系统应允许新用户通过邮箱或手机号进行注册 \\
+    \midrule
+    \textbf{前置条件} & 用户未登录，输入信息合法 \\
+    \midrule
+    \textbf{输入} & 用户名、邮箱/手机号、密码（加密传输） \\
+    \midrule
+    \textbf{处理逻辑} & 
+    1. 验证邮箱/手机号唯一性 \\
+    & 2. 发送验证码并校验 \\
+    & 3. 密码使用 BCrypt 加密存储 \\
+    & 4. 创建用户记录并返回 Token \\
+    \midrule
+    \textbf{异常处理} & 邮箱/手机号已注册时提示用户；验证码错误时重试 \\
+    \bottomrule
+\end{longtable}
+
+\subsubsection{用户登录}
+
+\begin{longtable}{p{0.18\textwidth}|p{0.72\textwidth}}
+    \toprule
+    \textbf{需求标识} & FR-UM-02 \\
+    \midrule
+    \textbf{名称} & 用户登录 \\
+    \midrule
+    \textbf{描述} & 系统支持用户通过邮箱/手机号 + 密码或验证码登录 \\
+    \midrule
+    \textbf{处理逻辑} & 
+    1. 校验用户凭证 \\
+    & 2. 验证密码（BCrypt） \\
+    & 3. 生成 JWT Token（含用户角色信息） \\
+    & 4. 返回 Token 至前端 \\
+    \midrule
+    \textbf{异常处理} & 密码错误超过 5 次时临时锁定账户 15 分钟 \\
+    \bottomrule
+\end{longtable}
+
+\subsubsection{密码找回}
+
+\textbf{标识：} FR-UM-03
+
+系统应支持用户通过绑定的邮箱/手机号重置密码：
+\begin{enumerate}[itemsep=3pt]
+    \item 用户提交邮箱/手机号
+    \item 发送重置链接/验证码
+    \item 验证通过后允许设置新密码
+    \item 新密码加密存储并清除旧 Token
+\end{enumerate}
+
+\subsubsection{个人信息管理}
+
+\textbf{标识：} FR-UM-04
+
+已登录用户可在个人中心查看和编辑个人信息，包括：头像上传（jpg/png，限制2MB）、昵称修改、个人简介编辑、绑定邮箱/手机号更换。前置条件为用户已登录（JWT 校验通过）。
+
+\subsubsection{收货地址管理}
+
+\textbf{标识：} FR-UM-05
+
+用户可添加、编辑、删除、设置默认收货地址。地址字段包括：收件人、联系电话、省份/城市/区县、详细地址、邮政编码。
+
+\subsubsection{用户信誉评分}
+
+\textbf{标识：} FR-UM-06
+
+交易完成后买卖双方可互相评分（1--5星），系统汇总显示用户信誉等级。
+
+\subsection{商品管理模块}
+
+\subsubsection{商品发布}
+
+\begin{longtable}{p{0.18\textwidth}|p{0.72\textwidth}}
+    \toprule
+    \textbf{需求标识} & FR-GM-01 \\
+    \midrule
+    \textbf{名称} & 商品发布 \\
+    \midrule
+    \textbf{描述} & 卖家可发布新商品信息 \\
+    \midrule
+    \textbf{前置条件} & 用户已登录且通过卖家认证 \\
+    \midrule
+    \textbf{输入项} & 商品标题、描述（富文本）、分类、价格、成色、交易方式、图片（最多9张） \\
+    \midrule
+    \textbf{处理逻辑} & 
+    1. 图片上传至 OSS/本地存储 \\
+    & 2. 商品信息写入数据库（状态为"待审核"） \\
+    & 3. 发送审核通知至管理员 \\
+    \midrule
+    \textbf{约束} & 标题长度 5--50 字；价格精确到分；图片单张不超过 5MB \\
+    \bottomrule
+\end{longtable}
+
+\subsubsection{商品浏览与搜索}
+
+\textbf{标识：} FR-GM-02
+
+用户可浏览商品列表，支持分类筛选、关键词搜索和多维度排序：
+\begin{itemize}[itemsep=3pt]
+    \item 搜索方式：关键词搜索、分类筛选、价格区间筛选、成色筛选
+    \item 排序方式：按发布时间、价格（升/降序）、热度（浏览量/收藏量）
+    \item 分页：每页默认 20 条
+\end{itemize}
+
+\subsubsection{商品详情}
+
+\textbf{标识：} FR-GM-03
+
+用户可查看商品的完整信息：图片轮播、商品标题、价格、成色、描述、卖家信息、发布时间、浏览量、收藏数。附加功能包括收藏/取消收藏、举报商品。
+
+\subsubsection{商品状态管理}
+
+\textbf{标识：} FR-GM-04
+
+卖家可管理自己发布的商品状态。状态流转：待审核 $\rightarrow$ 在售（审核通过）$\rightarrow$ 已下架 / 已售出 / 审核驳回。支持上架、下架、编辑（仅下架状态可编辑）、删除操作。
+
+\subsection{订单交易模块}
+
+\subsubsection{购物车}
+
+\textbf{标识：} FR-OM-01（可选）
+
+用户可将心仪商品加入购物车，支持修改数量、删除商品、清空购物车、批量结算。
+
+\subsubsection{订单生成}
+
+\begin{longtable}{p{0.18\textwidth}|p{0.72\textwidth}}
+    \toprule
+    \textbf{需求标识} & FR-OM-02 \\
+    \midrule
+    \textbf{名称} & 订单生成 \\
+    \midrule
+    \textbf{描述} & 用户下单购买商品，系统生成订单 \\
+    \midrule
+    \textbf{处理逻辑} & 
+    1. 校验商品状态（在售） \\
+    & 2. 检查库存 \\
+    & 3. 生成唯一订单号 \\
+    & 4. 订单初始状态为"待付款" \\
+    & 5. 商品状态变更为"已售出" \\
+    \midrule
+    \textbf{事务要求} & 订单创建与库存扣减需保证原子性（事务管理） \\
+    \bottomrule
+\end{longtable}
+
+\subsubsection{订单状态流转}
+
+\textbf{标识：} FR-OM-03
+
+\begin{table}[H]
+    \centering
+    \caption{订单状态流转规则}
+    \begin{tabularx}{\textwidth}{|c|X|}
+        \hline
+        \textbf{状态} & \textbf{说明} \\
+        \hline
+        待付款 & 买家可取消订单 \\
+        \hline
+        待发货 & 卖家确认发货，录入物流单号 \\
+        \hline
+        待收货 & 买家确认收货 \\
+        \hline
+        已完成 & 交易完成，双方可互相评价 \\
+        \hline
+        已取消 & 订单取消，交易终止 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsubsection{在线支付模拟}
+
+\textbf{标识：} FR-OM-04
+
+系统提供模拟支付接口，用户点击"去支付"后跳转至模拟支付页面，确认支付后系统处理支付回调，订单状态更新为"待发货"。
+
+\subsubsection{物流信息管理}
+
+\textbf{标识：} FR-OM-05（模拟）
+
+卖家发货后录入物流信息（物流公司、物流单号），买家可查看物流进度。
+
+\subsection{消息与沟通模块}
+
+\subsubsection{站内信/留言板}
+
+\textbf{标识：} FR-MM-01
+
+买家和卖家可通过站内信进行沟通。支持发送文本消息（支持表情）、商品链接快速发送、查看历史消息记录。
+
+\subsubsection{系统通知}
+
+\textbf{标识：} FR-MM-02
+
+系统自动向用户发送通知：订单状态变更通知、商品审核通过/驳回通知、系统公告推送。
+
+\subsubsection{消息已读/未读标记}
+
+\textbf{标识：} FR-MM-03
+
+系统应标记消息的已读/未读状态，在导航栏显示未读消息数量。
+
+\subsection{后台管理模块}
+
+\subsubsection{用户管理}
+
+\textbf{标识：} FR-AM-01
+
+管理员可查看、搜索、禁用/启用用户账户，进行角色分配。
+
+\subsubsection{商品审核}
+
+\textbf{标识：} FR-AM-02
+
+管理员可审核卖家发布的商品，包括待审核列表、商品详情预览、审核通过/驳回（填写驳回原因）。
+
+\subsubsection{订单管理}
+
+\textbf{标识：} FR-AM-03
+
+管理员可查询所有订单（多条件筛选），查看订单详情，处理异常订单。
+
+\subsubsection{数据统计}
+
+\textbf{标识：} FR-AM-04
+
+系统以图表形式展示关键运营数据：注册用户量（趋势图）、商品发布量、成交量、交易额、分类占比（饼图）。
+
+\subsubsection{公告管理}
+
+\textbf{标识：} FR-AM-05
+
+管理员可发布、编辑、删除系统公告。展示位置为首页公告栏和系统通知推送。
+
+\subsection{可选扩展功能}
+
+\begin{itemize}[itemsep=5pt]
+    \item \textbf{FR-EF-01（商品推荐算法）：} 基于用户浏览和购买历史，推荐可能感兴趣的商品。
+    \item \textbf{FR-EF-02（敏感词过滤）：} 对商品标题、描述、留言进行敏感词过滤（基于 DFA 算法）。
+    \item \textbf{FR-EF-03（交易纠纷处理）：} 用户可发起举报，管理员介入处理。
+\end{itemize}
+
+% ==================== 4. 外部接口需求 ====================
+\section{外部接口需求}
+
+\subsection{用户接口}
+
+\begin{itemize}[itemsep=3pt]
+    \item 前端框架：Vue3 + Element Plus / Vuetify UI 组件库
+    \item 页面类型：响应式 Web 页面，兼容 PC 端主流浏览器
+    \item 交互方式：鼠标点击、键盘输入、页面路由跳转
+\end{itemize}
+
+\subsection{软件接口}
+
+\subsubsection{后端 API 接口规范}
+
+\begin{longtable}{p{0.25\textwidth}|p{0.65\textwidth}}
+    \toprule
+    \textbf{规范项} & \textbf{内容} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    接口风格 & RESTful API \\
+    数据格式 & JSON（请求与响应） \\
+    认证方式 & JWT Token（放置于 Authorization Header） \\
+    统一响应格式 & $\{code, message, data\}$ \\
+    跨域配置 & CORS 跨域资源共享 \\
+\end{longtable}
+
+\subsubsection{数据库与缓存接口}
+
+\begin{itemize}[itemsep=3pt]
+    \item 数据库：MySQL 8.x，ORM 框架使用 MyBatis-Plus / JPA，连接池使用 HikariCP
+    \item 缓存服务：Redis 6.x+，缓存用户会话、验证码、热点商品数据，淘汰策略为 LRU
+    \item 文件存储：本地文件存储或云 OSS，支持缩略图生成
+\end{itemize}
+
+\subsection{通信接口}
+
+\begin{itemize}[itemsep=3pt]
+    \item 前后端通信：HTTP/HTTPS 协议
+    \item WebSocket：用于实时消息通知（可选）
+    \item API 版本控制：URL 路径前缀 \texttt{/api/v1/}
+\end{itemize}
+
+% ==================== 5. 非功能需求 ====================
+\section{非功能需求}
+
+\subsection{性能需求}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{标识} & \textbf{描述} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    NFR-PF-01 & 页面平均加载时间不超过 2 秒 \\
+    NFR-PF-02 & 核心 API 响应时间不超过 500ms（P95），使用 Redis 缓存和索引优化 \\
+    NFR-PF-03 & 系统支持至少 100 个并发用户访问 \\
+\end{longtable}
+
+\subsection{安全性需求}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{标识} & \textbf{描述} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    NFR-SC-01 & 使用 JWT + SpringSecurity 实现用户认证与 RBAC 授权 \\
+    NFR-SC-02 & 密码使用 BCrypt 加密存储，禁止明文存储 \\
+    NFR-SC-03 & 对敏感接口实施频率限制，防止接口被刷 \\
+    NFR-SC-04 & 有效防范 XSS、CSRF、SQL 注入等常见 Web 攻击 \\
+\end{longtable}
+
+\subsection{可用性与可靠性需求}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{标识} & \textbf{描述} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    NFR-UB-01 & 系统在正常条件下保证 99.5\% 的可用性 \\
+    NFR-UB-02 & 界面简洁直观，新用户无需培训即可完成基本操作 \\
+    NFR-RL-01 & 关键业务操作（订单创建）需保证事务 ACID 特性 \\
+    NFR-RL-02 & 数据库应定期自动备份，防止数据丢失 \\
+\end{longtable}
+
+\subsection{可维护性与可移植性需求}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{标识} & \textbf{描述} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    NFR-MT-01 & 代码遵循统一编码规范，包含注释和文档 \\
+    NFR-MT-02 & 采用模块化架构，低耦合高内聚 \\
+    NFR-PT-01 & 兼容 Chrome、Firefox、Edge、Safari 最新版 \\
+\end{longtable}
+
+% ==================== 6. 数据需求 ====================
+\section{数据需求}
+
+\subsection{核心数据实体}
+
+\begin{longtable}{p{0.18\textwidth}|p{0.25\textwidth}|p{0.47\textwidth}}
+    \toprule
+    \textbf{实体} & \textbf{描述} & \textbf{主要属性} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{实体} & \textbf{描述} & \textbf{主要属性} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    User & 用户账户 & id, username, email, phone, password\_hash, avatar, role, credit\_score, status, created\_at \\
+    Address & 收货地址 & id, user\_id, receiver, phone, province, city, district, detail, is\_default \\
+    Category & 商品分类 & id, name, parent\_id, level, sort\_order \\
+    Product & 商品信息 & id, user\_id, title, description, price, condition, category\_id, status, view\_count, created\_at \\
+    ProductImage & 商品图片 & id, product\_id, url, sort\_order \\
+    Favorite & 收藏记录 & id, user\_id, product\_id, created\_at \\
+    Order & 订单信息 & id, order\_no, buyer\_id, seller\_id, product\_id, total\_price, status, created\_at \\
+    OrderLog & 订单日志 & id, order\_id, from\_status, to\_status, operator, remark, created\_at \\
+    Message & 站内消息 & id, from\_user\_id, to\_user\_id, content, is\_read, created\_at \\
+    Notification & 系统通知 & id, user\_id, title, content, type, is\_read, created\_at \\
+    Review & 交易评价 & id, order\_id, from\_user\_id, to\_user\_id, rating, content, created\_at \\
+    Announcement & 系统公告 & id, admin\_id, title, content, status, created\_at \\
+\end{longtable}
+
+\subsection{Redis 缓存策略}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.25\textwidth}|p{0.15\textwidth}|p{0.3\textwidth}}
+    \toprule
+    \textbf{缓存对象} & \textbf{Key 设计} & \textbf{缓存时间} & \textbf{说明} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    用户会话 & session:\{userId\} & 7天 & JWT Token 刷新 \\
+    验证码 & captcha:\{email\} & 5分钟 & 注册/找回密码 \\
+    热点商品 & hot:product:\{id\} & 1小时 & 高访问量商品 \\
+    分类列表 & category:tree & 24小时 & 分类树结构 \\
+    首页推荐 & index:recommend & 10分钟 & 推荐列表 \\
+\end{longtable}
+
+% ==================== 7. 需求验证与确认 ====================
+\section{需求验证与确认}
+
+\subsection{需求验证方法}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{验证方法} & \textbf{适用范围} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    需求评审 & 全体需求条目，由项目组成员和指导教师共同评审 \\
+    原型验证 & 用户界面需求，通过 Vue3 原型页面进行验证 \\
+    测试用例推导 & 每项功能需求至少对应一个测试用例 \\
+    性能测试 & 非功能需求中的性能指标需通过压测工具验证 \\
+\end{longtable}
+
+\subsection{需求优先级与实施阶段}
+
+\begin{longtable}{p{0.08\textwidth}|p{0.22\textwidth}|p{0.35\textwidth}|p{0.2\textwidth}}
+    \toprule
+    \textbf{优先级} & \textbf{定义} & \textbf{对应需求} & \textbf{阶段} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    P0 & 必备 & 登录注册、商品CRUD、订单流转 & 第一阶段 \\
+    P1 & 重要 & 搜索筛选、图片上传、购物车 & 第二阶段 \\
+    P2 & 增强 & 数据统计、后台管理、信誉评价 & 第三阶段 \\
+    P3 & 可选 & 推荐算法、敏感词过滤 & 第四阶段 \\
+\end{longtable}
+
+\subsection{需求跟踪}
+
+需求跟踪矩阵（RTM）用于确保每项需求在后续的设计、实现和测试阶段均有对应的产出物。建议在项目实施过程中持续维护 RTM 表格。
+
+% ==================== 附录 ====================
+\newpage
+\appendix
+\section{需求优先级汇总表}
+
+\begin{longtable}{|c|p{0.3\textwidth}|c|p{0.2\textwidth}|}
+    \hline
+    \textbf{编号} & \textbf{需求名称} & \textbf{优先级} & \textbf{所属模块} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{编号} & \textbf{需求名称} & \textbf{优先级} & \textbf{所属模块} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    FR-UM-01 & 用户注册 & P0 & 用户管理 \\
+    \hline
+    FR-UM-02 & 用户登录 & P0 & 用户管理 \\
+    \hline
+    FR-UM-03 & 密码找回 & P1 & 用户管理 \\
+    \hline
+    FR-UM-04 & 个人信息管理 & P1 & 用户管理 \\
+    \hline
+    FR-UM-05 & 收货地址管理 & P2 & 用户管理 \\
+    \hline
+    FR-UM-06 & 用户信誉评分 & P2 & 用户管理 \\
+    \hline
+    FR-GM-01 & 商品发布 & P0 & 商品管理 \\
+    \hline
+    FR-GM-02 & 商品浏览与搜索 & P0 & 商品管理 \\
+    \hline
+    FR-GM-03 & 商品详情 & P0 & 商品管理 \\
+    \hline
+    FR-GM-04 & 商品状态管理 & P1 & 商品管理 \\
+    \hline
+    FR-OM-01 & 购物车 & P1 & 订单交易 \\
+    \hline
+    FR-OM-02 & 订单生成 & P0 & 订单交易 \\
+    \hline
+    FR-OM-03 & 订单状态流转 & P0 & 订单交易 \\
+    \hline
+    FR-OM-04 & 在线支付模拟 & P1 & 订单交易 \\
+    \hline
+    FR-OM-05 & 物流信息管理 & P2 & 订单交易 \\
+    \hline
+    FR-MM-01 & 站内信/留言板 & P1 & 消息沟通 \\
+    \hline
+    FR-MM-02 & 系统通知 & P1 & 消息沟通 \\
+    \hline
+    FR-MM-03 & 消息已读/未读标记 & P2 & 消息沟通 \\
+    \hline
+    FR-AM-01 & 用户管理（后台） & P2 & 后台管理 \\
+    \hline
+    FR-AM-02 & 商品审核（后台） & P2 & 后台管理 \\
+    \hline
+    FR-AM-03 & 订单管理（后台） & P2 & 后台管理 \\
+    \hline
+    FR-AM-04 & 数据统计（后台） & P2 & 后台管理 \\
+    \hline
+    FR-AM-05 & 公告管理（后台） & P2 & 后台管理 \\
+    \hline
+    FR-EF-01 & 商品推荐算法 & P3 & 扩展功能 \\
+    \hline
+    FR-EF-02 & 敏感词过滤 & P3 & 扩展功能 \\
+    \hline
+    FR-EF-03 & 交易纠纷处理 & P3 & 扩展功能 \\
+    \hline
+\end{longtable}
+
+\section{需求变更记录}
+
+\begin{longtable}{|c|c|p{0.3\textwidth}|c|c|}
+    \hline
+    \textbf{版本} & \textbf{日期} & \textbf{变更内容} & \textbf{变更人} & \textbf{审批人} \\
+    \hline
+    V1.0 & 2026-07-04 & 初始版本 & --- & --- \\
+    \hline
+\end{longtable}
+
+\vfill
+\begin{center}
+    \textit{本文档遵循 GB/T 45802-2025《系统与软件工程 生存周期过程 需求工程》标准编写}
+\end{center}
+
+\end{document}

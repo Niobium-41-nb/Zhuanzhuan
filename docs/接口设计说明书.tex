@@ -1,0 +1,620 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper,UTF8]{ctexart}
+
+% ==================== 宏包引入 ====================
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{float}
+
+% ==================== 超链接设置 ====================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+% ==================== 代码块样式 ====================
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    xleftmargin=2em,
+    aboveskip=1em,
+    belowskip=1em,
+    language=SQL
+}
+
+% JSON 代码风格
+\lstdefinelanguage{json}{
+    sensitive=true,
+    keywords={null,true,false},
+    morestring=[b]"
+}
+
+% ==================== 页眉页脚 ====================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small 校园二手物品交易平台 --- 接口设计说明书}
+\fancyfoot[C]{\thepage}
+
+% ==================== 标题格式 ====================
+\titleformat{\section}{\heiti\Large}{\bfseries\thesection}{1em}{}
+\titleformat{\subsection}{\heiti\large}{\bfseries\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\heiti\normalsize}{\bfseries\thesubsubsection}{1em}{}
+
+% ==================== 文档信息 ====================
+\title{\textbf{\Huge 接口设计说明书}\\[8pt]
+       \normalsize 校园二手物品交易平台 --- RESTful API 规范}
+\author{项目组}
+\date{版本：V1.0\\[4pt] 日期：2026-07-04}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% ==================== 目录 ====================
+\tableofcontents
+\newpage
+
+% ==================== 1. 引言 ====================
+\section{引言}
+
+\subsection{编写目的}
+
+本文档旨在明确校园二手物品交易平台前后端接口的规范与定义，为前端开发人员与后端开发人员提供统一的接口对接依据，确保前后端分离开发的高效协作。
+
+\subsection{适用范围}
+
+本文档适用于本项目的所有前端开发工程师、后端开发工程师及测试工程师。
+
+\subsection{参考文档}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|}
+        \hline
+        \textbf{序号} & \textbf{文档名称} \\
+        \hline
+        1 & 《软件需求规格说明书》 \\
+        \hline
+        2 & 《系统架构设计说明书》 \\
+        \hline
+        3 & 《数据库设计说明书》 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+% ==================== 2. 接口规范 ====================
+\section{接口规范}
+
+\subsection{通用规范}
+
+\begin{longtable}{p{0.15\textwidth}|p{0.75\textwidth}}
+    \toprule
+    \textbf{项目} & \textbf{规范} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    接口风格 & RESTful API \\
+    基础路径 & /api/v1/ \\
+    数据格式 & JSON（UTF-8 编码） \\
+    认证方式 & JWT Token（Bearer 认证） \\
+    内容类型 & application/json（上传使用 multipart/form-data） \\
+\end{longtable}
+
+\subsection{通用请求头}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.55\textwidth}|c}
+    \toprule
+    \textbf{请求头} & \textbf{说明} & \textbf{必填} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    Content-Type & application/json & \checkmark \\
+    Authorization & Bearer \{token\} & 需认证接口 \\
+    Accept-Language & zh-CN（默认） & \\
+\end{longtable}
+
+\subsection{统一响应格式}
+
+\begin{lstlisting}[language=json,breaklines=true]
+// 成功响应
+{"code": 200, "message": "success", "data": {}}
+
+// 失败响应
+{"code": 400, "message": "错误描述", "data": null}
+
+// 分页响应
+{"code": 200, "message": "success",
+ "data": {"records": [], "total": 100,
+          "page": 1, "size": 10, "pages": 10}}
+\end{lstlisting}
+
+\subsection{全局状态码}
+
+\begin{longtable}{|c|c|}
+    \hline
+    \textbf{状态码} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{状态码} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    200 & 请求成功 \\
+    \hline
+    201 & 创建成功 \\
+    \hline
+    400 & 请求参数错误 \\
+    \hline
+    401 & 未认证（Token 无效或过期） \\
+    \hline
+    403 & 无权限访问 \\
+    \hline
+    404 & 资源不存在 \\
+    \hline
+    409 & 资源冲突 \\
+    \hline
+    422 & 参数校验失败 \\
+    \hline
+    429 & 请求过于频繁 \\
+    \hline
+    500 & 服务器内部错误 \\
+    \hline
+\end{longtable}
+
+\subsection{通用分页参数}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{参数名} & \textbf{类型} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{参数名} & \textbf{类型} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    page & Integer & 1 & 页码，从1开始 \\
+    \hline
+    size & Integer & 10 & 每页条数，最大100 \\
+    \hline
+    sort & String & --- & 排序字段 \\
+    \hline
+    order & String & desc & 排序方向 asc/desc \\
+    \hline
+\end{longtable}
+
+% ==================== 3. 用户模块接口 ====================
+\section{用户模块接口}
+
+\subsection{用户注册}
+
+\textbf{URL：} POST /api/v1/user/register \hfill \textbf{权限：} 公开
+
+\textbf{请求参数：}
+
+\begin{lstlisting}[language=json,breaklines=true]
+{
+  "username": "zhangsan",
+  "password": "Abc12345",
+  "email": "zhangsan@edu.cn",
+  "phone": "13800138000",
+  "code": "123456"
+}
+\end{lstlisting}
+
+\textbf{成功响应 (201)：}
+
+\begin{lstlisting}[language=json,breaklines=true]
+{"code": 201, "message": "注册成功",
+ "data": {"userId": 1, "username": "zhangsan"}}
+\end{lstlisting}
+
+\subsection{用户登录}
+
+\textbf{URL：} POST /api/v1/user/login \hfill \textbf{权限：} 公开
+
+\textbf{响应：}
+
+\begin{lstlisting}[language=json,breaklines=true]
+{"code": 200, "message": "登录成功",
+ "data": {
+   "accessToken": "eyJ...",
+   "refreshToken": "eyJ...",
+   "expiresIn": 7200,
+   "user": {"userId": 1, "username": "zhangsan",
+            "nickname": "张三", "role": "user"}
+ }}
+\end{lstlisting}
+
+\subsection{用户地址管理}
+
+提供地址的 CRUD 接口：
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    GET & /api/v1/user/address & 地址列表 & 登录 \\
+    \hline
+    POST & /api/v1/user/address & 新增地址 & 登录 \\
+    \hline
+    PUT & /api/v1/user/address/\{id\} & 编辑地址 & 登录 \\
+    \hline
+    DELETE & /api/v1/user/address/\{id\} & 删除地址 & 登录 \\
+    \hline
+    PUT & /api/v1/user/address/\{id\}/default & 设为默认 & 登录 \\
+    \hline
+\end{longtable}
+
+\subsection{用户模块接口汇总}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    POST & /api/v1/user/register & 用户注册 & 公开 \\
+    \hline
+    POST & /api/v1/user/login & 用户登录 & 公开 \\
+    \hline
+    POST & /api/v1/user/logout & 退出登录 & 登录 \\
+    \hline
+    POST & /api/v1/user/refresh & 刷新Token & 公开 \\
+    \hline
+    POST & /api/v1/user/code & 发送验证码 & 公开 \\
+    \hline
+    POST & /api/v1/user/password/reset & 重置密码 & 公开 \\
+    \hline
+    GET & /api/v1/user/info & 获取个人信息 & 登录 \\
+    \hline
+    PUT & /api/v1/user/info & 更新个人信息 & 登录 \\
+    \hline
+    POST & /api/v1/user/avatar & 上传头像 & 登录 \\
+    \hline
+\end{longtable}
+
+% ==================== 4. 商品模块接口 ====================
+\section{商品模块接口}
+
+\subsection{商品列表（分页）}
+
+\textbf{URL：} GET /api/v1/product/list \hfill \textbf{权限：} 公开
+
+\textbf{查询参数：}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{参数} & \textbf{类型} & \textbf{默认值} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    keyword & String & --- & 搜索关键词 \\
+    \hline
+    categoryId & Integer & --- & 分类ID \\
+    \hline
+    minPrice/maxPrice & Decimal & --- & 价格区间 \\
+    \hline
+    condition & String & --- & 成色筛选 \\
+    \hline
+    sort & String & created\_at & 排序字段 \\
+    \hline
+    order & String & desc & 排序方向 \\
+    \hline
+\end{longtable}
+
+\subsection{商品模块接口汇总}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    GET & /api/v1/product/list & 商品列表 & 公开 \\
+    \hline
+    GET & /api/v1/product/\{id\} & 商品详情 & 公开 \\
+    \hline
+    POST & /api/v1/product & 发布商品 & 卖家 \\
+    \hline
+    PUT & /api/v1/product/\{id\} & 编辑商品 & 卖家 \\
+    \hline
+    DELETE & /api/v1/product/\{id\} & 删除商品 & 卖家 \\
+    \hline
+    PUT & /api/v1/product/\{id\}/status & 修改商品状态 & 卖家 \\
+    \hline
+    POST & /api/v1/product/favorite & 收藏/取消收藏 & 登录 \\
+    \hline
+    GET & /api/v1/product/favorite/list & 收藏列表 & 登录 \\
+    \hline
+    GET & /api/v1/category/list & 分类列表 & 公开 \\
+    \hline
+\end{longtable}
+
+% ==================== 5. 订单模块接口 ====================
+\section{订单模块接口}
+
+\subsection{订单模块接口汇总}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    POST & /api/v1/order & 创建订单 & 登录 \\
+    \hline
+    GET & /api/v1/order/list & 订单列表 & 登录 \\
+    \hline
+    GET & /api/v1/order/\{id\} & 订单详情 & 登录 \\
+    \hline
+    PUT & /api/v1/order/\{id\}/cancel & 取消订单 & 买家 \\
+    \hline
+    PUT & /api/v1/order/\{id\}/pay & 支付订单 & 买家 \\
+    \hline
+    PUT & /api/v1/order/\{id\}/ship & 确认发货 & 卖家 \\
+    \hline
+    PUT & /api/v1/order/\{id\}/receive & 确认收货 & 买家 \\
+    \hline
+    POST & /api/v1/order/\{id\}/review & 评价订单 & 登录 \\
+    \hline
+    GET & /api/v1/order/\{id\}/log & 订单日志 & 登录 \\
+    \hline
+\end{longtable}
+
+% ==================== 6. 消息模块接口 ====================
+\section{消息模块接口}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    GET & /api/v1/message/conversations & 会话列表 & 登录 \\
+    \hline
+    GET & /api/v1/message/conversation/\{userId\} & 聊天记录 & 登录 \\
+    \hline
+    POST & /api/v1/message/send & 发送消息 & 登录 \\
+    \hline
+    PUT & /api/v1/message/read/\{userId\} & 标记已读 & 登录 \\
+    \hline
+    GET & /api/v1/message/unread/count & 未读消息数 & 登录 \\
+    \hline
+    GET & /api/v1/notification/list & 通知列表 & 登录 \\
+    \hline
+    PUT & /api/v1/notification/read/\{id\} & 标记通知已读 & 登录 \\
+    \hline
+\end{longtable}
+
+% ==================== 7. 后台管理模块接口 ====================
+\section{后台管理模块接口}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    GET & /api/v1/admin/users & 用户列表 & 管理员 \\
+    \hline
+    PUT & /api/v1/admin/user/\{id\}/status & 禁用/启用用户 & 管理员 \\
+    \hline
+    PUT & /api/v1/admin/user/\{id\}/role & 修改角色 & 管理员 \\
+    \hline
+    GET & /api/v1/admin/product/review & 待审核商品 & 管理员 \\
+    \hline
+    PUT & /api/v1/admin/product/review/\{id\} & 审核商品 & 管理员 \\
+    \hline
+    PUT & /api/v1/admin/product/\{id\}/offline & 违规下架 & 管理员 \\
+    \hline
+    GET & /api/v1/admin/orders & 订单管理 & 管理员 \\
+    \hline
+    GET & /api/v1/admin/statistics & 数据统计 & 管理员 \\
+    \hline
+    POST & /api/v1/admin/announcement & 发布公告 & 管理员 \\
+    \hline
+    PUT & /api/v1/admin/announcement/\{id\} & 编辑公告 & 管理员 \\
+    \hline
+    DELETE & /api/v1/admin/announcement/\{id\} & 删除公告 & 管理员 \\
+    \hline
+\end{longtable}
+
+% ==================== 8. 公共接口 ====================
+\section{公共接口}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    GET & /api/v1/index/recommend & 首页推荐 & 公开 \\
+    \hline
+    GET & /api/v1/announcement/list & 公告列表 & 公开 \\
+    \hline
+    POST & /api/v1/upload/image & 通用图片上传 & 登录 \\
+    \hline
+\end{longtable}
+
+% ==================== 9. 认证与安全 ====================
+\section{认证与安全}
+
+\subsection{JWT 认证流程}
+
+\begin{enumerate}[itemsep=5pt]
+    \item \textbf{登录：} 用户提交凭证，服务端验证后生成 JWT（含用户ID、角色）
+    \item \textbf{请求：} 前端将 Token 放入 Authorization 请求头
+    \item \textbf{校验：} 后端 JWT 过滤器校验 Token 合法性
+    \item \textbf{刷新：} Access Token 过期后使用 Refresh Token 获取新 Token
+    \item \textbf{登出：} 前端清除本地 Token（可选：后端将 Token 加入黑名单）
+\end{enumerate}
+
+\subsection{Token 有效期}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.3\textwidth}|p{0.35\textwidth}}
+    \toprule
+    \textbf{Token 类型} & \textbf{有效期} & \textbf{说明} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    Access Token & 2 小时 & 正常接口访问 \\
+    Refresh Token & 7 天 & 刷新 Access Token \\
+\end{longtable}
+
+\subsection{安全防护}
+
+\begin{itemize}[itemsep=3pt]
+    \item \textbf{密码安全：} BCrypt 加密存储，禁止明文
+    \item \textbf{接口防刷：} Redis 实现 IP + 接口级别频率限制
+    \item \textbf{XSS 防护：} 输入转义 + 富文本过滤
+    \item \textbf{SQL 注入防护：} MyBatis-Plus 参数绑定
+    \item \textbf{数据脱敏：} 手机号中间4位 * 隐藏
+\end{itemize}
+
+% ==================== 附录 ====================
+\newpage
+\appendix
+\section{接口总表}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{模块} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{模块} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    POST & /api/v1/user/register & 用户 & 公开 \\
+    \hline
+    POST & /api/v1/user/login & 用户 & 公开 \\
+    \hline
+    POST & /api/v1/user/logout & 用户 & 登录 \\
+    \hline
+    POST & /api/v1/user/refresh & 用户 & 公开 \\
+    \hline
+    POST & /api/v1/user/code & 用户 & 公开 \\
+    \hline
+    POST & /api/v1/user/password/reset & 用户 & 公开 \\
+    \hline
+    GET & /api/v1/user/info & 用户 & 登录 \\
+    \hline
+    PUT & /api/v1/user/info & 用户 & 登录 \\
+    \hline
+    POST & /api/v1/user/avatar & 用户 & 登录 \\
+    \hline
+    GET/POST/PUT/DELETE & /api/v1/user/address & 用户 & 登录 \\
+    \hline
+    GET/POST/PUT/DELETE & /api/v1/product/** & 商品 & 公开/卖家 \\
+    \hline
+    POST/GET/PUT & /api/v1/order/** & 订单 & 登录 \\
+    \hline
+    GET/POST & /api/v1/message/** & 消息 & 登录 \\
+    \hline
+    GET/PUT & /api/v1/notification/** & 通知 & 登录 \\
+    \hline
+    GET/PUT/POST/DELETE & /api/v1/admin/** & 后台 & 管理员 \\
+    \hline
+    GET & /api/v1/index/recommend & 首页 & 公开 \\
+    \hline
+    GET & /api/v1/announcement/list & 公告 & 公开 \\
+    \hline
+\end{longtable}
+
+\section{版本记录}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{版本} & \textbf{日期} & \textbf{修改内容} & \textbf{修改人} \\
+    \hline
+    V1.0 & 2026-07-04 & 初始版本 & 项目组 \\
+    \hline
+\end{longtable}
+
+\vfill
+\begin{center}
+    \textit{本文档为校园二手物品交易平台 RESTful API 接口规范}
+\end{center}
+
+\end{document}

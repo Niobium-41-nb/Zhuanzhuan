@@ -1,0 +1,734 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper,UTF8]{ctexart}
+
+% ==================== 宏包引入 ====================
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{diagbox}
+
+% ==================== 超链接设置 ====================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+% ==================== 页眉页脚 ====================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small 校园二手物品交易平台 --- 系统架构设计说明书}
+\fancyfoot[C]{\thepage}
+
+% ==================== 标题格式 ====================
+\titleformat{\section}{\heiti\Large}{\bfseries\thesection}{1em}{}
+\titleformat{\subsection}{\heiti\large}{\bfseries\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\heiti\normalsize}{\bfseries\thesubsubsection}{1em}{}
+
+% ==================== 代码块样式 ====================
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    xleftmargin=2em,
+    aboveskip=1em,
+    belowskip=1em
+}
+
+% ==================== 文档信息 ====================
+\title{\textbf{\Huge 系统架构设计说明书}\\[8pt]
+       \normalsize 校园二手物品交易平台}
+\author{项目组}
+\date{版本：V1.0\\[4pt] 日期：2026-07-04}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+% ==================== 目录 ====================
+\tableofcontents
+\newpage
+
+% ==================== 1. 引言 ====================
+\section{引言}
+
+\subsection{编写目的}
+
+本文档旨在对校园二手物品交易平台进行全面的系统架构设计，明确系统的技术选型、架构风格、模块划分、数据库设计、接口规范及部署方案，为后续的详细设计与编码实现提供技术指导。
+
+\subsection{适用范围}
+
+本文档适用于本项目的系统架构师、后端开发工程师、前端开发工程师、测试工程师及项目管理人员。
+
+\subsection{参考文档}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|}
+        \hline
+        \textbf{序号} & \textbf{文档名称} \\
+        \hline
+        1 & 《软件需求规格说明书》 \\
+        \hline
+        2 & 《项目指导书》 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+% ==================== 2. 系统总体架构 ====================
+\section{系统总体架构}
+
+\subsection{架构风格}
+
+本系统采用\textbf{前后端分离架构}，前端为单页应用（SPA），后端提供RESTful~API服务。前后端通过HTTP/HTTPS协议进行数据交互，使用JWT实现无状态认证。
+
+\subsection{技术选型}
+
+\begin{longtable}{p{0.15\textwidth}|p{0.2\textwidth}|p{0.1\textwidth}|p{0.4\textwidth}}
+    \toprule
+    \textbf{层级} & \textbf{技术} & \textbf{版本} & \textbf{说明} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{层级} & \textbf{技术} & \textbf{版本} & \textbf{说明} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    前端框架 & Vue 3 & 3.4+ & 组合式API + TypeScript \\
+    UI组件库 & Element Plus & 2.5+ & 企业级UI组件 \\
+    状态管理 & Pinia & 2.1+ & Vue3官方状态管理 \\
+    路由管理 & Vue Router & 4.2+ & SPA路由控制 \\
+    HTTP客户端 & Axios & 1.6+ & 请求拦截器、统一错误处理 \\
+    后端框架 & Spring Boot & 3.2+ & 微服务快速开发框架 \\
+    安全框架 & Spring Security & 6.x+ & 认证与授权 \\
+    ORM框架 & MyBatis-Plus & 3.5+ & 数据库操作增强 \\
+    数据库 & MySQL & 8.0+ & 关系型数据库 \\
+    缓存 & Redis & 6.0+ & 高性能缓存 \\
+    令牌 & JWT & 0.12+ & 无状态认证 \\
+    接口文档 & Knife4j & 4.3+ & Swagger增强 \\
+    项目构建 & Maven & 3.9+ & 后端构建工具 \\
+    构建工具 & Vite & 5.0+ & 前端构建工具 \\
+\end{longtable}
+
+\subsection{系统架构层次}
+
+系统自上而下划分为四层：
+
+\begin{enumerate}[itemsep=5pt]
+    \item \textbf{客户端层：} Vue3 单页应用，Element Plus UI 组件，Axios HTTP 通信
+    \item \textbf{网关层：} SpringBoot 统一入口，CORS 跨域配置，JWT 认证过滤器
+    \item \textbf{业务层：} 用户模块、商品模块、订单模块、消息模块、后台管理模块
+    \item \textbf{数据层：} MySQL 关系型数据库、Redis 缓存
+\end{enumerate}
+
+% ==================== 3. 前端架构设计 ====================
+\section{前端架构设计}
+
+\subsection{项目目录结构}
+
+\begin{lstlisting}[language={},breaklines=true]
+zhuanzhuan-frontend/
+├── public/                       # 静态资源
+├── src/
+│   ├── api/                      # API接口层
+│   │   ├── request.ts            # Axios 实例与拦截器
+│   │   ├── user.ts               # 用户模块接口
+│   │   ├── product.ts            # 商品模块接口
+│   │   ├── order.ts              # 订单模块接口
+│   │   └── message.ts            # 消息模块接口
+│   ├── assets/                   # 静态资源
+│   ├── components/               # 公共组件
+│   │   ├── common/               # 通用组件
+│   │   ├── product/              # 商品相关组件
+│   │   └── layout/               # 布局组件
+│   ├── composables/              # 组合式函数
+│   ├── layouts/                  # 布局模板
+│   ├── router/                   # 路由配置
+│   ├── stores/                   # Pinia 状态管理
+│   │   ├── user.ts               # 用户状态
+│   │   └── app.ts                # 应用状态
+│   ├── utils/                    # 工具函数
+│   ├── views/                    # 页面组件
+│   │   ├── home/                 # 首页
+│   │   ├── product/              # 商品相关页面
+│   │   ├── order/                # 订单相关页面
+│   │   ├── user/                 # 个人中心页面
+│   │   ├── message/              # 消息页面
+│   │   └── admin/                # 后台管理页面
+│   ├── App.vue
+│   └── main.ts
+├── index.html
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
+\end{lstlisting}
+
+\subsection{路由设计}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{路由路径} & \textbf{页面组件} & \textbf{权限} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{路由路径} & \textbf{页面组件} & \textbf{权限} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    / & HomePage.vue & 公开 & 首页 \\
+    \hline
+    /login & LoginPage.vue & 公开 & 登录页 \\
+    \hline
+    /register & RegisterPage.vue & 公开 & 注册页 \\
+    \hline
+    /product/list & ProductList.vue & 公开 & 商品列表 \\
+    \hline
+    /product/:id & ProductDetail.vue & 公开 & 商品详情 \\
+    \hline
+    /product/publish & ProductPublish.vue & 卖家 & 发布商品 \\
+    \hline
+    /cart & CartPage.vue & 用户 & 购物车 \\
+    \hline
+    /order/list & OrderList.vue & 用户 & 订单列表 \\
+    \hline
+    /order/:id & OrderDetail.vue & 用户 & 订单详情 \\
+    \hline
+    /user/profile & UserProfile.vue & 用户 & 个人中心 \\
+    \hline
+    /user/address & AddressManage.vue & 用户 & 地址管理 \\
+    \hline
+    /user/favorites & UserFavorites.vue & 用户 & 我的收藏 \\
+    \hline
+    /message & MessagePage.vue & 用户 & 站内信 \\
+    \hline
+    /admin/users & AdminUsers.vue & 管理员 & 用户管理 \\
+    \hline
+    /admin/products & AdminProducts.vue & 管理员 & 商品审核 \\
+    \hline
+    /admin/orders & AdminOrders.vue & 管理员 & 订单管理 \\
+    \hline
+    /admin/stats & AdminStats.vue & 管理员 & 数据统计 \\
+    \hline
+    /admin/announcements & AdminAnnouncements.vue & 管理员 & 公告管理 \\
+    \hline
+\end{longtable}
+
+\subsection{状态管理设计 (Pinia)}
+
+前端使用 Pinia 进行状态管理，主要 Store 包括：
+
+\begin{itemize}[itemsep=3pt]
+    \item \textbf{userStore：} 用户信息、JWT~Token、登录状态
+    \item \textbf{appStore：} 系统配置、主题设置、全局 Loading
+    \item \textbf{productStore：} 商品列表缓存、分类缓存、搜索条件
+    \item \textbf{orderStore：} 当前订单、订单筛选条件
+    \item \textbf{messageStore：} 未读消息数、会话列表
+\end{itemize}
+
+\subsection{前端数据流}
+
+数据流向为：用户操作 $\rightarrow$ Vue~Component $\rightarrow$ Pinia~Action $\rightarrow$ API~Call（Axios）$\rightarrow$ SpringBoot~Backend $\rightarrow$ API~Response $\rightarrow$ Pinia~State $\rightarrow$ Vue~Component $\rightarrow$ 用户界面。
+
+% ==================== 4. 后端架构设计 ====================
+\section{后端架构设计}
+
+\subsection{项目目录结构}
+
+\begin{lstlisting}[language={},breaklines=true]
+zhuanzhuan-backend/
+├── src/main/java/com/zhuanzhuan/
+│   ├── ZhuanZhuanApplication.java       # 启动类
+│   ├── common/                         # 公共模块
+│   │   ├── config/                     # 配置类
+│   │   ├── constant/                   # 常量定义
+│   │   ├── exception/                  # 异常处理
+│   │   ├── result/                     # 统一返回结果
+│   │   └── util/                       # 工具类
+│   ├── modules/                        # 业务模块
+│   │   ├── user/                       # 用户模块
+│   │   ├── product/                    # 商品模块
+│   │   ├── order/                      # 订单模块
+│   │   ├── message/                    # 消息模块
+│   │   └── admin/                      # 后台管理模块
+│   └── security/                       # 安全模块
+├── src/main/resources/
+│   ├── application.yml
+│   ├── application-dev.yml
+│   └── application-prod.yml
+├── pom.xml
+└── README.md
+\end{lstlisting}
+
+\subsection{分层架构}
+
+后端采用经典的四层架构：
+
+\begin{longtable}{p{0.15\textwidth}|p{0.75\textwidth}}
+    \toprule
+    \textbf{层次} & \textbf{职责} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    Controller层 & 接收HTTP请求、参数校验、调用Service、返回RESTful响应 \\
+    Service层 & 核心业务逻辑、事务管理、业务规则校验 \\
+    Mapper层 & MyBatis-Plus 数据库CRUD、复杂查询 \\
+    Entity层 & POJO实体类、DTO数据传输对象、VO视图对象 \\
+\end{longtable}
+
+\subsection{统一响应格式}
+
+\begin{lstlisting}[language=json,breaklines=true]
+// 成功响应
+{"code": 200, "message": "success", "data": {}}
+
+// 失败响应
+{"code": 400, "message": "参数错误", "data": null}
+
+// 分页响应
+{"code": 200, "message": "success",
+ "data": {"records": [], "total": 100, "page": 1, "size": 10}}
+\end{lstlisting}
+
+% ==================== 5. 数据库设计 ====================
+\section{数据库设计}
+
+\subsection{实体关系}
+
+系统包含以下核心实体：用户（User）、商品（Product）、商品图片（ProductImage）、商品分类（Category）、订单（Order）、订单日志（OrderLog）、消息（Message）、通知（Notification）、收藏（Favorite）、收货地址（Address）、交易评价（Review）、公告（Announcement）。
+
+\subsection{数据库表结构}
+
+\subsubsection{用户表 (user)}
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{主键} & \textbf{非空} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{主键} & \textbf{非空} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & \checkmark & 用户ID \\
+    \hline
+    username & VARCHAR & 50 & & \checkmark & 用户名 \\
+    \hline
+    password\_hash & VARCHAR & 255 & & \checkmark & 密码(BCrypt) \\
+    \hline
+    email & VARCHAR & 100 & & & 邮箱 \\
+    \hline
+    phone & VARCHAR & 20 & & & 手机号 \\
+    \hline
+    avatar & VARCHAR & 255 & & & 头像URL \\
+    \hline
+    role & ENUM & & & \checkmark & 角色(user/admin) \\
+    \hline
+    credit\_score & INT & 11 & & & 信誉分 \\
+    \hline
+    status & TINYINT & 4 & & \checkmark & 状态(0禁用/1启用) \\
+    \hline
+    created\_at & DATETIME & & & \checkmark & 创建时间 \\
+    \hline
+\end{longtable}
+
+\subsubsection{商品表 (product)}
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{主键} & \textbf{非空} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{主键} & \textbf{非空} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & \checkmark & 商品ID \\
+    \hline
+    user\_id & BIGINT & 20 & & \checkmark & 卖家ID \\
+    \hline
+    category\_id & BIGINT & 20 & & \checkmark & 分类ID \\
+    \hline
+    title & VARCHAR & 100 & & \checkmark & 商品标题 \\
+    \hline
+    description & TEXT & & & & 商品描述 \\
+    \hline
+    price & DECIMAL & 10,2 & & \checkmark & 价格(元) \\
+    \hline
+    condition & ENUM & & & \checkmark & 成色 \\
+    \hline
+    status & ENUM & & & \checkmark & 状态 \\
+    \hline
+    view\_count & INT & 11 & & & 浏览量 \\
+    \hline
+    created\_at & DATETIME & & & \checkmark & 发布时间 \\
+    \hline
+\end{longtable}
+
+\subsubsection{订单表 (order)}
+
+\begin{longtable}{|c|c|c|c|c|p{0.25\textwidth}|}
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{主键} & \textbf{非空} & \textbf{说明} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{字段名} & \textbf{类型} & \textbf{长度} & \textbf{主键} & \textbf{非空} & \textbf{说明} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    id & BIGINT & 20 & \checkmark & \checkmark & 订单ID \\
+    \hline
+    order\_no & VARCHAR & 32 & & \checkmark & 订单号(唯一) \\
+    \hline
+    buyer\_id & BIGINT & 20 & & \checkmark & 买家ID \\
+    \hline
+    seller\_id & BIGINT & 20 & & \checkmark & 卖家ID \\
+    \hline
+    product\_id & BIGINT & 20 & & \checkmark & 商品ID \\
+    \hline
+    total\_price & DECIMAL & 10,2 & & \checkmark & 总价 \\
+    \hline
+    status & ENUM & & & \checkmark & 订单状态 \\
+    \hline
+    created\_at & DATETIME & & & \checkmark & 创建时间 \\
+    \hline
+\end{longtable}
+
+\subsection{Redis 缓存策略}
+
+\begin{longtable}{p{0.18\textwidth}|p{0.3\textwidth}|p{0.1\textwidth}|p{0.32\textwidth}}
+    \toprule
+    \textbf{缓存对象} & \textbf{Key 设计} & \textbf{过期时间} & \textbf{说明} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    验证码 & captcha:\{email/phone\} & 5分钟 & 注册/找回密码 \\
+    用户会话 & session:\{userId\} & 7天 & JWT Token刷新 \\
+    热点商品 & product:\{id\} & 30分钟 & 商品详情缓存 \\
+    商品分类 & category:tree & 24小时 & 分类树结构 \\
+    首页推荐 & index:recommend & 10分钟 & 按热度排序 \\
+    接口防刷 & rate:limit:\{ip\}:\{api\} & 1分钟 & 频率限制 \\
+\end{longtable}
+
+% ==================== 6. 接口设计 ====================
+\section{接口设计}
+
+\subsection{接口规范}
+
+\begin{itemize}[itemsep=3pt]
+    \item \textbf{接口风格：} RESTful API
+    \item \textbf{基础路径：} /api/v1/
+    \item \textbf{数据格式：} JSON (UTF-8)
+    \item \textbf{认证方式：} JWT Token (Authorization: Bearer)
+    \item \textbf{分页参数：} page（页码）、size（每页条数）
+\end{itemize}
+
+\subsection{用户模块接口}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    POST & /api/v1/user/register & 用户注册 & 公开 \\
+    \hline
+    POST & /api/v1/user/login & 用户登录 & 公开 \\
+    \hline
+    POST & /api/v1/user/code & 发送验证码 & 公开 \\
+    \hline
+    GET & /api/v1/user/info & 获取个人信息 & 登录 \\
+    \hline
+    PUT & /api/v1/user/info & 更新个人信息 & 登录 \\
+    \hline
+    POST & /api/v1/user/avatar & 上传头像 & 登录 \\
+    \hline
+    GET & /api/v1/user/address & 地址列表 & 登录 \\
+    \hline
+    POST & /api/v1/user/address & 新增地址 & 登录 \\
+    \hline
+    PUT & /api/v1/user/address/\{id\} & 编辑地址 & 登录 \\
+    \hline
+    DELETE & /api/v1/user/address/\{id\} & 删除地址 & 登录 \\
+    \hline
+\end{longtable}
+
+\subsection{商品模块接口}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    GET & /api/v1/product/list & 商品列表(分页) & 公开 \\
+    \hline
+    GET & /api/v1/product/\{id\} & 商品详情 & 公开 \\
+    \hline
+    POST & /api/v1/product & 发布商品 & 卖家 \\
+    \hline
+    PUT & /api/v1/product/\{id\} & 编辑商品 & 卖家 \\
+    \hline
+    DELETE & /api/v1/product/\{id\} & 删除商品 & 卖家 \\
+    \hline
+    POST & /api/v1/product/favorite & 收藏/取消收藏 & 登录 \\
+    \hline
+    GET & /api/v1/category/list & 分类列表 & 公开 \\
+    \hline
+\end{longtable}
+
+\subsection{订单模块接口}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    POST & /api/v1/order & 创建订单 & 登录 \\
+    \hline
+    GET & /api/v1/order/list & 订单列表 & 登录 \\
+    \hline
+    GET & /api/v1/order/\{id\} & 订单详情 & 登录 \\
+    \hline
+    PUT & /api/v1/order/\{id\}/pay & 支付订单 & 登录 \\
+    \hline
+    PUT & /api/v1/order/\{id\}/ship & 确认发货 & 卖家 \\
+    \hline
+    PUT & /api/v1/order/\{id\}/receive & 确认收货 & 买家 \\
+    \hline
+    POST & /api/v1/order/\{id\}/review & 评价订单 & 登录 \\
+    \hline
+\end{longtable}
+
+\subsection{后台管理接口}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{方法} & \textbf{路径} & \textbf{说明} & \textbf{权限} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    GET & /api/v1/admin/users & 用户列表 & 管理员 \\
+    \hline
+    PUT & /api/v1/admin/user/\{id\}/status & 禁用/启用用户 & 管理员 \\
+    \hline
+    GET & /api/v1/admin/product/review & 待审核商品 & 管理员 \\
+    \hline
+    PUT & /api/v1/admin/product/review/\{id\} & 审核商品 & 管理员 \\
+    \hline
+    GET & /api/v1/admin/orders & 订单管理 & 管理员 \\
+    \hline
+    GET & /api/v1/admin/statistics & 数据统计 & 管理员 \\
+    \hline
+    POST & /api/v1/admin/announcement & 发布公告 & 管理员 \\
+    \hline
+\end{longtable}
+
+% ==================== 7. 安全架构设计 ====================
+\section{安全架构设计}
+
+\subsection{认证与授权流程}
+
+用户认证基于 JWT Token 实现，授权基于 SpringSecurity 的 RBAC 模型：
+
+\begin{enumerate}[itemsep=3pt]
+    \item 用户登录后服务端生成 JWT Token（包含用户ID、角色等信息）
+    \item 客户端将 Token 存储于 localStorage，后续请求通过 Authorization 头携带
+    \item 后端 JWT 认证过滤器解析 Token，校验合法性后设置 SecurityContext
+    \item SpringSecurity 根据用户角色进行接口级权限控制
+\end{enumerate}
+
+\subsection{安全防护措施}
+
+\begin{longtable}{p{0.2\textwidth}|p{0.7\textwidth}}
+    \toprule
+    \textbf{防护类型} & \textbf{措施} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    XSS 防护 & 前端对用户输入做转义处理；后端使用 XSS 过滤库 \\
+    CSRF 防护 & SameSite=Lax Cookie 策略；关键接口校验 Referer \\
+    SQL 注入防护 & MyBatis-Plus 参数绑定；禁止字符串拼接 SQL \\
+    接口防刷 & Redis 实现接口频率限制（IP 级别） \\
+    数据脱敏 & 手机号中间4位隐藏；邮箱部分隐藏 \\
+    密码安全 & BCrypt 加密存储，随机盐值 \\
+\end{longtable}
+
+% ==================== 8. 部署架构 ====================
+\section{部署架构}
+
+\subsection{部署拓扑}
+
+系统部署分为四层：
+
+\begin{enumerate}[itemsep=5pt]
+    \item \textbf{负载均衡层：} Nginx 反向代理，SSL 终结，静态资源托管
+    \item \textbf{前端层：} Vue3 SPA 构建产物由 Nginx 托管
+    \item \textbf{后端层：} SpringBoot Jar 多实例部署，提供 RESTful API
+    \item \textbf{数据层：} MySQL 主从复制 + Redis 哨兵模式
+\end{enumerate}
+
+\subsection{环境要求}
+
+\begin{longtable}{p{0.17\textwidth}|p{0.53\textwidth}|p{0.15\textwidth}}
+    \toprule
+    \textbf{环境} & \textbf{配置} & \textbf{数量} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    前端服务器 & 2核4GB + Ubuntu 20.04 & 1 \\
+    后端服务器 & 4核8GB + JDK 17 + Ubuntu 20.04 & 2 \\
+    数据库服务器 & 4核8GB + MySQL 8.0 & 1 \\
+    缓存服务器 & 2核4GB + Redis 6.0 & 1 \\
+\end{longtable}
+
+% ==================== 9. 关键技术方案 ====================
+\section{关键技术方案}
+
+\subsection{事务管理}
+
+\begin{longtable}{p{0.15\textwidth}|p{0.2\textwidth}|p{0.5\textwidth}}
+    \toprule
+    \textbf{场景} & \textbf{策略} & \textbf{说明} \\
+    \midrule
+    \endhead
+    \bottomrule
+    \endfoot
+
+    订单创建 & @Transactional & 订单创建 + 库存扣减原子性 \\
+    支付回调 & @Transactional & 支付状态更新 + 商品状态更新原子性 \\
+    用户注册 & @Transactional & 用户创建 + 默认地址原子性 \\
+\end{longtable}
+
+\subsection{并发控制}
+
+\begin{itemize}[itemsep=3pt]
+    \item \textbf{乐观锁：} 商品表使用 version 字段，更新时校验版本号
+    \item \textbf{Redis 分布式锁：} 订单创建时使用 SETNX 防止重复下单
+    \item \textbf{数据库锁：} 库存扣减使用 SELECT ... FOR UPDATE 行级锁
+\end{itemize}
+
+\subsection{文件上传方案}
+
+\begin{itemize}[itemsep=3pt]
+    \item 开发/测试阶段：本地文件存储
+    \item 生产阶段：云 OSS（推荐阿里云OSS/七牛云）
+    \item 图片处理：Thumbnailator 生成缩略图
+\end{itemize}
+
+\subsection{日志方案}
+
+\begin{itemize}[itemsep=3pt]
+    \item 应用日志：SLF4J + Logback，分级输出，按日滚动归档
+    \item 操作日志：AOP + 自定义注解，记录关键操作
+    \item SQL日志：开发环境开启，生产环境关闭
+\end{itemize}
+
+% ==================== 附录 ====================
+\newpage
+\appendix
+\section{架构决策记录 (ADR)}
+
+\begin{longtable}{|c|p{0.18\textwidth}|p{0.18\textwidth}|p{0.45\textwidth}|}
+    \hline
+    \textbf{编号} & \textbf{决策} & \textbf{备选方案} & \textbf{选择理由} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{编号} & \textbf{决策} & \textbf{备选方案} & \textbf{选择理由} \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+
+    ADR-001 & 前后端分离架构 & 单体架构 & 更好的解耦与团队并行开发 \\
+    \hline
+    ADR-002 & JWT 无状态认证 & Session认证 & 无需服务端存储会话 \\
+    \hline
+    ADR-003 & MyBatis-Plus ORM & JPA/Hibernate & 灵活SQL控制，学习成本低 \\
+    \hline
+    ADR-004 & Element Plus UI & Ant Design Vue & Vue3生态最成熟的中文UI库 \\
+    \hline
+    ADR-005 & Vue Router History & Hash模式 & URL更美观 \\
+    \hline
+\end{longtable}
+
+\section{版本记录}
+
+\begin{longtable}{|c|c|c|c|}
+    \hline
+    \textbf{版本} & \textbf{日期} & \textbf{修改内容} & \textbf{修改人} \\
+    \hline
+    V1.0 & 2026-07-04 & 初始版本 & 项目组 \\
+    \hline
+\end{longtable}
+
+\vfill
+\begin{center}
+    \textit{本文档为校园二手物品交易平台系统架构设计说明书}
+\end{center}
+
+\end{document}
