@@ -13,6 +13,7 @@ public interface ProductService extends IService<Product> {
     IPage<ProductListVO> getProductList(int page, int size, String keyword, Long categoryId,
                                          BigDecimal minPrice, BigDecimal maxPrice, String condition,
                                          String sort, String order, Long userId, String status);
+    IPage<ProductListVO> getMyProducts(Long userId, int page, int size, String status);
     ProductVO getProductDetail(Long id, Long currentUserId);
     ProductVO updateProduct(Long userId, Long productId, ProductPublishDTO dto);
     void deleteProduct(Long userId, Long productId);

@@ -35,6 +35,7 @@
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+                    <el-dropdown-item command="myProducts">我的商品</el-dropdown-item>
                     <el-dropdown-item command="orders">我的订单</el-dropdown-item>
                     <el-dropdown-item command="favorites">我的收藏</el-dropdown-item>
                     <el-dropdown-item command="address">地址管理</el-dropdown-item>
@@ -104,6 +105,7 @@ onMounted(async () => {
 function handleUserCommand(command: string) {
   switch (command) {
     case 'profile': router.push('/user/profile'); break
+    case 'myProducts': router.push('/user/my-products'); break
     case 'orders': router.push('/order/list'); break
     case 'favorites': router.push('/user/favorites'); break
     case 'address': router.push('/user/address'); break

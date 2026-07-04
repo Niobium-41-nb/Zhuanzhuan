@@ -80,6 +80,15 @@ public class ProductController {
         return Result.success(favoriteService.toggle(getCurrentUserId(), body.get("productId")));
     }
 
+    @GetMapping("/product/my")
+    public PageResult<ProductListVO> getMyProducts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String status) {
+        var result = productService.getMyProducts(getCurrentUserId(), page, size, status);
+        return PageResult.success(result.getRecords(), result.getTotal(), page, size);
+    }
+
     @GetMapping("/product/favorite/list")
     public PageResult<ProductListVO> getFavoriteList(
             @RequestParam(defaultValue = "1") int page,

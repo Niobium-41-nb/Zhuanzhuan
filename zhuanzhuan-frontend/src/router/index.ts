@@ -17,6 +17,7 @@ const router = createRouter({
         { path: 'order/:id', name: 'OrderDetail', component: () => import('@/views/order/OrderDetail.vue'), meta: { title: '订单详情', requiresAuth: true } },
         { path: 'user/profile', name: 'UserProfile', component: () => import('@/views/user/UserProfile.vue'), meta: { title: '个人中心', requiresAuth: true } },
         { path: 'user/address', name: 'AddressManage', component: () => import('@/views/user/AddressManage.vue'), meta: { title: '地址管理', requiresAuth: true } },
+        { path: 'user/my-products', name: 'MyProducts', component: () => import('@/views/product/MyProducts.vue'), meta: { title: '我的商品', requiresAuth: true } },
         { path: 'user/favorites', name: 'UserFavorites', component: () => import('@/views/user/UserFavorites.vue'), meta: { title: '我的收藏', requiresAuth: true } },
         { path: 'message', name: 'Message', component: () => import('@/views/message/MessagePage.vue'), meta: { title: '站内信', requiresAuth: true } },
         { path: 'guide', name: 'Guide', component: () => import('@/views/home/GuidePage.vue'), meta: { title: '使用指南' } },

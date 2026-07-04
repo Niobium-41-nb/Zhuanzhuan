@@ -114,6 +114,30 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
+    public IPage<ProductListVO> getMyProducts(Long userId, int page, int size, String status) {
+        Page<Product> pageParam = new Page<>(page, size);
+        IPage<Product> productPage = productMapper.selectPageWithCondition(
+                pageParam, null, null, null, null, null, status, userId, null, null);
+
+        List<Product> products = productPage.getRecords();
+
+        Set<Long> catIds = products.stream().map(Product::getCategoryId).collect(Collectors.toSet());
+        Map<Long, String> catNameMap = catIds.isEmpty() ? Collections.emptyMap()
+                : categoryMapper.selectBatchIds(catIds).stream()
+                        .collect(Collectors.toMap(Category::getId, Category::getName));
+
+        IPage<ProductListVO> voPage = new Page<>(page, size);
+        voPage.setTotal(productPage.getTotal());
+        voPage.setRecords(products.stream().map(p -> {
+            ProductListVO vo = new ProductListVO();
+            BeanUtil.copyProperties(p, vo);
+            vo.setCategoryName(catNameMap.get(p.getCategoryId()));
+            return vo;
+        }).collect(Collectors.toList()));
+        return voPage;
+    }
+
+    @Override
     public ProductVO getProductDetail(Long id, Long currentUserId) {
         Product product = productMapper.selectById(id);
         if (product == null) throw new BusinessException(404, "商品不存在");

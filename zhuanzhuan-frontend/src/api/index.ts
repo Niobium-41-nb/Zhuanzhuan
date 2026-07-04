@@ -25,6 +25,7 @@ export const productApi = {
   delete(id: number) { return request.delete(`/product/${id}`) },
   updateStatus(id: number, data: any) { return request.put(`/product/${id}/status`, data) },
   toggleFavorite(data: any) { return request.post('/product/favorite', data) },
+  getMyProducts(params: any) { return request.get('/product/my', { params }) },
   getFavoriteList(params: any) { return request.get('/product/favorite/list', { params }) },
   getCategories() { return request.get('/category/list') },
   uploadImage(formData: FormData) { return request.post('/upload/image', formData, { headers: { 'Content-Type': 'multipart/form-data' } }) }
