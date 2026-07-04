@@ -37,7 +37,7 @@ async function loadOrders() {
   const params: any = { role: 'buyer' }
   if (activeStatus.value) params.status = activeStatus.value
   const res = await orderApi.getList(params)
-  list.value = res.data?.records || []
+  list.value = res.data || []
 }
 
 function statusType(s: string) {

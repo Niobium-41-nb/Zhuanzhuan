@@ -23,7 +23,7 @@ import { adminApi } from '@/api'
 
 const list = ref<any[]>([])
 
-onMounted(async () => { const res = await adminApi.getReviewList({}); list.value = res.data?.records || [] })
+onMounted(async () => { const res = await adminApi.getReviewList({}); list.value = res.data || [] })
 
 async function review(id: number, action: string) {
   await adminApi.reviewProduct(id, { action })

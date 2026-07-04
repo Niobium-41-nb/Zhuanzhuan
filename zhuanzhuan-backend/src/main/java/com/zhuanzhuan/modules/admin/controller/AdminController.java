@@ -75,11 +75,13 @@ public class AdminController {
     @GetMapping("/product/review")
     public PageResult<Product> getReviewList(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String status) {
         Page<Product> pageParam = new Page<>(page, size);
-        IPage<Product> result = productMapper.selectPage(pageParam,
-                new LambdaQueryWrapper<Product>().eq(Product::getStatus, "待审核")
-                        .orderByDesc(Product::getCreatedAt));
+        LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<Product>()
+                .eq(status != null && !status.isEmpty(), Product::getStatus, status)
+                .orderByDesc(Product::getCreatedAt);
+        IPage<Product> result = productMapper.selectPage(pageParam, wrapper);
         return PageResult.success(result.getRecords(), result.getTotal(), page, size);
     }
 

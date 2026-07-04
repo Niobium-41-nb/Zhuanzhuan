@@ -24,7 +24,7 @@ const list = ref<any[]>([])
 
 onMounted(async () => {
   const res = await productApi.getFavoriteList({ page: 1, size: 20 })
-  list.value = res.data?.records || []
+  list.value = res.data || []
 })
 </script>
 

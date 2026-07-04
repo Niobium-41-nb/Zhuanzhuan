@@ -1,0 +1,36 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    username: sa
+    password:
+
+  sql:
+    init:
+      mode: never
+
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted_at
+      logic-delete-value: now()
+      logic-not-delete-value: null
+
+jwt:
+  secret: TestSecretKeyForJUnitTestingOnly12345678901234567890
+  access-token-expiration: 3600000
+  refresh-token-expiration: 604800000

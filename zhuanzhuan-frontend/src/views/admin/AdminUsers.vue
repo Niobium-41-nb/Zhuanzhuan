@@ -29,7 +29,7 @@ import { adminApi } from '@/api'
 
 const list = ref<any[]>([])
 
-onMounted(async () => { const res = await adminApi.getUsers({}); list.value = res.data?.records || [] })
+onMounted(async () => { const res = await adminApi.getUsers({}); list.value = res.data || [] })
 
 async function toggleStatus(row: any) {
   await adminApi.updateUserStatus(row.id, { status: row.status === 1 ? 0 : 1 })

@@ -19,7 +19,7 @@ import { adminApi } from '@/api'
 
 const list = ref<any[]>([])
 
-onMounted(async () => { const res = await adminApi.getOrders({}); list.value = res.data?.records || [] })
+onMounted(async () => { const res = await adminApi.getOrders({}); list.value = res.data || [] })
 
 function tagType(s: string) { const map: any = { '待付款': 'warning', '待发货': 'primary', '待收货': 'info', '已完成': 'success', '已取消': 'info' }; return map[s] || '' }
 </script>

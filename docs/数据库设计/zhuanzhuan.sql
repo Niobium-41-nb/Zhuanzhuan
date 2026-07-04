@@ -49,18 +49,28 @@ CREATE TABLE `user` (
 -- ============================================================
 -- 2. 商品分类表 (category)
 --    存储商品的多级分类信息
+--    一级分类固定为6个：电子产品、书籍教材、生活用品、服饰鞋包、运动户外、其他
+--    二级分类为各一级分类下的子分类，通过 parent_id 关联
 -- ============================================================
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
     `id`         BIGINT(20)  NOT NULL  AUTO_INCREMENT  COMMENT '分类ID',
     `name`       VARCHAR(50) NOT NULL                  COMMENT '分类名称',
     `parent_id`  BIGINT(20)  DEFAULT 0                 COMMENT '父分类ID(0为顶级)',
-    `level`      TINYINT(4)  NOT NULL DEFAULT 1        COMMENT '层级(1/2/3)',
+    `level`      TINYINT(4)  NOT NULL DEFAULT 1        COMMENT '层级(1一级/2二级)',
     `icon`       VARCHAR(255) DEFAULT NULL             COMMENT '分类图标',
     `sort_order` INT(11)     DEFAULT 0                 COMMENT '排序序号',
     `status`     TINYINT(4)  NOT NULL DEFAULT 1        COMMENT '状态(0隐藏/1显示)',
     PRIMARY KEY (`id`),
-    KEY `idx_parent_id` (`parent_id`)
+    KEY `idx_parent_id` (`parent_id`),
+    CONSTRAINT `ck_category_level` CHECK (`level` IN (1, 2)),
+    CONSTRAINT `ck_category_parent` CHECK (
+        (`level` = 1 AND `parent_id` = 0) OR
+        (`level` = 2 AND `parent_id` > 0)
+    ),
+    CONSTRAINT `ck_category_name_level1` CHECK (
+        `level` = 2 OR `name` IN ('电子产品', '书籍教材', '生活用品', '服饰鞋包', '运动户外', '其他')
+    )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品分类表';
 
 -- ============================================================
@@ -287,11 +297,10 @@ CREATE TABLE `announcement` (
 -- 初始化数据
 -- ============================================================
 
--- 插入默认管理员（密码: admin123，BCrypt哈希值）
--- 注意：实际生产环境请使用 BCryptPasswordEncoder 生成
+-- 插入默认管理员（密码: admin123）
 INSERT INTO `user` (`id`, `username`, `password_hash`, `email`, `nickname`, `role`, `status`) VALUES
-(1, 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'admin@zhuanzhuan.com', '系统管理员', 'admin', 1),
-(2, 'testuser', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'test@zhuanzhuan.com', '测试用户', 'user', 1);
+(1, 'admin', '$2a$10$jnb0EqRycqlWErewqY3CS.qIafyXZv./nii/J/AFyEtCItBs74KYK', 'admin@zhuanzhuan.com', '系统管理员', 'admin', 1),
+(2, 'testuser', '$2a$10$jnb0EqRycqlWErewqY3CS.qIafyXZv./nii/J/AFyEtCItBs74KYK', 'test@zhuanzhuan.com', '测试用户', 'user', 1);
 
 -- 插入商品分类
 INSERT INTO `category` (`id`, `name`, `parent_id`, `level`, `sort_order`, `status`) VALUES
