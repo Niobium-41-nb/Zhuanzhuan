@@ -83,6 +83,50 @@ services:
     networks:
       - zhuanzhuan-net
 
+  # ============================================================
+  # SpringBoot 后端服务
+  # ============================================================
+  backend:
+    build:
+      context: ./zhuanzhuan-backend
+      dockerfile: Dockerfile
+    container_name: zhuanzhuan-backend
+    hostname: backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - upload_data:/data/zhuanzhuan/uploads
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JWT_SECRET: ZhuanZhuanSecretKey2024ForJWTTokenGenerationAndValidation
+      JWT_ACCESS_TOKEN_EXPIRATION: 7200000
+      JWT_REFRESH_TOKEN_EXPIRATION: 604800000
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - zhuanzhuan-net
+
+  # ============================================================
+  # Vue3 前端服务（Nginx）
+  # ============================================================
+  frontend:
+    build:
+      context: ./zhuanzhuan-frontend
+      dockerfile: Dockerfile
+    container_name: zhuanzhuan-frontend
+    hostname: frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - zhuanzhuan-net
+
 # ============================================================
 # 数据卷定义
 # ============================================================
@@ -90,6 +134,8 @@ volumes:
   mysql_data:
     driver: local
   redis_data:
+    driver: local
+  upload_data:
     driver: local
 
 # ============================================================

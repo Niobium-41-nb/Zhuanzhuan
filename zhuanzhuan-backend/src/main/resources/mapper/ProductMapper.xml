@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhuanzhuan.modules.product.mapper.ProductMapper">
+
+    <resultMap id="productMap" type="com.zhuanzhuan.modules.product.entity.Product">
+        <id column="id" property="id"/>
+    </resultMap>
+
+    <select id="selectPageWithCondition" resultMap="productMap">
+        SELECT p.* FROM product p
+        WHERE p.deleted_at IS NULL
+        <if test="status != null and status != ''">
+            AND p.status = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (p.title LIKE CONCAT('%', #{keyword}, '%') OR p.description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="categoryId != null">
+            AND p.category_id = #{categoryId}
+        </if>
+        <if test="minPrice != null">
+            AND p.price &gt;= #{minPrice}
+        </if>
+        <if test="maxPrice != null">
+            AND p.price &lt;= #{maxPrice}
+        </if>
+        <if test="condition != null and condition != ''">
+            AND p.condition = #{condition}
+        </if>
+        <if test="userId != null">
+            AND p.user_id = #{userId}
+        </if>
+        <choose>
+            <when test="sort != null and sort != ''">
+                ORDER BY p.${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY p.created_at DESC
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

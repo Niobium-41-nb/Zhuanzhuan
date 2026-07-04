@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: zhuanzhuan-backend
+  profiles:
+    active: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/zhuanzhuan?useUnicode=true&characterEncoding=utf8mb4&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: root123
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: redis123
+      database: 0
+      timeout: 5000
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 50MB
+
+server:
+  port: 8080
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.zhuanzhuan.modules.*.entity
+  global-config:
+    db-config:
+      id-type: AUTO
+      logic-delete-field: deleted_at
+      logic-delete-value: now()
+      logic-not-delete-value: 'null'
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+knife4j:
+  enable: true
+  openapi:
+    title: 校园二手物品交易平台 API 文档
+    description: 基于 Vue3 + SpringBoot 的校园C2C交易平台
+    version: 1.0.0
+    group:
+      default:
+        group-name: 默认分组
+        api-rule: package
+        api-rule-resources:
+          - com.zhuanzhuan.modules
+
+jwt:
+  secret: ZhuanZhuanSecretKey2024ForJWTTokenGenerationAndValidation
+  access-token-expiration: 7200000
+  refresh-token-expiration: 604800000
+
+upload:
+  path: /data/zhuanzhuan/uploads
+  max-size: 5242880
+  allow-types: jpg,jpeg,png,gif,webp
