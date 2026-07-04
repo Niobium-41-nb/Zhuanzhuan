@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { productApi } from '@/api'
+import { productApi, indexApi } from '@/api'
 
 const router = useRouter()
 const keyword = ref('')
@@ -130,6 +130,16 @@ onMounted(async () => {
     const catRes = await productApi.getCategories()
     categories.value = catRes.data || []
   } catch (_) {}
+  try {
+    const statRes: any = await indexApi.getStatistics()
+    if (statRes.data) {
+      stats.value = {
+        users: statRes.data.userCount?.toLocaleString() || '--',
+        products: statRes.data.productCount?.toLocaleString() || '--',
+        trades: statRes.data.orderCount?.toLocaleString() || '--'
+      }
+    }
+  } catch (_) {}
   await loadProducts()
 })
 
@@ -138,7 +148,7 @@ async function loadProducts() {
   if (activeCategory.value !== '0') params.categoryId = activeCategory.value
   try {
     const res: any = await productApi.getList(params)
-    products.value = res.data?.records || []
+    products.value = res.data || []
     loaded.value = true
   } catch (_) {}
 }

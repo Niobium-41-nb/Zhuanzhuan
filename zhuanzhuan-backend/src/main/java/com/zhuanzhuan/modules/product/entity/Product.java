@@ -16,6 +16,7 @@ public class Product {
     private String description;
     private BigDecimal price;
     private BigDecimal originalPrice;
+    @TableField("`condition`")
     private String condition;
     private String coverImage;
     private Integer viewCount;

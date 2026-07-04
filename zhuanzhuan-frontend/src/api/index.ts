@@ -81,5 +81,6 @@ export const adminApi = {
 
 export const indexApi = {
   getRecommend() { return request.get('/index/recommend') },
+  getStatistics() { return request.get('/index/statistics') },
   getAnnouncements() { return request.get('/announcement/list') }
 }

@@ -100,7 +100,7 @@ async function loadData() {
   else if (sortField.value === 'view_count') { params.sort = 'view_count'; params.order = 'desc' }
   try {
     const res: any = await productApi.getList(params)
-    list.value = res.data?.records || []
+    list.value = res.data || []
     total.value = res.total || 0
     loaded.value = true
   } catch (_) {}
