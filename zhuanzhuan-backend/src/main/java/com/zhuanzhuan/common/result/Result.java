@@ -8,7 +8,7 @@ public class Result<T> {
     private String message;
     private T data;
 
-    private Result() {}
+    protected Result() {}
 
     private Result(Integer code, String message, T data) {
         this.code = code;

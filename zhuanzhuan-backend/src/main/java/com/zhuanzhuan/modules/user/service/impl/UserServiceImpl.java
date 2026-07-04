@@ -16,7 +16,10 @@ import com.zhuanzhuan.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String mailFrom;
 
     @Override
     @Transactional
@@ -114,7 +121,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String code = RandomUtil.randomNumbers(6);
         String cacheKey = "captcha:" + target;
         redisTemplate.opsForValue().set(cacheKey, code, 5, TimeUnit.MINUTES);
-        log.info("验证码已发送至 {}: {}", target, code);
+
+        // 发送邮件验证码
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(mailFrom);
+            message.setTo(target);
+            message.setSubject("转转 - 邮箱验证码");
+            message.setText("您的验证码是: " + code + "\n\n验证码有效期为5分钟，请勿泄露给他人。\n\n如果非本人操作，请忽略此邮件。");
+            mailSender.send(message);
+            log.info("验证码已发送至邮箱 {}: {}", target, code);
+        } catch (Exception e) {
+            log.error("发送验证码至 {} 失败: {}", target, e.getMessage());
+            throw new BusinessException(500, "验证码发送失败，请检查邮箱地址或稍后重试");
+        }
     }
 
     @Override

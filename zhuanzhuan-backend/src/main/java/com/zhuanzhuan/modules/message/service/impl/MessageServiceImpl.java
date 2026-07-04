@@ -1,6 +1,7 @@
 package com.zhuanzhuan.modules.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhuanzhuan.modules.message.entity.Message;
@@ -95,7 +96,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     @Transactional
     public void markAsRead(Long userId, Long otherUserId) {
-        messageMapper.update(null, new LambdaQueryWrapper<Message>()
+        messageMapper.update(null, new LambdaUpdateWrapper<Message>()
                 .eq(Message::getFromUserId, otherUserId)
                 .eq(Message::getToUserId, userId)
                 .eq(Message::getIsRead, 0)

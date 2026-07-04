@@ -7,8 +7,9 @@ services:
     container_name: zhuanzhuan-mysql
     hostname: mysql
     restart: unless-stopped
-    ports:
-      - "3306:3306"
+    # 仅容器内部网络通信，无需暴露到宿主机
+    expose:
+      - "3306"
     environment:
       # root 用户密码
       MYSQL_ROOT_PASSWORD: root123
@@ -47,8 +48,9 @@ services:
     container_name: zhuanzhuan-redis
     hostname: redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
+    # 仅容器内部网络通信，无需暴露到宿主机
+    expose:
+      - "6379"
     volumes:
       - redis_data:/data
       - ./deploy/redis/redis.conf:/usr/local/etc/redis/redis.conf
@@ -69,8 +71,9 @@ services:
     image: phpmyadmin:latest
     container_name: zhuanzhuan-phpmyadmin
     restart: unless-stopped
+    # 管理工具，使用不冲突的端口
     ports:
-      - "8080:80"
+      - "3001:80"
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
@@ -93,10 +96,13 @@ services:
     container_name: zhuanzhuan-backend
     hostname: backend
     restart: unless-stopped
-    ports:
-      - "8080:8080"
+    # 前端 Nginx 已通过内部网络代理 API，无需暴露到宿主机
+    expose:
+      - "8080"
     volumes:
       - upload_data:/data/zhuanzhuan/uploads
+    env_file:
+      - .env
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JWT_SECRET: ZhuanZhuanSecretKey2024ForJWTTokenGenerationAndValidation
@@ -121,7 +127,7 @@ services:
     hostname: frontend
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "3000:80"
     depends_on:
       - backend
     networks:
