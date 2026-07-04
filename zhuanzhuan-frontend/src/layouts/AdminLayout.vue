@@ -5,7 +5,7 @@
         <div class="admin-logo">转转 · 管理后台</div>
         <el-menu :router="true" :default-active="route.path">
           <el-menu-item index="/admin/users"><el-icon><User /></el-icon>用户管理</el-menu-item>
-          <el-menu-item index="/admin/products"><el-icon><Goods /></el-icon>商品审核</el-menu-item>
+          <el-menu-item index="/admin/products"><el-icon><Goods /></el-icon>商品管理</el-menu-item>
           <el-menu-item index="/admin/orders"><el-icon><List /></el-icon>订单管理</el-menu-item>
           <el-menu-item index="/admin/stats"><el-icon><DataAnalysis /></el-icon>数据统计</el-menu-item>
           <el-menu-item index="/admin/announcements"><el-icon><Bell /></el-icon>公告管理</el-menu-item>

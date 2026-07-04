@@ -95,7 +95,13 @@ async function submit() {
   if (!valid) return
   submitting.value = true
   try {
-    await productApi.publish(form)
+    // el-cascader 返回数组 [父ID, 子ID]，后端需要单个 Long（叶子节点 ID）
+    const catId: unknown = form.categoryId
+    const payload = {
+      ...form,
+      categoryId: Array.isArray(catId) ? catId[catId.length - 1] : catId
+    }
+    await productApi.publish(payload)
     ElMessage.success('发布成功，等待审核')
     router.push('/')
   } catch (_) {} finally { submitting.value = false }

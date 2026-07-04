@@ -64,15 +64,25 @@ export const notificationApi = {
 }
 
 export const adminApi = {
+  // Users
   getUsers(params: any) { return request.get('/admin/users', { params }) },
   updateUserStatus(id: number, data: any) { return request.put(`/admin/user/${id}/status`, data) },
   updateUserRole(id: number, data: any) { return request.put(`/admin/user/${id}/role`, data) },
+  // Products
+  getProductList(params: any) { return request.get('/admin/products', { params }) },
   getReviewList(params: any) { return request.get('/admin/product/review', { params }) },
   reviewProduct(id: number, data: any) { return request.put(`/admin/product/review/${id}`, data) },
-  offlineProduct(id: number, data: any) { return request.put(`/admin/product/${id}/offline`, data) },
+  adminUpdateProduct(id: number, data: any) { return request.put(`/admin/product/${id}`, data) },
+  offlineProduct(id: number) { return request.put(`/admin/product/${id}/offline`) },
+  adminDeleteProduct(id: number) { return request.delete(`/admin/product/${id}`) },
+  // Orders
   getOrders(params: any) { return request.get('/admin/orders', { params }) },
+  getOrderDetail(id: number) { return request.get(`/admin/order/${id}`) },
+  updateOrderStatus(id: number, data: any) { return request.put(`/admin/order/${id}/status`, data) },
+  // Statistics
   getStatistics() { return request.get('/admin/statistics') },
   getStatisticsDetail(params: any) { return request.get('/admin/statistics/detail', { params }) },
+  // Announcements
   getAnnouncements() { return request.get('/admin/announcement') },
   createAnnouncement(data: any) { return request.post('/admin/announcement', data) },
   updateAnnouncement(id: number, data: any) { return request.put(`/admin/announcement/${id}`, data) },

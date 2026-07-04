@@ -17,8 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,14 +65,33 @@ public class FavoriteServiceImpl implements FavoriteService {
         Page<Favorite> result = favoriteMapper.selectPage(favPage,
                 new LambdaQueryWrapper<Favorite>().eq(Favorite::getUserId, userId).orderByDesc(Favorite::getCreatedAt));
 
+        List<Favorite> records = result.getRecords();
+        if (records.isEmpty()) {
+            IPage<ProductListVO> voPage = new Page<>(page, size);
+            voPage.setTotal(result.getTotal());
+            voPage.setRecords(Collections.emptyList());
+            return voPage;
+        }
+
+        // 批量查询商品（1 次查询替代 N 次）
+        Set<Long> productIds = records.stream().map(Favorite::getProductId).collect(Collectors.toSet());
+        Map<Long, Product> productMap = productMapper.selectBatchIds(productIds).stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
+        // 批量查询卖家（1 次查询替代 N 次）
+        Set<Long> sellerIds = productMap.values().stream().map(Product::getUserId).collect(Collectors.toSet());
+        Map<Long, User> userMap = sellerIds.isEmpty() ? Collections.emptyMap()
+                : userMapper.selectBatchIds(sellerIds).stream()
+                        .collect(Collectors.toMap(User::getId, Function.identity()));
+
         IPage<ProductListVO> voPage = new Page<>(page, size);
         voPage.setTotal(result.getTotal());
-        voPage.setRecords(result.getRecords().stream().map(fav -> {
-            Product p = productMapper.selectById(fav.getProductId());
+        voPage.setRecords(records.stream().map(fav -> {
+            Product p = productMap.get(fav.getProductId());
             if (p == null) return null;
             ProductListVO vo = new ProductListVO();
             BeanUtil.copyProperties(p, vo);
-            User seller = userMapper.selectById(p.getUserId());
+            User seller = userMap.get(p.getUserId());
             if (seller != null) {
                 Map<String, Object> sellerMap = new HashMap<>();
                 sellerMap.put("userId", seller.getId());

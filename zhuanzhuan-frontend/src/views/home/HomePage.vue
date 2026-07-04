@@ -74,7 +74,7 @@
           @click="$router.push(`/product/${item.id}`)"
         >
           <div class="card-img-wrap">
-            <img :src="item.coverImage || 'https://via.placeholder.com/300x200?text=暂无图片'" :alt="item.title" class="card-img" />
+            <img :src="getProductCover(item)" :alt="item.title" class="card-img" />
             <span class="card-category">{{ item.categoryName }}</span>
           </div>
           <div class="card-body">
@@ -102,6 +102,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { productApi, indexApi } from '@/api'
+import { getProductCover } from '@/utils/productImage'
 
 const router = useRouter()
 const keyword = ref('')

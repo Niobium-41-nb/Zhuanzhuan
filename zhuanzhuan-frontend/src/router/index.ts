@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isLoggedIn } from '@/utils/auth'
+import { isLoggedIn, getUserInfo } from '@/utils/auth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -44,9 +44,16 @@ router.beforeEach((to, _from, next) => {
   document.title = `${to.meta.title} - 转转`
   if (to.meta.requiresAuth && !isLoggedIn()) {
     next('/login')
-  } else {
-    next()
+    return
   }
+  if (to.meta.requiresAdmin) {
+    const userInfo = getUserInfo()
+    if (!userInfo || userInfo.role !== 'admin') {
+      next('/')
+      return
+    }
+  }
+  next()
 })
 
 export default router

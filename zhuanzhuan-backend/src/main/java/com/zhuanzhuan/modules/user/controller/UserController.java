@@ -9,13 +9,16 @@ import com.zhuanzhuan.modules.user.service.AddressService;
 import com.zhuanzhuan.modules.user.service.UserService;
 import com.zhuanzhuan.modules.user.vo.LoginVO;
 import com.zhuanzhuan.modules.user.vo.UserVO;
+import com.zhuanzhuan.security.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -24,6 +27,8 @@ public class UserController {
 
     private final UserService userService;
     private final AddressService addressService;
+    private final JwtUtil jwtUtil;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private Long getCurrentUserId() {
         return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -40,7 +45,20 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public Result<Void> logout() {
+    public Result<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        // 将 Token 加入黑名单
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            String tokenId = jwtUtil.getTokenId(token);
+            if (tokenId != null) {
+                long expiration = jwtUtil.getExpiration(token);
+                long ttl = expiration - System.currentTimeMillis();
+                if (ttl > 0) {
+                    redisTemplate.opsForValue().set("blacklist:token:" + tokenId, "1",
+                            ttl, TimeUnit.MILLISECONDS);
+                }
+            }
+        }
         SecurityContextHolder.clearContext();
         return Result.success("退出成功");
     }

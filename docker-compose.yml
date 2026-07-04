@@ -12,12 +12,12 @@ services:
       - "3306"
     environment:
       # root 用户密码
-      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
       # 启动时自动创建的数据库名
       MYSQL_DATABASE: zhuanzhuan
       # 创建普通用户（可选）
-      MYSQL_USER: zhuanzhuan
-      MYSQL_PASSWORD: zhuanzhuan123
+      MYSQL_USER: ${MYSQL_USER:-zhuanzhuan}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-zhuanzhuan123}
     volumes:
       # 数据持久化到宿主机
       - mysql_data:/var/lib/mysql
@@ -28,11 +28,10 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-      - --default-authentication-plugin=mysql_native_password
       - --max_connections=200
       - --innodb_buffer_pool_size=256M
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot123"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root123}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -54,35 +53,13 @@ services:
     volumes:
       - redis_data:/data
       - ./deploy/redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf --requirepass redis123
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:-redis123}
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "redis123", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis123}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-    networks:
-      - zhuanzhuan-net
-
-  # ============================================================
-  # phpMyAdmin - 数据库管理工具（可选）
-  # ============================================================
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: zhuanzhuan-phpmyadmin
-    restart: unless-stopped
-    # 管理工具，使用不冲突的端口
-    ports:
-      - "3001:80"
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: root123
-      UPLOAD_LIMIT: 100M
-    depends_on:
-      mysql:
-        condition: service_healthy
     networks:
       - zhuanzhuan-net
 
@@ -105,9 +82,11 @@ services:
       - .env
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      JWT_SECRET: ZhuanZhuanSecretKey2024ForJWTTokenGenerationAndValidation
-      JWT_ACCESS_TOKEN_EXPIRATION: 7200000
-      JWT_REFRESH_TOKEN_EXPIRATION: 604800000
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_TOKEN_EXPIRATION: ${JWT_ACCESS_TOKEN_EXPIRATION:-7200000}
+      JWT_REFRESH_TOKEN_EXPIRATION: ${JWT_REFRESH_TOKEN_EXPIRATION:-604800000}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     depends_on:
       mysql:
         condition: service_healthy

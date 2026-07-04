@@ -39,4 +39,10 @@ public interface ProductMapper extends BaseMapper<Product> {
 
     @Select("SELECT COUNT(*) FROM product WHERE user_id = #{userId} AND deleted_at IS NULL")
     int countByUserId(Long userId);
+
+    @Select("SELECT * FROM product WHERE id = #{id} AND deleted_at IS NULL FOR UPDATE")
+    Product selectByIdForUpdate(Long id);
+
+    @Select("SELECT COUNT(*) FROM `order` WHERE product_id = #{productId} AND `status` IN ('待付款', '待发货', '待收货')")
+    int countActiveOrdersByProductId(Long productId);
 }

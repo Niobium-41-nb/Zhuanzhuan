@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
 
+    private static final Set<String> ALLOWED_STATUS_TRANSITIONS = Set.of("在售", "已下架");
+
     private final ProductMapper productMapper;
     private final ProductImageMapper productImageMapper;
     private final CategoryMapper categoryMapper;
@@ -52,13 +54,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         // Save images
         if (dto.getImageIds() != null && !dto.getImageIds().isEmpty()) {
             List<ProductImage> images = productImageMapper.selectBatchIds(dto.getImageIds());
-            for (ProductImage img : images) {
-                img.setProductId(product.getId());
-                productImageMapper.updateById(img);
+            if (!images.isEmpty()) {
+                for (ProductImage img : images) {
+                    img.setProductId(product.getId());
+                    productImageMapper.updateById(img);
+                }
+                // Set cover image
+                product.setCoverImage(images.get(0).getUrl());
+                productMapper.updateById(product);
             }
-            // Set cover image
-            product.setCoverImage(images.get(0).getUrl());
-            productMapper.updateById(product);
         }
 
         return getProductDetail(product.getId(), userId);
@@ -185,6 +189,13 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = productMapper.selectById(productId);
         if (product == null) throw new BusinessException(404, "商品不存在");
         if (!product.getUserId().equals(userId)) throw new BusinessException(403, "无权操作");
+
+        // 检查是否有活跃订单
+        int activeOrders = productMapper.countActiveOrdersByProductId(productId);
+        if (activeOrders > 0) {
+            throw new BusinessException(400, "该商品有进行中的订单，无法删除");
+        }
+
         productMapper.deleteById(productId);
     }
 
@@ -194,6 +205,12 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = productMapper.selectById(productId);
         if (product == null) throw new BusinessException(404, "商品不存在");
         if (!product.getUserId().equals(userId)) throw new BusinessException(403, "无权操作");
+
+        // 状态白名单校验
+        if (!ALLOWED_STATUS_TRANSITIONS.contains(status)) {
+            throw new BusinessException(400, "无效的状态值");
+        }
+
         product.setStatus(status);
         productMapper.updateById(product);
     }

@@ -2,6 +2,7 @@ package com.zhuanzhuan.common.config;
 
 import com.zhuanzhuan.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Value("${knife4j.enable:false}")
+    private boolean knife4jEnabled;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -40,13 +44,7 @@ public class SecurityConfig {
                     "/api/v1/product/list",
                     "/api/v1/product/*",
                     "/api/v1/announcement/list",
-                    "/api/v1/upload/**",
-                    "/uploads/**",
-                    "/doc.html",
-                    "/v3/api-docs/**",
-                    "/swagger-ui/**",
-                    "/swagger-resources/**",
-                    "/webjars/**"
+                    "/uploads/**"
                 ).permitAll()
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

@@ -4,7 +4,7 @@
     <el-card v-for="item in list" :key="item.id" class="cart-item">
       <div class="cart-content">
         <el-checkbox v-model="item.selected" @change="updateItem(item)" />
-        <img :src="item.coverImage" class="cart-img" />
+        <img :src="getProductCover(item)" class="cart-img" />
         <div class="cart-info"><p>{{ item.title }}</p><p class="price">¥{{ item.price }}</p></div>
         <el-input-number v-model="item.quantity" :min="1" :max="99" size="small" @change="updateItem(item)" />
         <el-button text type="danger" @click="remove(item.id)">删除</el-button>
@@ -23,6 +23,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { cartApi, orderApi } from '@/api'
+import { getProductCover } from '@/utils/productImage'
 
 const router = useRouter()
 const list = ref<any[]>([])

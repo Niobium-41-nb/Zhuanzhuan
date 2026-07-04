@@ -28,6 +28,17 @@ public class ReviewServiceImpl implements ReviewService {
         if (order == null) throw new BusinessException(404, "订单不存在");
         if (!"已完成".equals(order.getStatus())) throw new BusinessException(3001, "订单未完成，无法评价");
 
+        // 验证评价人为订单买家或卖家
+        if (!order.getBuyerId().equals(userId) && !order.getSellerId().equals(userId)) {
+            throw new BusinessException(403, "无权评价此订单");
+        }
+
+        // 防止重复评价
+        Review existing = reviewMapper.selectByOrderAndUser(orderId, userId);
+        if (existing != null) {
+            throw new BusinessException(400, "您已经评价过此订单");
+        }
+
         Review review = new Review();
         review.setOrderId(orderId);
         review.setFromUserId(userId);

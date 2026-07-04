@@ -15,7 +15,7 @@
         <el-tag :type="statusType(item.status)">{{ item.status }}</el-tag>
       </div>
       <div class="order-body">
-        <img :src="item.productImage" class="order-img" />
+        <img :src="getOrderProductImage(item.productImage, item.productTitle, item.productId)" class="order-img" />
         <div class="order-info"><p>{{ item.productTitle }}</p><p class="order-price">¥{{ item.totalPrice }}</p></div>
       </div>
       <div class="order-footer"><span>{{ item.createdAt }}</span></div>
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { orderApi } from '@/api'
+import { getOrderProductImage } from '@/utils/productImage'
 
 const list = ref<any[]>([])
 const activeStatus = ref('')

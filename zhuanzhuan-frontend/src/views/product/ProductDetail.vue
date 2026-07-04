@@ -13,7 +13,7 @@
       <!-- Left: Images -->
       <div class="detail-gallery">
         <div class="gallery-main">
-          <img :src="currentImage || product.coverImage" :alt="product.title" class="main-img" />
+          <img :src="currentImage || product.coverImage || getCategoryCover(product.category?.name, product.id)" :alt="product.title" class="main-img" />
         </div>
         <div class="gallery-thumbs" v-if="product.images?.length">
           <img
@@ -93,7 +93,7 @@
     <!-- Description -->
     <section class="detail-section">
       <h2 class="section-title">商品描述</h2>
-      <div class="description" v-html="product.description || '暂无描述'" />
+      <div class="description">{{ sanitizedDescription }}</div>
     </section>
   </div>
 </template>
@@ -105,11 +105,26 @@ import { ElMessage } from 'element-plus'
 import { Star, StarFilled } from '@element-plus/icons-vue'
 import { productApi, orderApi } from '@/api'
 import { isLoggedIn } from '@/utils/auth'
+import { getCategoryCover } from '@/utils/productImage'
 
 const route = useRoute()
 const router = useRouter()
 const product = ref<any>(null)
 const currentImage = ref('')
+
+const sanitizedDescription = computed(() => {
+  const desc = product.value?.description
+  if (!desc) return '暂无描述'
+  // 移除 <script> / <style> 标签
+  let cleaned = desc.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+  cleaned = cleaned.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+  // 剥离所有 HTML 标签
+  cleaned = cleaned.replace(/<[^>]*>/g, '')
+  // 解码 HTML 实体
+  const textarea = document.createElement('textarea')
+  textarea.innerHTML = cleaned
+  return textarea.value || '暂无描述'
+})
 
 const conditionClass = computed(() => {
   const map: Record<string, string> = {

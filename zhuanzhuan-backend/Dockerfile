@@ -21,11 +21,18 @@ RUN mvn clean package -DskipTests -q
 # ============================================================
 FROM eclipse-temurin:17-jre-jammy
 
+RUN groupadd -r appuser && useradd -r -g appuser -d /app appuser
+
 WORKDIR /app
-RUN mkdir -p /data/zhuanzhuan/uploads
+RUN mkdir -p /data/zhuanzhuan/uploads && chown -R appuser:appuser /app
 
 COPY --from=builder /build/target/*.jar app.jar
 
+RUN chown -R appuser:appuser /app
+
+# 入口包装脚本：以 root 修正卷权限后降权运行
+RUN printf '#!/bin/sh\nchmod 777 /data/zhuanzhuan/uploads 2>/dev/null\nexec su -s /bin/sh appuser -c "exec /opt/java/openjdk/bin/java -jar /app/app.jar --spring.profiles.active=prod"\n' > /entrypoint.sh && chmod +x /entrypoint.sh
+
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["/entrypoint.sh"]

@@ -59,7 +59,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // Verify code
         String cacheKey = dto.getEmail() != null ? "captcha:" + dto.getEmail() : "captcha:" + dto.getPhone();
-        String cachedCode = (String) redisTemplate.opsForValue().get(cacheKey);
+        Object cached = redisTemplate.opsForValue().get(cacheKey);
+        String cachedCode = cached != null ? String.valueOf(cached) : null;
         if (!dto.getCode().equals(cachedCode)) {
             throw new BusinessException(1003, "验证码错误或已过期");
         }
@@ -81,6 +82,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public LoginVO login(LoginDTO dto) {
+        // 登录频率限制：10次/15分钟
+        String rateLimitKey = "login:rate:" + dto.getAccount();
+        Object attemptObj = redisTemplate.opsForValue().get(rateLimitKey);
+        Integer attempts = attemptObj != null ? Integer.parseInt(String.valueOf(attemptObj)) : null;
+        if (attempts != null && attempts >= 10) {
+            throw new BusinessException(429, "登录尝试过于频繁，请15分钟后再试");
+        }
+
         User user = userMapper.selectByUsername(dto.getAccount());
         if (user == null) {
             user = userMapper.selectByEmail(dto.getAccount());
@@ -88,15 +97,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user == null) {
             user = userMapper.selectByPhone(dto.getAccount());
         }
+
         if (user == null) {
-            throw new BusinessException("账号不存在");
+            // 记录失败次数
+            redisTemplate.opsForValue().set(rateLimitKey,
+                    (attempts != null ? attempts : 0) + 1, 15, TimeUnit.MINUTES);
+            throw new BusinessException("账号或密码错误");
         }
         if (user.getStatus() == 0) {
             throw new BusinessException(1001, "账户已被禁用");
         }
         if (!passwordEncoder.matches(dto.getPassword(), user.getPasswordHash())) {
-            throw new BusinessException("密码错误");
+            // 记录失败次数
+            redisTemplate.opsForValue().set(rateLimitKey,
+                    (attempts != null ? attempts : 0) + 1, 15, TimeUnit.MINUTES);
+            throw new BusinessException("账号或密码错误");
         }
+
+        // 登录成功，清除失败记录
+        redisTemplate.delete(rateLimitKey);
 
         user.setLastLoginAt(LocalDateTime.now());
         userMapper.updateById(user);
@@ -119,9 +138,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void sendCode(String target, String type) {
+        // 频率限制：3次/5分钟
+        String rateLimitKey = "captcha:rate:" + target;
+        Object attemptObj = redisTemplate.opsForValue().get(rateLimitKey);
+        Integer attempts = attemptObj != null ? Integer.parseInt(String.valueOf(attemptObj)) : null;
+        if (attempts != null && attempts >= 3) {
+            throw new BusinessException(429, "验证码发送过于频繁，请5分钟后再试");
+        }
+
         String code = RandomUtil.randomNumbers(6);
         String cacheKey = "captcha:" + target;
         redisTemplate.opsForValue().set(cacheKey, code, 5, TimeUnit.MINUTES);
+
+        // 记录发送次数
+        redisTemplate.opsForValue().set(rateLimitKey,
+                (attempts != null ? attempts : 0) + 1, 5, TimeUnit.MINUTES);
 
         // 发送邮件验证码
         try {
@@ -131,7 +162,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             message.setSubject("转转 - 邮箱验证码");
             message.setText("您的验证码是: " + code + "\n\n验证码有效期为5分钟，请勿泄露给他人。\n\n如果非本人操作，请忽略此邮件。");
             mailSender.send(message);
-            log.info("验证码已发送至邮箱 {}: {}", target, code);
+            log.info("验证码已发送至: {}", target);
         } catch (Exception e) {
             log.error("发送验证码至 {} 失败: {}", target, e.getMessage());
             throw new BusinessException(500, "验证码发送失败，请检查邮箱地址或稍后重试");
@@ -141,8 +172,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public void resetPassword(String target, String code, String newPassword) {
+        // 密码强度校验
+        if (newPassword == null || !newPassword.matches("^(?=.*[A-Za-z])(?=.*\\d).{8,20}$")) {
+            throw new BusinessException(400, "密码必须为8-20位，包含字母和数字");
+        }
+
         String cacheKey = "captcha:" + target;
-        String cachedCode = (String) redisTemplate.opsForValue().get(cacheKey);
+        Object cached = redisTemplate.opsForValue().get(cacheKey);
+        String cachedCode = cached != null ? String.valueOf(cached) : null;
         if (!code.equals(cachedCode)) {
             throw new BusinessException(1003, "验证码错误或已过期");
         }

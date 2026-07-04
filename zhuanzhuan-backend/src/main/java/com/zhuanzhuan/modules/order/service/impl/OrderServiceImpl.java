@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,9 +44,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderVO create(Long buyerId, OrderCreateDTO dto) {
-        Product product = productMapper.selectById(dto.getProductId());
+        // 使用悲观锁防止双重出售
+        Product product = productMapper.selectByIdForUpdate(dto.getProductId());
         if (product == null) throw new BusinessException(404, "商品不存在");
         if (!"在售".equals(product.getStatus())) throw new BusinessException(2001, "商品已售出或已下架");
+
+        // 阻止自买自卖
+        if (product.getUserId().equals(buyerId))
+            throw new BusinessException(2002, "不能购买自己的商品");
 
         // Create order
         Order order = new Order();
@@ -83,8 +89,8 @@ public class OrderServiceImpl implements OrderService {
     public IPage<OrderVO> getOrderList(Long userId, String role, String status, int page, int size) {
         Page<Order> pageParam = new Page<>(page, size);
         LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<Order>()
-                .eq("buyer".equals(role), Order::getBuyerId, userId)
                 .eq("seller".equals(role), Order::getSellerId, userId)
+                .eq(!"seller".equals(role), Order::getBuyerId, userId)  // 默认按买家筛选
                 .eq(status != null && !status.isEmpty(), Order::getStatus, status)
                 .orderByDesc(Order::getCreatedAt);
 
@@ -92,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
 
         IPage<OrderVO> voPage = new Page<>(page, size);
         voPage.setTotal(result.getTotal());
-        voPage.setRecords(result.getRecords().stream().map(this::toOrderVO).collect(Collectors.toList()));
+        voPage.setRecords(batchToOrderVO(result.getRecords()));
         return voPage;
     }
 
@@ -100,6 +106,10 @@ public class OrderServiceImpl implements OrderService {
     public OrderVO getOrderDetail(Long userId, Long orderId) {
         Order order = orderMapper.selectById(orderId);
         if (order == null) throw new BusinessException(404, "订单不存在");
+        // 权限校验：只有买家或卖家可查看订单详情
+        if (!order.getBuyerId().equals(userId) && !order.getSellerId().equals(userId)) {
+            throw new BusinessException(403, "无权查看此订单");
+        }
         return toOrderVO(order);
     }
 
@@ -128,6 +138,8 @@ public class OrderServiceImpl implements OrderService {
     public void pay(Long userId, Long orderId) {
         Order order = orderMapper.selectById(orderId);
         if (order == null) throw new BusinessException(404, "订单不存在");
+        if (!order.getBuyerId().equals(userId))
+            throw new BusinessException(403, "无权操作此订单");
         if (!"待付款".equals(order.getStatus())) throw new BusinessException(3001, "订单状态异常");
 
         order.setStatus("待发货");
@@ -198,23 +210,43 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderVO toOrderVO(Order order) {
-        OrderVO vo = new OrderVO();
-        BeanUtil.copyProperties(order, vo);
-        vo.setOrderId(order.getId());
+        List<Order> list = Collections.singletonList(order);
+        return batchToOrderVO(list).get(0);
+    }
 
-        // Product info
-        Product product = productMapper.selectById(order.getProductId());
-        if (product != null) {
-            vo.setProductTitle(product.getTitle());
-            vo.setProductImage(product.getCoverImage());
-        }
+    private List<OrderVO> batchToOrderVO(List<Order> orders) {
+        if (orders.isEmpty()) return Collections.emptyList();
 
-        // Buyer/Seller names
-        User buyer = userMapper.selectById(order.getBuyerId());
-        User seller = userMapper.selectById(order.getSellerId());
-        if (buyer != null) vo.setBuyerName(buyer.getNickname() != null ? buyer.getNickname() : buyer.getUsername());
-        if (seller != null) vo.setSellerName(seller.getNickname() != null ? seller.getNickname() : seller.getUsername());
+        // 批量收集所有商品 ID 和用户 ID
+        Set<Long> productIds = orders.stream().map(Order::getProductId).collect(Collectors.toSet());
+        Set<Long> userIds = orders.stream().map(Order::getBuyerId).collect(Collectors.toSet());
+        userIds.addAll(orders.stream().map(Order::getSellerId).collect(Collectors.toSet()));
 
-        return vo;
+        // 批量查询（各 1 次）
+        Map<Long, Product> productMap = productIds.isEmpty() ? Collections.emptyMap()
+                : productMapper.selectBatchIds(productIds).stream()
+                        .collect(Collectors.toMap(Product::getId, p -> p));
+        Map<Long, User> userMap = userIds.isEmpty() ? Collections.emptyMap()
+                : userMapper.selectBatchIds(userIds).stream()
+                        .collect(Collectors.toMap(User::getId, u -> u));
+
+        return orders.stream().map(order -> {
+            OrderVO vo = new OrderVO();
+            BeanUtil.copyProperties(order, vo);
+            vo.setOrderId(order.getId());
+
+            Product product = productMap.get(order.getProductId());
+            if (product != null) {
+                vo.setProductTitle(product.getTitle());
+                vo.setProductImage(product.getCoverImage());
+            }
+
+            User buyer = userMap.get(order.getBuyerId());
+            User seller = userMap.get(order.getSellerId());
+            if (buyer != null) vo.setBuyerName(buyer.getNickname() != null ? buyer.getNickname() : buyer.getUsername());
+            if (seller != null) vo.setSellerName(seller.getNickname() != null ? seller.getNickname() : seller.getUsername());
+
+            return vo;
+        }).collect(Collectors.toList());
     }
 }
