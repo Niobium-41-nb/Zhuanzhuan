@@ -1,6 +1,7 @@
 package com.zhuanzhuan.modules.user.service.impl;
 
 import com.zhuanzhuan.common.exception.BusinessException;
+import com.zhuanzhuan.common.sms.SmsService;
 import com.zhuanzhuan.modules.user.dto.RegisterDTO;
 import com.zhuanzhuan.modules.user.entity.User;
 import com.zhuanzhuan.modules.user.mapper.UserMapper;
@@ -40,6 +41,9 @@ class UserServiceImplTest {
     private JavaMailSender mailSender;
 
     @Mock
+    private SmsService smsService;
+
+    @Mock
     private ValueOperations<String, Object> valueOperations;
 
     private UserServiceImpl userService;
@@ -47,7 +51,7 @@ class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         userService = new UserServiceImpl(
-                userMapper, passwordEncoder, jwtUtil, redisTemplate, mailSender);
+                userMapper, passwordEncoder, jwtUtil, redisTemplate, mailSender, smsService);
         lenient().when(redisTemplate.opsForValue()).thenReturn(valueOperations);
     }
 

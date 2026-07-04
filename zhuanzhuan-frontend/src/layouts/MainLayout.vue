@@ -70,8 +70,8 @@
           </div>
           <div class="footer-col">
             <h4>帮助</h4>
-            <a href="#">使用指南</a>
-            <a href="#">联系我们</a>
+            <router-link to="/guide">使用指南</router-link>
+            <router-link to="/contact">联系我们</router-link>
           </div>
         </div>
         <div class="footer-bottom">

@@ -1,6 +1,7 @@
 package com.zhuanzhuan.modules.user.controller;
 
 import com.zhuanzhuan.common.result.Result;
+import com.zhuanzhuan.modules.user.dto.BindPhoneDTO;
 import com.zhuanzhuan.modules.user.dto.LoginDTO;
 import com.zhuanzhuan.modules.user.dto.RegisterDTO;
 import com.zhuanzhuan.modules.user.dto.UserUpdateDTO;
@@ -70,6 +71,24 @@ public class UserController {
     @PutMapping("/info")
     public Result<UserVO> updateUserInfo(@RequestBody UserUpdateDTO dto) {
         return Result.success(userService.updateUserInfo(getCurrentUserId(), dto));
+    }
+
+    // ======================== 手机号相关 ========================
+
+    @PostMapping("/phone/login")
+    public Result<LoginVO> loginByPhone(@Valid @RequestBody LoginDTO dto) {
+        return Result.success("登录成功", userService.loginByPhone(dto));
+    }
+
+    @PostMapping("/phone/bind-code")
+    public Result<Void> sendBindCode(@RequestBody Map<String, String> body) {
+        userService.sendSmsCode(body.get("phone"), "bind");
+        return Result.success("验证码已发送");
+    }
+
+    @PostMapping("/phone/bind")
+    public Result<UserVO> bindPhone(@Valid @RequestBody BindPhoneDTO dto) {
+        return Result.success("绑定成功", userService.bindPhone(getCurrentUserId(), dto.getPhone(), dto.getCode()));
     }
 
     @PostMapping("/avatar")

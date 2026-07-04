@@ -35,6 +35,8 @@ public class SecurityConfig {
                     "/api/v1/user/refresh",
                     "/api/v1/user/code",
                     "/api/v1/user/password/reset",
+                    "/api/v1/user/phone/login",
+                    "/api/v1/user/phone/bind-code",
                     "/api/v1/index/**",
                     "/api/v1/category/**",
                     "/api/v1/product/list",

@@ -20,6 +20,16 @@ export const useUserStore = defineStore('user', () => {
     return res.data
   }
 
+  async function loginByPhone(data: any) {
+    const res = await userApi.loginByPhone(data)
+    token.value = res.data.accessToken
+    setToken(res.data.accessToken)
+    setRefreshToken(res.data.refreshToken)
+    userInfo.value = res.data.user
+    setUserInfo(res.data.user)
+    return res.data
+  }
+
   async function register(data: any) {
     return await userApi.register(data)
   }
@@ -37,5 +47,5 @@ export const useUserStore = defineStore('user', () => {
     clearAuth()
   }
 
-  return { token, userInfo, isLoggedIn, isAdmin, login, register, fetchUserInfo, logout }
+  return { token, userInfo, isLoggedIn, isAdmin, login, loginByPhone, register, fetchUserInfo, logout }
 })

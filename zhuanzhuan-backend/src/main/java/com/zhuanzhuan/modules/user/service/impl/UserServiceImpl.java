@@ -4,6 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhuanzhuan.common.exception.BusinessException;
+import com.zhuanzhuan.common.sms.SmsService;
 import com.zhuanzhuan.modules.user.dto.LoginDTO;
 import com.zhuanzhuan.modules.user.dto.RegisterDTO;
 import com.zhuanzhuan.modules.user.dto.UserUpdateDTO;
@@ -37,6 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, Object> redisTemplate;
     private final JavaMailSender mailSender;
+    private final SmsService smsService;
 
     @Value("${spring.mail.username}")
     private String mailFrom;
@@ -122,18 +124,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String cacheKey = "captcha:" + target;
         redisTemplate.opsForValue().set(cacheKey, code, 5, TimeUnit.MINUTES);
 
-        // 发送邮件验证码
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(mailFrom);
-            message.setTo(target);
-            message.setSubject("转转 - 邮箱验证码");
-            message.setText("您的验证码是: " + code + "\n\n验证码有效期为5分钟，请勿泄露给他人。\n\n如果非本人操作，请忽略此邮件。");
-            mailSender.send(message);
-            log.info("验证码已发送至邮箱 {}: {}", target, code);
-        } catch (Exception e) {
-            log.error("发送验证码至 {} 失败: {}", target, e.getMessage());
-            throw new BusinessException(500, "验证码发送失败，请检查邮箱地址或稍后重试");
+        if ("sms".equals(type)) {
+            // 发送短信验证码
+            try {
+                smsService.sendSmsCode(target, code);
+                log.info("短信验证码已发送至手机 {}: {}", target, code);
+            } catch (Exception e) {
+                log.error("发送短信验证码至 {} 失败: {}", target, e.getMessage());
+                throw new BusinessException(500, "短信验证码发送失败，请稍后重试");
+            }
+        } else {
+            // 发送邮件验证码
+            try {
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setFrom(mailFrom);
+                message.setTo(target);
+                message.setSubject("转转 - 邮箱验证码");
+                message.setText("您的验证码是: " + code + "\n\n验证码有效期为5分钟，请勿泄露给他人。\n\n如果非本人操作，请忽略此邮件。");
+                mailSender.send(message);
+                log.info("验证码已发送至邮箱 {}: {}", target, code);
+            } catch (Exception e) {
+                log.error("发送验证码至 {} 失败: {}", target, e.getMessage());
+                throw new BusinessException(500, "验证码发送失败，请检查邮箱地址或稍后重试");
+            }
         }
     }
 
@@ -217,5 +230,64 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Math.toIntExact(baseMapper.selectCount(
                 new LambdaQueryWrapper<User>().eq(User::getId, userId)
         ));
+    }
+
+    // ======================== 短信验证码登录 ========================
+
+    @Override
+    public LoginVO loginByPhone(LoginDTO dto) {
+        // 校验手机号
+        User user = userMapper.selectByPhone(dto.getAccount());
+        if (user == null) {
+            throw new BusinessException("该手机号未注册");
+        }
+        if (user.getStatus() == 0) {
+            throw new BusinessException(1001, "账户已被禁用");
+        }
+        // 校验短信验证码
+        String cacheKey = "captcha:" + dto.getAccount();
+        String cachedCode = (String) redisTemplate.opsForValue().get(cacheKey);
+        if (!dto.getCode().equals(cachedCode)) {
+            throw new BusinessException(1003, "验证码错误或已过期");
+        }
+        redisTemplate.delete(cacheKey);
+
+        user.setLastLoginAt(LocalDateTime.now());
+        userMapper.updateById(user);
+
+        return buildLoginVO(user);
+    }
+
+    @Override
+    public void sendSmsCode(String phone, String type) {
+        sendCode(phone, "sms");
+    }
+
+    // ======================== 绑定手机号 ========================
+
+    @Override
+    @Transactional
+    public UserVO bindPhone(Long userId, String phone, String code) {
+        // 校验手机号是否已被其他用户绑定
+        User existing = userMapper.selectByPhone(phone);
+        if (existing != null && !existing.getId().equals(userId)) {
+            throw new BusinessException(409, "该手机号已被其他账号绑定");
+        }
+        // 校验验证码
+        String cacheKey = "captcha:" + phone;
+        String cachedCode = (String) redisTemplate.opsForValue().get(cacheKey);
+        if (!code.equals(cachedCode)) {
+            throw new BusinessException(1003, "验证码错误或已过期");
+        }
+        redisTemplate.delete(cacheKey);
+
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        user.setPhone(phone);
+        userMapper.updateById(user);
+
+        return toUserVO(user);
     }
 }

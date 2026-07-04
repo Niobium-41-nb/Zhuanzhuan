@@ -18,7 +18,9 @@ const router = createRouter({
         { path: 'user/profile', name: 'UserProfile', component: () => import('@/views/user/UserProfile.vue'), meta: { title: '个人中心', requiresAuth: true } },
         { path: 'user/address', name: 'AddressManage', component: () => import('@/views/user/AddressManage.vue'), meta: { title: '地址管理', requiresAuth: true } },
         { path: 'user/favorites', name: 'UserFavorites', component: () => import('@/views/user/UserFavorites.vue'), meta: { title: '我的收藏', requiresAuth: true } },
-        { path: 'message', name: 'Message', component: () => import('@/views/message/MessagePage.vue'), meta: { title: '站内信', requiresAuth: true } }
+        { path: 'message', name: 'Message', component: () => import('@/views/message/MessagePage.vue'), meta: { title: '站内信', requiresAuth: true } },
+        { path: 'guide', name: 'Guide', component: () => import('@/views/home/GuidePage.vue'), meta: { title: '使用指南' } },
+        { path: 'contact', name: 'Contact', component: () => import('@/views/home/ContactPage.vue'), meta: { title: '联系我们' } }
       ]
     },
     {
