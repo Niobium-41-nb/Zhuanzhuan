@@ -4,9 +4,10 @@
 FROM maven:3.9-eclipse-temurin-17 AS deps
 
 WORKDIR /build
-COPY pom.xml .
+COPY pom.xml settings-docker.xml ./
 
-RUN mvn dependency:go-offline -B -q
+# 使用阿里云镜像加速 Maven 依赖下载
+RUN mvn dependency:go-offline -B -q -s settings-docker.xml
 
 # ============================================================
 # Stage 2: 编译源码
@@ -14,7 +15,7 @@ RUN mvn dependency:go-offline -B -q
 FROM deps AS builder
 
 COPY src ./src
-RUN mvn clean package -DskipTests -q
+RUN mvn clean package -DskipTests -q -s settings-docker.xml
 
 # ============================================================
 # Stage 3: 运行
