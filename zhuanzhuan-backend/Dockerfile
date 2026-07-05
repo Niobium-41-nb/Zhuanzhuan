@@ -30,8 +30,11 @@ COPY --from=builder /build/target/*.jar app.jar
 
 RUN chown -R appuser:appuser /app
 
+# 设置容器 locale 为 UTF-8
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+
 # 入口包装脚本：以 root 修正卷权限后降权运行
-RUN printf '#!/bin/sh\nchmod 777 /data/zhuanzhuan/uploads 2>/dev/null\nexec su -s /bin/sh appuser -c "exec /opt/java/openjdk/bin/java -jar /app/app.jar --spring.profiles.active=prod"\n' > /entrypoint.sh && chmod +x /entrypoint.sh
+RUN printf '#!/bin/sh\nchmod 777 /data/zhuanzhuan/uploads 2>/dev/null\nexec su -s /bin/sh appuser -c "exec /opt/java/openjdk/bin/java -Dfile.encoding=UTF-8 -jar /app/app.jar --spring.profiles.active=prod"\n' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 EXPOSE 8080
 
