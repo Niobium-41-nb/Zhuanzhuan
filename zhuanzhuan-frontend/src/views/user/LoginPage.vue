@@ -24,7 +24,12 @@
         </el-form-item>
       </el-form>
       <div class="auth-footer">
-        还没有账号？<router-link to="/register">立即注册</router-link>
+        <div class="auth-footer-row">
+          还没有账号？<router-link to="/register">立即注册</router-link>
+        </div>
+        <div class="auth-footer-row">
+          <router-link to="/forgot-password" class="forgot-link">忘记密码？</router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -164,6 +169,14 @@ async function handleLogin() {
   color: var(--c-text-secondary);
 }
 
+.auth-footer-row {
+  margin-bottom: 6px;
+}
+
+.auth-footer-row:last-child {
+  margin-bottom: 0;
+}
+
 .auth-footer a {
   color: var(--c-primary);
   font-weight: 600;
@@ -171,5 +184,16 @@ async function handleLogin() {
 
 .auth-footer a:hover {
   text-decoration: underline;
+}
+
+.forgot-link {
+  font-size: 13px;
+  font-weight: 500 !important;
+  color: var(--c-text-secondary) !important;
+  transition: color 0.2s;
+}
+
+.forgot-link:hover {
+  color: var(--c-primary) !important;
 }
 </style>

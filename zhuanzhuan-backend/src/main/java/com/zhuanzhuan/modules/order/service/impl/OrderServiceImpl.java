@@ -40,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductMapper productMapper;
     private final UserMapper userMapper;
     private final AddressMapper addressMapper;
+    private final com.zhuanzhuan.modules.message.mapper.NotificationMapper notificationMapper;
 
     @Override
     @Transactional
@@ -81,6 +82,9 @@ public class OrderServiceImpl implements OrderService {
 
         // Add order log
         addOrderLog(order.getId(), null, "待付款", "系统", "订单创建");
+
+        // 通知卖家：有新订单
+        notifyUser(product.getUserId(), "新订单", "您的商品「" + product.getTitle() + "」已被下单，请等待买家付款");
 
         return toOrderVO(order);
     }
@@ -146,6 +150,9 @@ public class OrderServiceImpl implements OrderService {
         order.setPaidAt(LocalDateTime.now());
         orderMapper.updateById(order);
         addOrderLog(orderId, "待付款", "待发货", "系统", "支付成功");
+
+        // 通知卖家发货
+        notifyUser(order.getSellerId(), "买家已付款", "订单 " + order.getOrderNo() + " 已付款，请尽快发货");
     }
 
     @Override
@@ -162,6 +169,9 @@ public class OrderServiceImpl implements OrderService {
         order.setShippedAt(LocalDateTime.now());
         orderMapper.updateById(order);
         addOrderLog(orderId, "待发货", "待收货", "卖家", "已发货");
+
+        // 通知买家
+        notifyUser(order.getBuyerId(), "卖家已发货", "订单 " + order.getOrderNo() + " 已发货，请注意查收");
     }
 
     @Override
@@ -209,6 +219,17 @@ public class OrderServiceImpl implements OrderService {
         orderLogMapper.insert(log);
     }
 
+    private void notifyUser(Long userId, String title, String content) {
+        com.zhuanzhuan.modules.message.entity.Notification notif =
+            new com.zhuanzhuan.modules.message.entity.Notification();
+        notif.setUserId(userId);
+        notif.setTitle(title);
+        notif.setContent(content);
+        notif.setType("order");
+        notif.setIsRead(0);
+        notificationMapper.insert(notif);
+    }
+
     private OrderVO toOrderVO(Order order) {
         List<Order> list = Collections.singletonList(order);
         return batchToOrderVO(list).get(0);
@@ -234,6 +255,8 @@ public class OrderServiceImpl implements OrderService {
             OrderVO vo = new OrderVO();
             BeanUtil.copyProperties(order, vo);
             vo.setOrderId(order.getId());
+            vo.setBuyerId(order.getBuyerId());
+            vo.setSellerId(order.getSellerId());
 
             Product product = productMap.get(order.getProductId());
             if (product != null) {

@@ -1,6 +1,6 @@
 <template>
   <div class="main-layout">
-    <header class="main-header">
+    <header class="main-header" :class="{ scrolled: isScrolled }">
       <div class="header-inner">
         <div class="header-left">
           <router-link to="/" class="logo">
@@ -18,11 +18,29 @@
             <router-link to="/cart" class="header-action">
               <el-icon size="20"><ShoppingCart /></el-icon>
             </router-link>
-            <router-link to="/message" class="header-action">
+            <router-link to="/message" class="header-action" title="消息">
               <el-badge :value="unreadCount" :hidden="unreadCount === 0">
-                <el-icon size="20"><Message /></el-icon>
+                <el-icon size="20"><ChatDotSquare /></el-icon>
               </el-badge>
             </router-link>
+            <el-popover placement="bottom" :width="320" trigger="click">
+              <template #reference>
+                <span class="header-action" title="通知">
+                  <el-badge :value="notifUnread" :hidden="notifUnread === 0">
+                    <el-icon size="20"><Bell /></el-icon>
+                  </el-badge>
+                </span>
+              </template>
+              <div class="notif-popover">
+                <div class="notif-pop-header">系统通知</div>
+                <div v-if="!notifications.length" class="notif-empty">暂无通知</div>
+                <div v-for="n in notifications.slice(0,10)" :key="n.id" class="notif-item" :class="{ unread: !n.isRead }" @click="readNotif(n)">
+                  <p class="notif-title">{{ n.title }}</p>
+                  <p class="notif-content">{{ n.content }}</p>
+                  <span class="notif-time">{{ formatNotifTime(n.createdAt) }}</span>
+                </div>
+              </div>
+            </el-popover>
             <div class="user-menu">
               <el-dropdown trigger="click" @command="handleUserCommand">
                 <span class="user-trigger">
@@ -84,14 +102,21 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { messageApi } from '@/api'
+import { messageApi, notificationApi } from '@/api'
+import { ChatDotSquare, Bell } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 const unreadCount = ref(0)
+const notifUnread = ref(0)
+const notifications = ref<any[]>([])
+const isScrolled = ref(false)
+
+let scrollHandler: (() => void) | null = null
+let refreshTimer: ReturnType<typeof setInterval> | null = null
 
 onMounted(async () => {
   if (userStore.isLoggedIn) {
@@ -99,8 +124,56 @@ onMounted(async () => {
       const res = await messageApi.getUnreadCount()
       unreadCount.value = res.data?.count || 0
     } catch (_) {}
+    try {
+      const nRes = await notificationApi.getUnreadCount()
+      notifUnread.value = nRes.data?.count || 0
+      loadNotifications()
+    } catch (_) {}
+    // 每30秒刷新一次未读数
+    refreshTimer = setInterval(refreshUnread, 30000)
   }
+  scrollHandler = () => { isScrolled.value = window.scrollY > 10 }
+  window.addEventListener('scroll', scrollHandler, { passive: true })
 })
+
+onUnmounted(() => {
+  if (scrollHandler) window.removeEventListener('scroll', scrollHandler)
+  if (refreshTimer) clearInterval(refreshTimer)
+})
+
+async function refreshUnread() {
+  try {
+    const res = await messageApi.getUnreadCount()
+    unreadCount.value = res.data?.count || 0
+    const nRes = await notificationApi.getUnreadCount()
+    notifUnread.value = nRes.data?.count || 0
+  } catch (_) {}
+}
+
+async function loadNotifications() {
+  try {
+    const res = await notificationApi.getList({ page: 1, size: 10 })
+    notifications.value = res.data || []
+  } catch (_) {}
+}
+
+async function readNotif(n: any) {
+  if (!n.isRead) {
+    await notificationApi.markRead(n.id)
+    n.isRead = 1
+    notifUnread.value = Math.max(0, notifUnread.value - 1)
+  }
+}
+
+function formatNotifTime(t: string) {
+  if (!t) return ''
+  const d = new Date(t)
+  const now = new Date()
+  const diff = now.getTime() - d.getTime()
+  if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前'
+  if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前'
+  return d.toLocaleDateString('zh-CN')
+}
 
 function handleUserCommand(command: string) {
   switch (command) {
@@ -121,12 +194,21 @@ function handleUserCommand(command: string) {
 <style scoped>
 /* ===== Header ===== */
 .main-header {
-  background: var(--c-surface);
-  border-bottom: 1px solid var(--c-border);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
   position: sticky;
   top: 0;
   z-index: 100;
   height: var(--header-height);
+  transition: all 0.3s ease;
+}
+
+.main-header.scrolled {
+  border-bottom-color: var(--c-border);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .header-inner {
@@ -372,5 +454,62 @@ function handleUserCommand(command: string) {
 .footer-bottom p {
   color: var(--c-muted);
   font-size: 12px;
+}
+
+/* Notification Popover */
+.notif-popover {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notif-pop-header {
+  font-weight: 700;
+  font-size: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--c-border-light);
+  margin-bottom: 4px;
+}
+
+.notif-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--c-muted);
+  font-size: 13px;
+}
+
+.notif-item {
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--c-border-light);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.notif-item:hover {
+  background: var(--c-primary-bg);
+}
+
+.notif-item.unread {
+  background: #F0F9F4;
+}
+
+.notif-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text);
+  margin: 0 0 4px;
+}
+
+.notif-content {
+  font-size: 12px;
+  color: var(--c-text-secondary);
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notif-time {
+  font-size: 11px;
+  color: var(--c-muted);
 }
 </style>

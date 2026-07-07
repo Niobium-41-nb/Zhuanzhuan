@@ -79,16 +79,23 @@
         <div class="seller-card">
           <div class="seller-header">卖家信息</div>
           <div class="seller-body">
-            <el-avatar :size="44" :src="product.seller?.avatar">
-              {{ product.seller?.nickname?.[0] }}
-            </el-avatar>
+            <div class="seller-avatar-link">
+              <el-avatar :size="44" :src="product.seller?.avatar">
+                {{ product.seller?.nickname?.[0] }}
+              </el-avatar>
+            </div>
             <div class="seller-detail">
               <p class="seller-name">{{ product.seller?.nickname }}</p>
               <div class="seller-score">
                 <span class="score-dot"></span>
                 信誉分 {{ product.seller?.creditScore }}
+                <span class="seller-count"> · {{ product.seller?.productCount || 0 }}件在售</span>
               </div>
             </div>
+            <button class="btn-contact" @click="contactSeller" v-if="product.seller?.userId !== currentUserId">
+              <el-icon><ChatLineSquare /></el-icon>
+              联系卖家
+            </button>
           </div>
         </div>
       </div>
@@ -106,15 +113,19 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Star, StarFilled, ShoppingCart } from '@element-plus/icons-vue'
+import { Star, StarFilled, ShoppingCart, ChatLineSquare } from '@element-plus/icons-vue'
 import { productApi, orderApi, cartApi } from '@/api'
-import { isLoggedIn } from '@/utils/auth'
+import { isLoggedIn, getUserInfo } from '@/utils/auth'
 import { getCategoryCover } from '@/utils/productImage'
 
 const route = useRoute()
 const router = useRouter()
 const product = ref<any>(null)
 const currentImage = ref('')
+const currentUserId = ref<number | null>(null)
+
+const userInfo = getUserInfo()
+if (userInfo) currentUserId.value = userInfo.userId
 
 const sanitizedDescription = computed(() => {
   const desc = product.value?.description
@@ -168,6 +179,11 @@ async function addToCart() {
     await cartApi.add({ productId: product.value.id })
     ElMessage.success('已加入购物车')
   } catch (_) {}
+}
+
+function contactSeller() {
+  if (!isLoggedIn()) { router.push('/login'); return }
+  router.push({ path: '/message', query: { to: product.value.seller.userId } })
 }
 </script>
 
@@ -446,6 +462,19 @@ async function addToCart() {
   gap: 12px;
 }
 
+.seller-avatar-link {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.seller-avatar-link:hover {
+  transform: scale(1.05);
+}
+
+.seller-detail {
+  flex: 1;
+}
+
 .seller-name {
   font-size: 14px;
   font-weight: 600;
@@ -461,11 +490,38 @@ async function addToCart() {
   margin-top: 2px;
 }
 
+.seller-count {
+  color: var(--c-muted);
+}
+
 .score-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--c-primary-light);
+}
+
+.btn-contact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: var(--c-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.btn-contact:hover {
+  background: var(--c-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
 }
 
 /* Description Section */

@@ -9,6 +9,8 @@ public class OrderVO {
     private Long orderId;
     private String orderNo;
     private Long productId;
+    private Long buyerId;
+    private Long sellerId;
     private String productTitle;
     private String productImage;
     private BigDecimal totalPrice;

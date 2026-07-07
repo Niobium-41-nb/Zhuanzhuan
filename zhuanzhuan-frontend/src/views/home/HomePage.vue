@@ -94,15 +94,27 @@
       <div class="section-header">
         <h2 class="section-title">最新商品</h2>
       </div>
-      <div class="product-grid">
+      <!-- Skeleton Loading -->
+      <div class="product-grid" v-if="!loaded">
+        <div v-for="n in 8" :key="'skeleton-' + n" class="product-card skeleton-card">
+          <div class="card-img-wrap skeleton"></div>
+          <div class="card-body">
+            <div class="skeleton" style="height:16px;width:80%;margin-bottom:8px"></div>
+            <div class="skeleton" style="height:24px;width:40%;margin-bottom:8px"></div>
+            <div class="skeleton" style="height:12px;width:60%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="product-grid" v-else>
         <article
           v-for="item in products"
           :key="item.id"
-          class="product-card"
+          class="product-card fade-in-up"
+          :style="{ animationDelay: (Math.min(products.indexOf(item), 10) * 0.05) + 's' }"
           @click="$router.push(`/product/${item.id}`)"
         >
           <div class="card-img-wrap">
-            <img :src="getProductCover(item)" :alt="item.title" class="card-img" />
+            <img :src="getProductCover(item)" :alt="item.title" class="card-img" loading="lazy" />
             <span class="card-category">{{ item.categoryName }}</span>
           </div>
           <div class="card-body">
@@ -121,7 +133,7 @@
           </div>
         </article>
       </div>
-      <el-empty v-if="!products.length && loaded" description="暂无商品" />
+      <el-empty v-if="loaded && !products.length" description="暂无商品" />
     </section>
   </div>
 </template>
@@ -683,6 +695,18 @@ function formatTime(t: string) {
 
 .meta-time {
   font-size: 12px;
+}
+
+/* ===== Skeleton Cards ===== */
+.skeleton-card {
+  cursor: default;
+}
+
+.skeleton-card .card-img-wrap.skeleton {
+  padding-top: 66%;
+  background: linear-gradient(90deg, var(--c-border-light) 25%, #E8ECF0 50%, var(--c-border-light) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
 }
 
 /* ===== Responsive ===== */

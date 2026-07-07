@@ -1,0 +1,214 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 转转——校园二手物品交易平台}
+\fancyhead[R]{\small 李硕·前端开发工作汇报}
+\fancyfoot[C]{\thepage}
+
+\title{{\Huge 前端开发工作汇报}\[0.3cm]{\Large 校园二手物品交易平台——转转}}
+\author{{\large 李硕}\{\small 前端开发工程师}}
+\date{2026年7月4日 — 2026年7月10日}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{个人角色与职责}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{项目} & \textbf{内容} \
+\midrule
+姓名 & 李硕 \
+角色 & 前端开发工程师 \
+技术栈 & Vue 3 + TypeScript + Vite + Element Plus + Pinia + Axios + ECharts \
+协作方式 & 与后端（刘轩霆、胡欣悦）对接 API，与前端阮崇轩协同开发页面 \
+主要职责 & 首页与商品模块（列表/详情/发布）、购物车与订单列表、管理后台页面、数据可视化、种子数据优化 \
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{技术栈说明}
+
+前端基于 Vue 3 Composition API + TypeScript 架构，使用 Vite 5 构建，Element Plus 作为 UI 组件库，Pinia 状态管理，Axios 封装 HTTP 请求。管理后台统计图表使用 ECharts 5 实现数据可视化。
+
+\section{详细工作内容}
+
+\subsection{第一周（7月4日—7月5日）：首页与商品模块}
+
+\subsubsection*{首页开发}
+\begin{itemize}
+    \item 实现 Hero 横幅：渐变绿色背景 + 浮动几何圆形装饰动画 + 品牌标语
+    \item 实现实时统计数据展示：注册用户数、在售商品数、成交订单数（对接 /index/statistics 接口）
+    \item 实现搜索框：圆角输入框 + 橙色搜索按钮，支持回车搜索和点击搜索，跳转商品列表页并携带关键词参数
+    \item 实现公告栏：仿真实公告板设计（绿色胶带装饰条），公告标题水平滚动轮播（CSS Animation），鼠标悬停暂停
+    \item 实现商品分类导航：8 个分类 Tab 按钮（含 Emoji 图标），点击切换加载对应分类商品，选中态绿色高亮
+    \item 实现首页商品网格：响应式 Grid 布局（240px 最小列宽），卡片含封面图（hover 放大效果）、分类标签、标题、价格、浏览量和时间
+    \item 实现相对时间格式化函数：刚刚 / X分钟前 / X小时前 / X天前 / 日期
+\end{itemize}
+
+\subsubsection*{商品列表页开发}
+\begin{itemize}
+    \item 实现多条件筛选栏：关键词搜索、分类下拉、价格区间、商品成色、排序方式（价格/时间/浏览量）
+    \item 对接后端分页 API，支持 URL query 参数同步（刷新保持筛选状态）
+    \item 实现分页组件（Element Plus Pagination），每页 20 条，支持页码和每页条数切换
+    \item 实现空状态提示：无结果时展示 El-Empty 组件
+\end{itemize}
+
+\subsubsection*{商品详情页开发}
+\begin{itemize}
+    \item 实现图片画廊：主图大图展示 + 缩略图列表，点击缩略图切换主图
+    \item 实现商品信息展示：成色标签（彩色编码）、标题、价格（大号橙色字体+原价删除线）、分类面包屑导航
+    \item 实现元数据网格：分类、浏览量、收藏数、发布时间四栏展示
+    \item 实现操作按钮组：加入购物车（带图标）、立即购买（双行文字）、收藏（Star/StarFilled 图标切换）
+    \item 实现卖家信息卡片：头像、昵称、信誉分、在售商品数
+    \item 实现 HTML 内容安全过滤（sanitizedDescription）：移除 script/style 标签、解码 HTML 实体
+    \item 实现响应式布局：移动端单列显示，主图高度自适应
+\end{itemize}
+
+\subsubsection*{商品发布页开发}
+\begin{itemize}
+    \item 实现发布表单：标题（50 字限制）、分类级联选择器（一级+二级）、成色下拉选择、价格/原价输入
+    \item 实现多图上传：使用 El-Upload picture-card 模式，支持 JPG/PNG/GIF/WebP 格式，单文件 5MB 限制
+    \item 实现图片上传后即时预览、删除和排序
+    \item 实现前端表单校验：标题必填、分类必选、价格必填且为正数
+    \item 封面图丢失时的回退方案：getCategoryCover 工具函数根据分类生成 Emoji 占位封面
+\end{itemize}
+
+\subsection{第二周（7月5日—7月6日）：购物车与订单模块}
+
+\subsubsection*{购物车页面开发}
+\begin{itemize}
+    \item 实现购物车列表：复选框选择、商品缩略图、标题、单价、数量调节器（+/-按钮）、小计金额、删除按钮
+    \item 实现全选/取消全选功能
+    \item 实现底部结算栏：已选 N 件、合计金额、去结算按钮
+    \item 实现数量修改实时同步后端（防抖处理）
+    \item 对接后端购物车 CRUD 接口
+    \item 实现空购物车引导状态
+\end{itemize}
+
+\subsubsection*{订单列表页开发}
+\begin{itemize}
+    \item 实现订单状态 Tab 切换：全部/待付款/待发货/待收货/已完成/已取消
+    \item 实现订单卡片：订单号、商品标题、价格、状态标签（彩色）、卖家/买家名称、创建时间
+    \item 支持买家视角和卖家视角切换
+    \item 点击卡片进入订单详情页
+\end{itemize}
+
+\subsubsection*{订单状态辅助函数}
+\begin{itemize}
+    \item 封装 statusType() 函数：将订单状态映射为 Element Plus Tag 类型
+    \item 在 AdminProducts、AdminOrders、OrderList、OrderDetail 四个页面中复用避免重复代码
+\end{itemize}
+
+\subsection{第三周（7月6日—7月7日）：管理后台页面}
+
+\subsubsection*{用户管理页（AdminUsers）}
+\begin{itemize}
+    \item 实现用户列表表格：ID、用户名、邮箱、手机号、角色、信誉分、状态、注册时间
+    \item 实现状态切换（启用/禁用按钮，带确认对话框）和角色切换（用户/管理员下拉）
+    \item 实现分页功能
+\end{itemize}
+
+\subsubsection*{商品审核页（AdminProducts）}
+\begin{itemize}
+    \item 实现商品审核列表：状态筛选（待审核/在售/已下架/审核驳回）、关键词搜索
+    \item 实现审核操作（通过/驳回，带确认）、违规下架、编辑弹窗（修改标题/价格/成色/状态/封面图/描述）
+    \item 实现分页功能，筛选变化时自动重置到第一页
+\end{itemize}
+
+\subsubsection*{订单管理页（AdminOrders）}
+\begin{itemize}
+    \item 实现订单表格：订单号、商品、买家、卖家、金额、状态、时间
+    \item 实现状态筛选和订单号搜索
+    \item 实现状态流转操作：标记已付款、标记已发货、标记已完成、取消订单
+    \item 实现订单详情弹窗（El-Dialog）：完整订单信息展示
+    \item 实现分页功能
+\end{itemize}
+
+\subsubsection*{数据统计页（AdminStats）}
+\begin{itemize}
+    \item 实现统计卡片行：注册用户数、商品发布量、订单成交量、今日注册数
+    \item 使用 ECharts 实现分类占比饼图（Pie Chart）
+    \item 使用 ECharts 实现每日趋势折线图（Line Chart）
+    \item 对接后端 /admin/statistics 接口
+    \item 修复 ECharts 内存泄漏问题：在组件卸载时调用 dispose() 释放图表实例
+\end{itemize}
+
+\subsubsection*{公告管理页（AdminAnnouncements）}
+\begin{itemize}
+    \item 实现公告列表：标题、状态（已发布/草稿）、发布时间
+    \item 实现新增/编辑/删除公告功能（含确认对话框）
+    \item 对接后端公告 CRUD 接口
+\end{itemize}
+
+\subsubsection*{管理后台布局（AdminLayout）}
+\begin{itemize}
+    \item 实现侧边栏导航：用户管理、商品审核、订单管理、数据统计、公告管理（含 Element Plus Icons）
+    \item 实现路由鉴权：非管理员自动重定向到首页
+    \item 实现响应式折叠侧边栏
+\end{itemize}
+
+\subsection{第四周（7月7日）：数据与图片优化}
+
+\subsubsection*{种子数据编写}
+\begin{itemize}
+    \item 编写 217 件商品种子 SQL，覆盖 20 个分类
+    \item 每件商品包含真实描述、合理价格和原价、正确成色、随机浏览量和收藏数
+    \item 为热门商品（iPhone、MacBook、三体、AirPods 等）配置多张细节图片
+\end{itemize}
+
+\subsubsection*{图片方案优化}
+\begin{itemize}
+    \item 参与三版图片方案迭代：LoremFlickr（不稳定）→ Picsum.photos 随机（无主题）→ 按分类种子前缀
+    \item 最终方案：20 种分类种子前缀（phone-/laptop-/textbook-/shoes-/sport- 等），同分类商品共享主题，不同 ID 保证差异化
+    \item 用户头像方案：迁移到 Pravatar（基于用户名种子稳定生成）
+\end{itemize}
+
+\section{代码统计}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{类别} & \textbf{文件数} & \textbf{代码行数（估计）} \
+\midrule
+首页 & 1（HomePage） & 730 \
+商品模块 & 4（ProductList 等） & 1100 \
+购物车与订单 & 2（CartPage、OrderList） & 500 \
+管理后台 & 6（AdminLayout 及 5 个管理页） & 1300 \
+工具与配置 & 3（productImage.ts、router、types） & 200 \
+SQL 种子数据 & 4 & 1400 \
+\cmidrule{2-3}
+\textbf{合计} & \textbf{20} & 5230 \
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{核心技术亮点}
+
+\begin{enumerate}
+    \item \textbf{级联分类选择器}：使用 Element Plus Cascader 实现二级分类选择，父分类可展开查看子分类，选择体验流畅。
+    \item \textbf{ECharts 可视化}：饼图展示分类占比、折线图展示时间趋势，图表自适应窗口大小变化，组件卸载时释放资源防止内存泄漏。
+    \item \textbf{分类占位图回退机制}：商品封面图加载失败时根据分类名称返回对应 Emoji 占位封面，比纯灰色占位图更友好。
+    \item \textbf{HTML 内容安全净化}：商品描述使用正则移除 script/style 标签后剥离所有 HTML 标签，再通过 DOM textarea 解码 HTML 实体，三重防线防止 XSS 攻击。
+    \item \textbf{全功能管理后台}：涵盖用户管理、商品审核、订单管理、数据统计、公告管理五大模块，支持搜索、筛选、分页、编辑、状态流转全流程操作。
+    \item \textbf{响应式设计}：所有页面适配移动端（小于等于768px），商品网格从多列自适应为双列，导航栏和侧边栏在小屏下自动隐藏或折叠。
+\end{enumerate}
+
+\end{document}

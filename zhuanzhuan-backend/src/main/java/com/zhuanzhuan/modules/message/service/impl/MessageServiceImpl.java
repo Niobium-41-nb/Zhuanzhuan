@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhuanzhuan.modules.message.entity.Message;
+import com.zhuanzhuan.modules.message.entity.Notification;
 import com.zhuanzhuan.modules.message.mapper.MessageMapper;
+import com.zhuanzhuan.modules.message.mapper.NotificationMapper;
 import com.zhuanzhuan.modules.message.service.MessageService;
 import com.zhuanzhuan.modules.message.vo.ConversationVO;
 import com.zhuanzhuan.modules.user.entity.User;
@@ -23,6 +25,7 @@ public class MessageServiceImpl implements MessageService {
 
     private final MessageMapper messageMapper;
     private final UserMapper userMapper;
+    private final NotificationMapper notificationMapper;
 
     @Override
     @Transactional
@@ -34,6 +37,19 @@ public class MessageServiceImpl implements MessageService {
         msg.setType(type != null ? type : "text");
         msg.setIsRead(0);
         messageMapper.insert(msg);
+
+        // 自动给接收方创建通知
+        User fromUser = userMapper.selectById(fromUserId);
+        String fromName = fromUser != null ?
+            (fromUser.getNickname() != null ? fromUser.getNickname() : fromUser.getUsername()) : "用户";
+        Notification notif = new Notification();
+        notif.setUserId(toUserId);
+        notif.setTitle("新消息");
+        notif.setContent(fromName + " 给你发来一条消息");
+        notif.setType("system");
+        notif.setIsRead(0);
+        notificationMapper.insert(notif);
+
         return msg;
     }
 

@@ -107,7 +107,15 @@ request.interceptors.response.use(
     } else if (error.response.status >= 500) {
       ElMessage.error('服务器错误，请稍后重试')
     } else if (error.response.status === 403) {
-      ElMessage.error('权限不足')
+      // Token 可能指向已删除的用户，清除过期认证
+      const token = getToken()
+      if (token) {
+        clearAuth()
+        router.push('/login')
+        ElMessage.error('登录已过期，请重新登录')
+      } else {
+        ElMessage.error('权限不足')
+      }
     } else if (error.response.status === 429) {
       ElMessage.error('操作过于频繁，请稍后再试')
     } else if (error.response.status === 404) {

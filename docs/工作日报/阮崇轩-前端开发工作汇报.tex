@@ -1,0 +1,218 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 转转——校园二手物品交易平台}
+\fancyhead[R]{\small 阮崇轩·前端开发工作汇报}
+\fancyfoot[C]{\thepage}
+
+\title{{\Huge 前端开发工作汇报}\\[0.3cm]{\Large 校园二手物品交易平台——转转}}
+\author{{\large 阮崇轩}\\{\small 前端开发工程师}}
+\date{2026年7月4日 — 2026年7月10日}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{个人角色与职责}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{项目} & \textbf{内容} \\
+\midrule
+姓名 & 阮崇轩 \\
+角色 & 前端开发工程师 \\
+技术栈 & Vue 3 + TypeScript + Vite + Element Plus + Pinia + Axios \\
+协作方式 & 与后端（刘轩霆、胡欣悦）对接 API，与前端李硕协同开发页面 \\
+主要职责 & 前端工程搭建、用户认证模块、消息通知系统、订单详情与操作、UI 动效优化、前后端联调与 Bug 修复 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{技术栈说明}
+
+本项目前端采用 \textbf{Vue 3 Composition API + TypeScript} 开发，构建工具使用 \textbf{Vite 5}，UI 组件库使用 \textbf{Element Plus}，状态管理使用 \textbf{Pinia}，HTTP 请求使用 \textbf{Axios}（含 Token 自动刷新机制），CSS 采用自定义设计令牌（CSS Variables）实现全局主题统一。
+
+\section{详细工作内容}
+
+\subsection{第一周（7月4日—7月5日）：项目初始化与认证模块}
+
+\subsubsection*{前端工程搭建}
+\begin{itemize}
+    \item 使用 \texttt{npm create vue@latest} 初始化 Vue 3 + TypeScript 项目
+    \item 配置 Vite 构建工具，设置路径别名 \texttt{@} 指向 \texttt{src/}
+    \item 安装并配置 Element Plus 组件库（按需导入）、Pinia 状态管理、Vue Router 路由、Axios HTTP 客户端
+    \item 建立项目目录结构：\texttt{api/}, \texttt{components/}, \texttt{layouts/}, \texttt{router/}, \texttt{stores/}, \texttt{types/}, \texttt{utils/}, \texttt{views/}
+    \item 配置 \texttt{vite.config.ts} 开发代理，将 \texttt{/api} 请求转发到后端 SpringBoot 服务
+\end{itemize}
+
+\subsubsection*{全局样式系统设计}
+\begin{itemize}
+    \item 设计 CSS Variables 设计令牌体系：主色 \texttt{\#2D6A4F}（森林绿）、辅色 \texttt{\#E76F51}（暖橙）、背景 \texttt{\#FDFBF7}（米白）
+    \item 覆盖 Element Plus 默认主题色，统一按钮、标签、分页、输入框等组件风格
+    \item 自定义滚动条样式、选中文本颜色
+    \item 引入 Google Fonts：ZCOOL QingKe HuangYou（品牌中文）、Noto Sans SC（正文）
+\end{itemize}
+
+\subsubsection*{登录页面开发}
+\begin{itemize}
+    \item 实现登录表单：账号输入（支持用户名/邮箱/手机号）、密码输入（支持显示/隐藏切换）
+    \item 集成 Pinia \texttt{useUserStore}，登录成功后存储 Token 到 localStorage
+    \item 设计渐变背景+浮动几何图形的视觉风格，适配移动端响应式
+\end{itemize}
+
+\subsubsection*{注册页面开发}
+\begin{itemize}
+    \item 实现注册表单：用户名、邮箱、密码、验证码四个字段，含前端格式校验
+    \item 实现「获取验证码」按钮 60 秒倒计时逻辑，防止重复点击
+    \item 对接后端 \texttt{/user/register} 和 \texttt{/user/code} 接口
+\end{itemize}
+
+\subsubsection*{找回密码页面开发（额外实现）}
+\begin{itemize}
+    \item 设计两步流程：Step 1 邮箱+验证码验证 → Step 2 设置新密码
+    \item 实现密码强度校验（8-20位、含字母和数字）、两次密码一致性校验
+    \item 对接后端 \texttt{/user/password/reset} 接口，完成后自动跳转登录页
+    \item 修复后端验证码在密码校验失败时被提前消耗的 Bug（将 Redis delete 移至所有校验通过之后）
+\end{itemize}
+
+\subsubsection*{Axios 封装与 Token 管理}
+\begin{itemize}
+    \item 封装 Axios 实例：Base URL、15 秒超时、请求头自动注入 Bearer Token
+    \item 实现 Token 自动刷新机制：401 时使用 Refresh Token 换取新 Access Token，请求队列排队机制避免并发刷新
+    \item 实现 403 过期登录自动清除并跳转登录页
+    \item 区分网络错误类型的用户友好提示（超时/断网/服务器错误/权限不足）
+\end{itemize}
+
+\subsection{第二周（7月5日—7月6日）：消息与通知系统}
+
+\subsubsection*{消息页面全面重写}
+\begin{itemize}
+    \item 从原始 86 行基础实现重写为完整的 300+ 行聊天界面
+    \item 双栏布局：左侧会话列表（340px）+ 右侧聊天区域（自适应）
+    \item 会话列表：头像、昵称、最后消息预览、时间戳、未读红点
+    \item 聊天区域：聊天气泡设计（我方绿色圆角右对齐、对方灰色圆角左对齐）、消息时间戳
+    \item 输入区域：大号输入框 + 发送按钮（含 loading 状态），支持 Enter 快捷键
+    \item 实现 URL 参数 \texttt{?to=userId} 自动打开指定用户的会话，支持发起新对话
+    \item 实现 30 秒轮询刷新未读消息数和通知数，保证实时性
+    \item 空状态引导：「暂无消息，去商品页联系卖家吧」「选择一个会话开始聊天」
+\end{itemize}
+
+\subsubsection*{商品详情页「联系卖家」功能}
+\begin{itemize}
+    \item 在卖家信息卡片中新增绿色「联系卖家」按钮（ChatLineSquare 图标）
+    \item 点击按钮跳转 \texttt{/message?to=sellerId}，自动打开与该卖家的聊天窗口
+    \item 未登录用户点击后自动跳转登录页，登录后继续操作
+    \item 修复卖家头像链接指向不存在的动态路由导致 404 的 Bug
+\end{itemize}
+
+\subsubsection*{通知系统前端实现}
+\begin{itemize}
+    \item 在页面头部新增铃铛图标（Bell）+ 未读红点徽标
+    \item 实现通知下拉弹窗（Element Plus Popover）：最多显示 10 条，支持点击标记已读
+    \item 对接后端 \texttt{/notification/list}、\texttt{/notification/read/\{id\}}、\texttt{/notification/unread/count} 三个接口
+    \item 通知列表样式：未读通知浅绿背景高亮、通知标题/内容/时间三行布局
+\end{itemize}
+
+\subsubsection*{后端消息与通知联动（后端代码贡献）}
+\begin{itemize}
+    \item 在 MessageServiceImpl.sendMessage 中增加自动创建系统通知的逻辑（收信方收到「XXX 给你发来一条消息」通知）
+    \item 在 OrderServiceImpl 各状态流转方法中增加通知触发（下单→通知卖家、付款→通知卖家发货、发货→通知买家收货）
+    \item 封装 notifyUser 工具方法，统一通知创建逻辑
+\end{itemize}
+
+\subsection{第三周（7月6日—7月7日）：订单模块与 UI 优化}
+
+\subsubsection*{订单详情页全面重写}
+\begin{itemize}
+    \item 实现买家-卖家双视角操作：根据当前登录用户自动判断角色，展示不同操作按钮
+    \item 买家操作：待付款→去支付/取消订单、待收货→确认收货、已完成→去评价
+    \item 卖家操作：待发货→录入物流发货（弹窗：选择物流公司+输入单号）
+    \item 评价功能：星级评分（El-Rate）+ 文字评价（Textarea），对接 Review API
+    \item 修复后端 OrderVO 缺少 buyerId/sellerId 字段导致前端无法判断角色的问题
+    \item 订单状态时间线（El-Timeline）展示，从创建到完成全流程可追溯
+\end{itemize}
+
+\subsubsection*{UI 动效与交互优化}
+\begin{itemize}
+    \item 实现页面过渡动画（fade + slide），路由切换时平滑淡入淡出
+    \item 实现回到顶部按钮：滚动超过 400px 出现，弹性缩放动画，绿色圆形悬浮按钮
+    \item 实现骨架屏加载状态（Shimmer 动画）：首页商品列表加载时显示 8 个灰色占位卡片
+    \item 实现商品卡片交错入场动画（fadeInUp + animationDelay）
+    \item 实现导航栏滚动感知：页面滚动超过 10px 时出现底部阴影+毛玻璃模糊效果
+    \item 全局按钮微交互：hover 上浮 1px + 阴影、active 按下回弹、transition 平滑过渡
+    \item 添加全局 CSS 动画：shimmer（骨架屏）、shake（错误状态）、pulse（实时指示器）、fadeInUp（入场）
+\end{itemize}
+
+\subsubsection*{导航栏增强}
+\begin{itemize}
+    \item 消息图标改为 ChatDotSquare 图标 + 未读红点
+    \item 新增通知铃铛图标 + Popover 下拉面板
+    \item 每 30 秒自动轮询未读消息和通知数量
+    \item 解决消息图标 \texttt{router-link-exact-active} 导致商品详情页失去高亮的问题
+\end{itemize}
+
+\subsection{第四周（7月7日）：Bug 修复与数据优化}
+
+\subsubsection*{关键 Bug 修复}
+\begin{itemize}
+    \item \textbf{密码重置「验证码错误」Bug}：定位到验证码在密码校验前被删除的问题，将 Redis delete 移至所有校验通过之后；同时修复注册流程同款 Bug
+    \item \textbf{验证码类型隔离漏洞}：修复注册验证码可被用于密码重置的安全问题，在 Redis Key 中加入 type 前缀区分（captcha:register:xxx vs captcha:reset:xxx）
+    \item \textbf{密码重置暴力破解防护}：新增 5次/15分钟频率限制，防 6 位验证码被暴力枚举
+    \item \textbf{旧 Token 导致全站 403}：浏览器缓存旧用户 Token（用户已被重新导入），导致所有页面弹「权限不足」；新增 403 响应时自动清除过期登录状态
+    \item \textbf{Docker 容器时区问题}：发现所有消息显示「8小时前」是因为容器默认 UTC 时区，在 docker-compose.yml 中为 MySQL 和 Backend 容器添加 \texttt{TZ: Asia/Shanghai}
+    \item \textbf{浏览量计数错误}：卖家查看自己商品也增加浏览量，修改为非卖家才+1
+\end{itemize}
+
+\subsubsection*{种子数据与图片优化}
+\begin{itemize}
+    \item 编写 15 个真实用户 + 217 件商品的种子 SQL（覆盖所有 19 个子分类）
+    \item 经历三次图片方案迭代：LoremFlickr（不稳定出熊图）→ Picsum.photos 随机 ID → Picsum.photos 按分类种子前缀（phone/laptop/textbook/shoes 等），同类商品使用统一主题
+    \item 用户头像使用 Pravatar 生成个性化头像
+    \item 热门商品配置多张细节图片
+\end{itemize}
+
+\section{代码统计}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{类别} & \textbf{文件数} & \textbf{代码行数（估计）} \\
+\midrule
+新增 Vue 页面（ForgotPassword） & 1 & $\sim$200 \\
+重写 Vue 页面（MessagePage、OrderDetail） & 2 & $\sim$600 \\
+修改 Vue 页面（App、MainLayout、LoginPage、ProductDetail、HomePage） & 5 & $\sim$400 \\
+工具模块（request.ts） & 1 & $\sim$20 \\
+后端 Bug 修复（UserServiceImpl、OrderServiceImpl 等） & 5 & $\sim$100 \\
+SQL 种子数据 & 4 & $\sim$1400 \\
+\cmidrule{2-3}
+\textbf{合计} & \textbf{18} & $\sim$2\,700 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{核心技术亮点}
+
+\begin{enumerate}
+    \item \textbf{Token 自动刷新队列机制}：多个并发请求同时遇到 401 时，只发起一次刷新请求，其他请求排队等待，刷新成功后批量重试，避免登录冲突。
+    \item \textbf{防验证码消耗设计}：验证码只在业务操作成功后才从 Redis 删除，避免因校验失败（如密码与旧密码相同）导致验证码被浪费。
+    \item \textbf{多方案图片迭代}：从 LoremFlickr（关键词匹配但不稳定）到 Picsum.photos（稳定但随机），最终采用按商品分类分配不同种子前缀的方案，兼顾稳定性和视觉差异化。
+    \item \textbf{骨架屏 + 交错动画}：首页商品卡片加载时先展示 Shimmer 骨架屏，数据到位后以瀑布流交错动画入场，提升感知性能。
+\end{enumerate}
+
+\end{document}

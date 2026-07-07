@@ -142,7 +142,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Product product = productMapper.selectById(id);
         if (product == null) throw new BusinessException(404, "商品不存在");
 
-        productMapper.incrementViewCount(id);
+        // 非卖家本人浏览时才增加浏览量
+        if (currentUserId == null || !currentUserId.equals(product.getUserId())) {
+            productMapper.incrementViewCount(id);
+        }
 
         ProductVO vo = new ProductVO();
         BeanUtil.copyProperties(product, vo);

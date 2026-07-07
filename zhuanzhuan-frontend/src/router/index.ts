@@ -37,7 +37,8 @@ const router = createRouter({
       ]
     },
     { path: '/login', name: 'Login', component: () => import('@/views/user/LoginPage.vue'), meta: { title: '登录' } },
-    { path: '/register', name: 'Register', component: () => import('@/views/user/RegisterPage.vue'), meta: { title: '注册' } }
+    { path: '/register', name: 'Register', component: () => import('@/views/user/RegisterPage.vue'), meta: { title: '注册' } },
+    { path: '/forgot-password', name: 'ForgotPassword', component: () => import('@/views/user/ForgotPassword.vue'), meta: { title: '找回密码' } }
   ]
 })
 
