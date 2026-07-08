@@ -116,6 +116,32 @@ services:
     networks:
       - zhuanzhuan-net
 
+  # ============================================================
+  # phpMyAdmin 数据库管理工具
+  # ============================================================
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: zhuanzhuan-phpmyadmin
+    hostname: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "3001:80"
+    environment:
+      TZ: Asia/Shanghai
+      # 指定 MySQL 容器的主机名（已在同一网络）
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      # 允许任意用户登录
+      PMA_ARBITRARY: 1
+      # 默认用户名（可选项）
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - zhuanzhuan-net
+
 # ============================================================
 # 数据卷定义
 # ============================================================
