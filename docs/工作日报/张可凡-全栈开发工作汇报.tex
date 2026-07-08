@@ -1,0 +1,97 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 转转——校园二手物品交易平台}
+\fancyhead[R]{\small 张可凡·全栈开发工作汇报}
+\fancyfoot[C]{\thepage}
+
+\title{{\Huge 全栈开发工作汇报}\\[0.3cm]{\Large 校园二手物品交易平台——转转}}
+\author{{\large 张可凡（队长）}\\{\small 全栈开发 / 项目管理 / 测试}}
+\date{2026年7月4日 — 2026年7月10日}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{个人角色与职责}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{项目} & \textbf{内容} \\
+\midrule
+姓名 & 张可凡 \\
+角色 & 队长 / 全栈开发 / 项目管理 / 测试 \\
+主要职责 & Docker 容器化部署、管理后台前端开发、Postman 接口测试、文档整合 \\
+Git 提交 & 18 次 \\
+新增代码 & $\sim$2500 行 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{每日工作内容}
+
+\subsection{7月4日（周六）—— 项目启动与环境搭建}
+\begin{itemize}
+    \item 创建 GitHub 仓库并初始化目录结构
+    \item 编写 \texttt{docker-compose.yml} 编排 MySQL + Redis + 后端 + 前端容器
+    \item 配置 Nginx
+    \item 编写 \texttt{README.md}
+\end{itemize}
+
+\subsection{7月5日（周日）—— 基础框架与核心后端}
+\begin{itemize}
+    \item 完成 Docker 全栈环境联调验证（phpMyAdmin + 后端 + 前端）
+    \item 编写 Redis 配置与缓存工具类
+    \item 编写 \texttt{deploy/mysql/my.cnf}、\texttt{deploy/redis/redis.conf}
+\end{itemize}
+
+\subsection{7月6日（周一）—— 用户模块 + 商品模块}
+\begin{itemize}
+    \item 编写需求分析文档（软件需求规格说明书）
+    \item 编写系统架构设计文档
+    \item 编写 \texttt{deploy/mysql/migration-indexes.sql} 索引优化脚本
+\end{itemize}
+
+\subsection{7月7日（周二）—— 订单模块 + 商品管理}
+\begin{itemize}
+    \item 完成数据库设计说明书
+    \item 开始编写接口设计说明书
+    \item 开发管理后台用户管理页（列表 + 搜索 + 禁用/启用）
+\end{itemize}
+
+\subsection{7月8日（周三）—— 消息模块 + 后台管理}
+\begin{itemize}
+    \item 完成接口设计说明书
+    \item 开发管理后台商品审核页（待审核列表 + 通过/驳回/违规下架）
+    \item 开发管理后台订单管理页
+\end{itemize}
+
+\subsection{7月9日（周四）—— 管理后台 + 联调}
+\begin{itemize}
+    \item 开发管理后台公告管理页（CRUD + 列表）
+    \item 开发管理后台数据统计页（ECharts 图表）
+    \item 使用 Postman 进行全量接口测试
+\end{itemize}
+
+\subsection{7月10日（周五）—— 收尾与文档}
+\begin{itemize}
+    \item 编写测试报告文档
+    \item 编写用户使用说明书
+    \item Postman 回归测试确认全部接口通过
+    \item 汇总全组文档并校验格式
+    \item 编写项目 README 最终版
+\end{itemize}
+
+\end{document}

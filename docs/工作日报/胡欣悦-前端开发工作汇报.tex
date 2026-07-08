@@ -1,0 +1,98 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 转转——校园二手物品交易平台}
+\fancyhead[R]{\small 胡欣悦·前端开发工作汇报}
+\fancyfoot[C]{\thepage}
+
+\title{{\Huge 前端开发工作汇报}\\[0.3cm]{\Large 校园二手物品交易平台——转转}}
+\author{{\large 胡欣悦}\\{\small 前端开发工程师}}
+\date{2026年7月4日 — 2026年7月10日}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{个人角色与职责}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{项目} & \textbf{内容} \\
+\midrule
+姓名 & 胡欣悦 \\
+角色 & 前端开发工程师（前端C） \\
+主要职责 & 首页、登录/注册页、个人中心、收藏页、消息通知页、站内信页面 \\
+Git 提交 & 16 次 \\
+新增代码 & $\sim$3500 行 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{每日工作内容}
+
+\subsection{7月4日（周六）—— 项目启动与环境搭建}
+\begin{itemize}
+    \item 使用 Vite 创建 Vue3 + TypeScript 项目
+    \item 集成 Element Plus、Pinia、Vue Router、Axios
+    \item 封装 Axios 拦截器（请求/响应/统一报错）
+    \item 配置路由结构
+\end{itemize}
+
+\subsection{7月5日（周日）—— 基础框架与核心后端}
+\begin{itemize}
+    \item 开发登录/注册页面 UI（表单校验 + 验证码输入）
+    \item 开发 MainLayout 布局（顶部导航 + 侧栏 + 底部 Footer）
+    \item 完成 Axios 与后端联调测试
+\end{itemize}
+
+\subsection{7月6日（周一）—— 用户模块 + 商品模块}
+\begin{itemize}
+    \item 开发个人中心页面（信息编辑 + 头像上传预览裁剪）
+    \item 开发地址管理页面（列表 + 新增/编辑对话框 + 删除）
+    \item 联调用户模块接口
+\end{itemize}
+
+\subsection{7月7日（周二）—— 订单模块 + 商品管理}
+\begin{itemize}
+    \item 开发首页推荐轮播（el-carousel）
+    \item 开发我的收藏页（收藏列表 + 取消收藏）
+    \item 开发消息通知页（通知列表 + 已读/未读标记）
+    \item 联调用户模块全部接口
+\end{itemize}
+
+\subsection{7月8日（周三）—— 消息模块 + 后台管理}
+\begin{itemize}
+    \item 开发站内信页面（会话列表 + 聊天窗口 UI + 发送消息）
+    \item 联调商品模块接口
+    \item 编写前端单元测试
+\end{itemize}
+
+\subsection{7月9日（周四）—— 管理后台 + 联调}
+\begin{itemize}
+    \item 完成站内信页面联调
+    \item 完成订单列表/详情页联调
+    \item 完成购物车页联调
+    \item 修复联调前端 Bug（Token 过期、数据格式适配）
+\end{itemize}
+
+\subsection{7月10日（周五）—— 收尾与文档}
+\begin{itemize}
+    \item 运行全部前端单元测试（8 个），全部通过
+    \item 优化首页加载性能
+    \item 修复 UI 兼容性问题
+    \item 补充页面空状态与加载状态处理
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,475 @@
+\documentclass[12pt,a4paper,oneside]{ctexart}
+\usepackage[top=2.3cm, bottom=2.3cm, left=3.2cm, right=3.2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{amsmath}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=black,
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+\renewcommand{\cfttoctitlefont}{\hfill\Large\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill}
+
+\titleformat{\section}{\Large\bfseries\centering}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\setstretch{1.5}
+
+\newcommand{\covername}[1]{{\fontsize{36pt}{40pt}\selectfont\heiti #1}}
+\newcommand{\coversub}[1]{{\fontsize{18pt}{22pt}\selectfont\heiti #1}}
+
+% 代码块样式
+\lstset{
+    basicstyle=\small\ttfamily,
+    columns=flexible,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!5},
+    extendedchars=true,
+    xleftmargin=2em,
+    xrightmargin=2em,
+}
+
+\begin{document}
+
+% ========== 封面 ==========
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+\includegraphics[width=4cm]{media/logo.jpeg}
+\vspace{1cm}
+
+\covername{综合实训报告}
+\\[0.5cm]
+\coversub{转转校园二手物品交易平台设计与实现}
+\\[2cm]
+
+\begin{tabular}{>{\kaishu\bfseries\large}l>{\large}l}
+  \hline
+  姓\hspace{2em}名： & 张可凡 \\[0.5cm]
+  学\hspace{2em}号： & 2024307020XXX \\[0.5cm]
+  班\hspace{2em}级： & 计科210X班 \\[0.5cm]
+  指导老师： & 徐士伟 \\[0.5cm]
+  \hline
+\end{tabular}
+
+\vfill
+{\kaishu\large 中国 武汉}
+\\[0.3cm]
+{\kaishu\normalsize 二〇二六年七月}
+\\[0.2cm]
+{\kaishu\normalsize 2026.07}
+
+
+\end{titlepage}
+
+% ========== 目录 ==========
+\tableofcontents
+\newpage
+
+% ========== 正文 ==========
+
+% ====== 第1章 实训目的及内容 ======
+\section{实训目的及内容}
+
+\subsection{实训目的}
+
+本次综合实训以软件工程理论为指导，通过开发一个完整的校园二手物品交易平台，达到以下目的：
+
+\begin{enumerate}[nosep]
+    \item 巩固和深化软件工程、Web前端开发技术、Java程序设计、数据库原理与应用、计算机网络等课程的理论知识。
+    \item 掌握前后端分离架构的开发模式，熟悉SpringBoot + Vue3主流技术栈的工程化实践。
+    \item 培养团队协作能力与项目管理能力，体验从需求分析、系统设计、编码实现到测试部署的完整软件生命周期。
+    \item 提升独立解决实际问题的能力，包括技术选型、架构设计、性能优化、安全防护等综合工程素养。
+\end{enumerate}
+
+\subsection{实训内容}
+
+本项目"转转"是一个面向高校学生的C2C二手物品交易Web应用系统，旨在解决校园闲置物品循环利用的需求。系统采用前后端分离架构，后端基于Spring Boot 3 + Spring Security + JWT实现RESTful API，前端基于Vue 3 + TypeScript + Element Plus构建用户界面，使用MySQL存储业务数据，Redis提供缓存加速。
+
+系统实现了完整的交易闭环，包括用户管理、商品管理、购物车与订单交易、站内消息沟通、后台管理五大核心模块，并提供Docker Compose一键部署方案。
+
+\subsection{实训安排}
+
+\subsubsection{团队组成}
+
+实训小组共5人，分工如下：
+
+\begin{table}[htbp]
+\centering
+\caption{团队成员与角色分工}
+\label{tab:team}
+\small
+\begin{tabular}{|c|c|c|p{4.5cm}|}
+\hline
+\textbf{成员} & \textbf{角色} & \textbf{职责} \\
+\hline
+张可凡（队长） & 全栈/项目管理 & Docker部署、后台前端、Postman测试、文档 \\
+\hline
+阮崇轩 & 后端开发A & 项目骨架、用户模块、商品模块、安全框架 \\
+\hline
+刘轩霆 & 后端开发B & 购物车、订单模块、消息模块、后台API \\
+\hline
+胡欣悦 & 前端开发C & 首页、登录注册、个人中心、收藏、通知 \\
+\hline
+李硕 & 前端开发D & 商品页面、购物车、订单页面、管理后台 \\
+\hline
+\end{tabular}
+\normalsize
+\end{table}
+
+\subsubsection{开发计划}
+
+项目周期为2026年7月4日至2026年7月10日，共分四个阶段：
+
+\begin{itemize}[nosep]
+    \item \textbf{第1天（7月4日）}：环境搭建与基础框架——Git仓库创建、Docker编排、前后端项目脚手架、数据库表设计。
+    \item \textbf{第2--3天（7月5日--6日）}：核心功能开发（用户+商品）——安全框架集成、注册登录、商品CRUD、分类与收藏。
+    \item \textbf{第4--5天（7月7日--8日）}：核心功能开发（订单+消息）——购物车、订单状态流转、站内信、系统通知。
+    \item \textbf{第6--7天（7月9日--10日）}：管理后台 + 联调测试——用户/商品/订单管理、数据统计、全量接口联调、文档编写。
+\end{itemize}
+
+% ====== 第2章 需求分析 ======
+\section{需求分析}
+
+转转校园二手交易平台作为面向高校学生的C2C交易平台，主要服务三类用户角色：游客（未登录用户）、普通用户（买家和卖家双重身份）以及管理员。系统的顶层用例如图\ref{fig:usecase}所示。
+
+\begin{figure}[htbp]
+\centering
+\caption{系统顶层用例图}
+\label{fig:usecase}
+\end{figure}
+
+\subsection{功能需求}
+
+系统包含以下五大核心功能模块：
+
+\subsubsection{用户管理模块}
+
+支持用户的完整生命周期管理。游客可通过邮箱/手机号验证码注册成为平台用户，注册后可使用用户名或邮箱或手机号登录系统。系统采用JWT双Token机制（Access Token 2小时过期，Refresh Token 7天过期）实现无状态认证，支持密码找回、Token无感刷新、安全退出（Token加入Redis黑名单）等功能。用户可在个人中心编辑昵称、简介、性别，上传头像，管理多个收货地址并设置默认地址。
+
+\subsubsection{商品管理模块}
+
+支持商品的完整生命周期管理。卖家可发布商品，填写标题、描述（富文本）、价格、原价、成色，选择分类并上传多张图片。商品发布后需管理员审核方可上架展示。买家可通过首页推荐、分类导航、关键词搜索（全文索引）浏览商品，支持按分类、价格区间、成色筛选，按价格、时间、热度排序。买家可收藏感兴趣的商品，卖家可查看和管理自己发布的商品。
+
+\subsubsection{订单交易模块}
+
+实现完整的交易闭环。买家可将商品加入购物车统一结算，下单时选择收货地址。订单状态按"待付款$\to$待发货$\to$待收货$\to$已完成"流转，系统提供模拟支付功能，卖家可录入物流信息发货，买家确认收货后可对交易进行评分和评价。所有状态变更均记录订单日志，便于追踪溯源。
+
+\subsubsection{消息与通知模块}
+
+支持买卖双方的即时沟通。买家可通过商品详情页的"联系卖家"发起会话，双方可互发文本消息或图片消息，支持会话列表查看、聊天记录分页查询、消息已读/未读标记和未读计数。系统自动推送订单状态变更、审核结果等系统通知。
+
+\subsubsection{后台管理模块}
+
+为管理员提供全面的管理功能。包括用户管理（用户列表、搜索筛选、禁用/启用、修改角色）、商品审核（待审核列表、审核通过/驳回、违规强制下架）、订单管理（按状态/单号/日期查询、异常状态处理）、数据统计（注册用户量、商品发布量、成交量、分类占比饼图、趋势折线图，基于ECharts实现）以及公告管理（发布/编辑/删除系统公告）。
+
+\subsection{非功能需求}
+
+\begin{itemize}[nosep]
+    \item \textbf{安全性}：密码BCrypt加密存储，JWT无状态认证，接口RBAC权限控制，SQL注入防护（参数白名单校验），XSS防护。
+    \item \textbf{性能}：Redis缓存热点商品数据，数据库复合索引优化，N+1查询问题修复，前端Gzip压缩与路由懒加载。
+    \item \textbf{可用性}：响应式UI设计，统一异常处理与友好的错误提示，Token自动刷新机制保证会话连续性。
+    \item \textbf{可维护性}：前后端分离架构，RESTful API规范，统一返回结果封装，完善的订单日志审计。
+\end{itemize}
+
+% ====== 第3章 系统设计 ======
+\section{系统设计}
+
+\subsection{体系结构设计}
+
+系统采用前后端分离的B/S架构，前端与后端通过RESTful API进行数据交互。整体架构分为四层，如图\ref{fig:architecture}所示。
+
+\begin{figure}[htbp]
+\centering
+\caption{系统体系结构图}
+\label{fig:architecture}
+\end{figure}
+
+\subsubsection{前端架构}
+
+前端基于Vue 3 + TypeScript + Vite构建，采用组合式API开发模式。使用Element Plus提供UI组件，Pinia管理全局状态，Vue Router实现路由控制。Axios封装请求拦截器自动携带JWT Token，响应拦截器统一处理错误并支持Token自动刷新。前端构建通过Vite插件实现Element Plus按需导入、Gzip压缩和代码分割。
+
+\subsubsection{后端架构}
+
+后端采用Spring Boot 3 + MyBatis-Plus + Spring Security技术栈，遵循经典的三层架构设计：
+
+\begin{itemize}[nosep]
+    \item \textbf{Controller层}：接收HTTP请求，参数校验，调用Service层处理业务，返回统一封装的Result对象。
+    \item \textbf{Service层}：业务逻辑处理，包括用户认证、商品管理、订单流转、消息通信等核心业务。
+    \item \textbf{DAO层}：基于MyBatis-Plus操作数据库，支持Lambda查询和分页插件。
+\end{itemize}
+
+安全方面，Spring Security配置为无状态会话模式，通过JwtAuthenticationFilter拦截请求，从请求头提取Token解析用户信息并设置SecurityContext。Redis用于缓存验证码、黑名单Token、热点商品数据等。
+
+\subsubsection{部署架构}
+
+系统采用Docker Compose编排四容器架构：Nginx（前端静态资源服务与反向代理）、Spring Boot后端、MySQL 8.0数据库、Redis 7缓存。所有服务通过内部网络通信，MySQL和Redis不对外暴露端口，后端仅通过Nginx反向代理对外暴露。
+
+\subsection{数据设计}
+
+系统共设计13张核心业务表，涵盖用户、商品、订单、消息等全部业务实体。表结构和关系如图\ref{fig:er}所示。
+
+\begin{figure}[htbp]
+\centering
+\caption{数据库E-R图}
+\label{fig:er}
+\end{figure}
+
+\subsubsection{核心数据库表}
+
+\begin{table}[htbp]
+\centering
+\caption{核心数据库表清单}
+\label{tab:tables}
+\small
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{表名} & \textbf{用途} & \textbf{关键字段} \\
+\hline
+user & 用户表 & username, password\_hash, email, phone, role \\
+\hline
+category & 商品分类表 & name, parent\_id, level \\
+\hline
+product & 商品表 & user\_id, category\_id, title, price, status \\
+\hline
+product\_image & 商品图片表 & product\_id, url, sort\_order \\
+\hline
+address & 收货地址表 & user\_id, receiver, phone, province, city \\
+\hline
+order & 订单表 & order\_no, buyer\_id, seller\_id, status \\
+\hline
+order\_log & 订单日志表 & order\_id, from\_status, to\_status \\
+\hline
+cart & 购物车表 & user\_id, product\_id, quantity \\
+\hline
+message & 消息表 & from\_user\_id, to\_user\_id, content, type \\
+\hline
+favorite & 收藏表 & user\_id, product\_id \\
+\hline
+review & 评价表 & order\_id, from\_user\_id, rating \\
+\hline
+notification & 通知表 & user\_id, title, content, type \\
+\hline
+announcement & 公告表 & admin\_id, title, content, status \\
+\hline
+\end{tabular}
+\normalsize
+\end{table}
+
+数据表设计特点：所有表使用InnoDB引擎和utf8mb4字符集；采用软删除策略（deleted\_at字段配合MyBatis-Plus @TableLogic）；created\_at和updated\_at通过MyMetaObjectHandler自动填充；product表含全文索引支持商品搜索；通过复合索引优化消息会话查询、未读计数、收藏排序等高频查询场景。
+
+% ====== 第4章 系统实现 ======
+\section{系统实现}
+
+\subsection{JWT双Token认证机制}
+
+系统采用Access Token + Refresh Token双Token机制实现无状态认证。Access Token有效期为2小时，存储用户ID和角色信息；Refresh Token有效期为7天，用于无感刷新Token。
+
+\begin{lstlisting}[caption=JWT认证过滤器核心逻辑, language=Java]
+@Override
+protected void doFilterInternal(HttpServletRequest request,
+        HttpServletResponse response, FilterChain chain) {
+    String authHeader = request.getHeader("Authorization");
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        String token = authHeader.substring(7);
+        // check blacklist
+        if (redisTemplate.hasKey("blacklist:token:" + 
+                jwtUtil.getId(token))) {
+            chain.doFilter(request, response);
+            return;
+        }
+        // parse token and set authentication
+        Claims claims = jwtUtil.parseToken(token);
+        SecurityContextHolder.getContext().setAuthentication(
+            new UsernamePasswordAuthenticationToken(
+                claims.getSubject(), null, authorities));
+    }
+    chain.doFilter(request, response);
+}
+\end{lstlisting}
+
+\subsection{订单状态流转引擎}
+
+订单模块是整个系统的核心业务，涉及多个状态的流转和数据一致性。采用状态模式设计，每个状态变更均记录日志，关键操作（创建订单扣减库存）通过@Transactional保证原子性。
+
+\begin{figure}[htbp]
+\centering
+\caption{订单状态流转图}
+\label{fig:order-flow}
+\end{figure}
+
+订单状态流转路径为：
+
+\begin{center}
+\textbf{待付款$\xrightarrow{\text{支付}}$待发货$\xrightarrow{\text{发货}}$待收货$\xrightarrow{\text{收货}}$已完成$\xrightarrow{\text{评价}}$已评价}
+\end{center}
+
+\subsection{商品搜索与筛选}
+
+商品模块支持多条件组合查询，包括分类筛选、价格区间、成色筛选、关键词搜索以及按价格/时间/热度排序。基于MyBatis-Plus的LambdaQueryWrapper动态拼接查询条件，配合MySQL全文索引实现关键词搜索。为防范SQL注入，排序字段采用白名单机制，仅允许预定义字段参与排序。
+
+\subsection{消息即时通信}
+
+站内信模块实现了买家与卖家的实时沟通功能。消息表记录所有通信内容，按会话（Conversation）维度组织，通过from\_user\_id和to\_user\_id的组合查询生成会话列表。系统支持消息已读/未读标记，并通过Redis缓存未读计数提升查询性能。
+
+\subsection{数据统计与可视化}
+
+管理后台的数据统计模块基于ECharts实现数据可视化，包括用户增长趋势折线图、商品分类分布饼图、每日订单成交量柱状图等。后端通过SQL聚合查询获取统计数据，前端使用ECharts图表组件渲染展示。
+
+% ====== 第5章 系统测试 ======
+\section{系统测试}
+
+\subsection{测试策略}
+
+系统采用多层次测试策略：后端使用JUnit 5 + Mockito进行单元测试和集成测试，H2内存数据库作为测试环境；前端使用Vitest + Vue Test Utils进行组件和Store测试；全量API通过Postman集合进行接口验证。
+
+\subsection{测试用例设计}
+
+以订单模块的核心功能为例，采用黑盒测试法设计的测试用例如表\ref{tab:testcase}所示。
+
+\begin{table}[H]
+\centering
+\caption{订单模块核心测试用例}
+\label{tab:testcase}
+\begin{tabular}{|p{3cm}|p{8cm}|}
+\hline
+\textbf{测试用例编号} & ORDER\_CORE\_001 \\
+\hline
+\textbf{测试项目} & 订单创建与支付流程 \\
+\hline
+\textbf{测试标题} & 正常创建订单并完成支付 \\
+\hline
+\textbf{重要级别} & 高 \\
+\hline
+\textbf{预置条件} & 买家已登录，商品在售且库存充足，买家有默认收货地址 \\
+\hline
+\textbf{输入} & 商品ID、数量1、收货地址ID \\
+\hline
+\textbf{操作步骤} & ① 调用创建订单接口；② 调用支付接口 \\
+\hline
+\textbf{预期输出} & 订单创建成功，状态为"待付款"；支付后状态变更为"待发货" \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{商品搜索测试用例}
+\label{tab:searchtest}
+\begin{tabular}{|p{3cm}|p{8cm}|}
+\hline
+\textbf{测试用例编号} & PRODUCT\_SEARCH\_001 \\
+\hline
+\textbf{测试项目} & 商品多条件组合搜索 \\
+\hline
+\textbf{测试标题} & 按分类+价格区间+排序搜索商品 \\
+\hline
+\textbf{重要级别} & 中 \\
+\hline
+\textbf{预置条件} & 数据库中已存在多个分类的商品数据 \\
+\hline
+\textbf{输入} & categoryId=1, minPrice=100, maxPrice=500, sortBy=price, order=asc \\
+\hline
+\textbf{操作步骤} & 调用商品列表接口，传入上述参数 \\
+\hline
+\textbf{预期输出} & 返回分类ID为1、价格在100--500元之间的商品列表，按价格升序排列 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{测试结果}
+
+\subsubsection{单元测试}
+
+后端共完成37个单元测试，覆盖Result工具类、JwtUtil工具类、UserServiceImpl、AddressServiceImpl以及Controller集成测试；前端共完成13个单元测试，覆盖auth工具函数、组件渲染、Result数据格式以及Pinia Store。全部50个测试均通过，成功率100\%。
+
+\begin{table}[H]
+\centering
+\caption{单元测试统计}
+\label{tab:unittest}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{测试范围} & \textbf{测试数} & \textbf{通过} & \textbf{通过率} \\
+\hline
+后端单元测试 & 37 & 37 & 100\% \\
+\hline
+前端单元测试 & 13 & 13 & 100\% \\
+\hline
+\textbf{总计} & \textbf{50} & \textbf{50} & \textbf{100\%} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{接口测试}
+
+通过Postman集合对全部60+个API端点进行验证，涵盖首页（3个）、用户认证（6个）、用户信息（3个）、地址管理（5个）、商品（11个）、购物车（4个）、订单（6个）、消息（5个）、管理后台（8个）、上传（1个）十大模块，全部接口通过验证。
+
+\subsubsection{性能优化}
+
+在测试过程中发现并修复了以下关键问题：
+
+\begin{enumerate}[nosep]
+    \item \textbf{N+1查询问题}：商品列表每页加载41条SQL语句，通过批量加载分类和卖家信息优化至3条SQL，性能提升约13倍。
+    \item \textbf{SQL注入漏洞}：`ProductMapper.xml`中排序字段直接拼接参数，改为白名单校验机制。
+    \item \textbf{数据库索引缺失}：新增4个复合索引优化消息会话查询、未读计数、收藏排序和卖家商品筛选。
+    \item \textbf{逻辑错误}：`countProductByUser()`查错表，修正为正确的Mapper方法。
+\end{enumerate}
+
+% ====== 第6章 结论与体会 ======
+\section{结论与体会}
+
+\subsection{结论}
+
+经过为期一周的集中开发与测试，"转转"校园二手物品交易平台已成功实现全部预设功能。系统基于Spring Boot 3 + Vue 3前后端分离架构，实现了用户管理、商品管理、购物车与订单交易、站内消息通信、后台管理五大核心模块，共计60+个RESTful API和15个前端页面。系统通过了50个单元测试和全量Postman接口测试，成功率为100\%，并已通过Docker Compose实现一键部署。
+
+项目的核心成果包括：实现了基于JWT双Token机制的安全认证体系，保障了接口访问安全；设计了完整的订单状态流转引擎，支持从下单到评价的全流程闭环；构建了基于Redis的缓存加速机制，提升了系统响应性能；同时修复了N+1查询、SQL注入等关键质量和安全问题。
+
+\subsection{个人体会}
+
+通过本次综合实训，我在以下几个方面获得了显著提升：
+
+\textbf{系统分析与设计能力}：在需求分析阶段，学习如何将模糊的业务需求转化为明确的系统功能和数据结构；在架构设计阶段，深入理解了前后端分离架构的优势，掌握了RESTful API的设计规范和数据库表设计的范式理论。
+
+\textbf{技术实践能力}：通过实际开发，巩固了Spring Boot框架的核心特性（IoC、AOP、事务管理），熟练掌握了MyBatis-Plus的Lambda查询和分页插件使用，理解了JWT无状态认证的工作原理和实现方式。前端方面，深入体验了Vue 3组合式API的开发模式，掌握了Pinia状态管理和Axios拦截器等关键技术。
+
+\textbf{项目管理与团队协作}：作为队长，负责全组任务分配、进度协调和最终质量把控。使用Git进行版本控制和分支管理，确保多人协作的代码一致性。每日召开晨会同步进度，及时解决联调中遇到的技术问题。
+
+\textbf{问题解决能力}：在开发过程中遇到了一系列技术挑战——Docker容器启动顺序控制、订单库存扣减的原子性保证、前后端字段命名不一致等。通过查阅官方文档和技术社区，逐一找到了合理的解决方案，积累了宝贵的实战经验。
+
+\textbf{质量意识}：测试环节让我深刻认识到软件质量的重要性。通过多层次测试策略，发现了N+1查询性能瓶颈和SQL注入安全漏洞等容易被忽视的问题，意识到好的软件不仅要"能用"，更要"好用"、"安全"。
+
+% ====== 第7章 参考文献 ======
+\section{参考文献}
+
+\begin{enumerate}[nosep]
+    \item 尤雨溪. Vue.js 3设计与实现[M]. 北京: 人民邮电出版社, 2023.
+    \item Walls C. SpringBoot实战[M]. 第4版. 北京: 人民邮电出版社, 2022.
+    \item Widenius M. MySQL必知必会[M]. 北京: 人民邮电出版社, 2020.
+    \item 黄健宏. Redis设计与实现[M]. 北京: 机械工业出版社, 2014.
+    \item Richardson L, Ruby S. RESTful Web APIs[M]. O'Reilly Media, 2013.
+    \item 王松. Spring Boot整合开发实战[M]. 北京: 清华大学出版社, 2023.
+    \item 张卫朋. Vue.js 3从入门到精通[M]. 北京: 人民邮电出版社, 2024.
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,92 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 转转——校园二手物品交易平台}
+\fancyhead[R]{\small 刘轩霆·后端开发工作汇报}
+\fancyfoot[C]{\thepage}
+
+\title{{\Huge 后端开发工作汇报}\\[0.3cm]{\Large 校园二手物品交易平台——转转}}
+\author{{\large 刘轩霆}\\{\small 后端开发工程师}}
+\date{2026年7月4日 — 2026年7月10日}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{个人角色与职责}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{项目} & \textbf{内容} \\
+\midrule
+姓名 & 刘轩霆 \\
+角色 & 后端开发工程师（后端B） \\
+主要职责 & 购物车、订单核心流程与状态流转、消息模块（站内信/通知）、后台管理 API、数据统计 \\
+Git 提交 & 20 次 \\
+新增代码 & $\sim$4000 行 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{每日工作内容}
+
+\subsection{7月4日（周六）—— 项目启动与环境搭建}
+\begin{itemize}
+    \item 协助搭建后端骨架
+    \item 编写 MyBatis-Plus 配置与分页插件
+    \item 设计用户表、地址表、商品表、分类表、订单表、购物车表、消息表等全部 15 张表的建表 SQL 与索引脚本
+\end{itemize}
+
+\subsection{7月5日（周日）—— 基础框架与核心后端}
+\begin{itemize}
+    \item 设计消息表、通知表、公告表 SQL
+    \item 完成地址管理 5 个接口（CRUD + 设为默认）
+    \item 完成购物车 4 个接口（增删改查）
+\end{itemize}
+
+\subsection{7月6日（周一）—— 用户模块 + 商品模块}
+\begin{itemize}
+    \item 实现创建订单（事务 + 库存扣减）
+    \item 实现订单列表、订单详情、取消订单、订单日志接口
+\end{itemize}
+
+\subsection{7月7日（周二）—— 订单模块 + 商品管理}
+\begin{itemize}
+    \item 实现支付（模拟）、确认发货、确认收货、评价接口
+\end{itemize}
+
+\subsection{7月8日（周三）—— 消息模块 + 后台管理}
+\begin{itemize}
+    \item 实现站内信 4 个接口（会话列表、聊天记录、发送消息、标记已读）
+    \item 实现系统通知 2 个接口（通知列表、标记已读）
+    \item 实现公告 CRUD 3 个接口
+    \item 实现公开公告列表接口
+\end{itemize}
+
+\subsection{7月9日（周四）—— 管理后台 + 联调}
+\begin{itemize}
+    \item 实现后台管理 API（订单管理列表、数据统计）
+    \item 编写全部后端单元测试
+\end{itemize}
+
+\subsection{7月10日（周五）—— 收尾与文档}
+\begin{itemize}
+    \item 完成后台管理 API 剩余接口
+    \item 验证所有订单状态流转正确性
+    \item 验证消息收发完整性
+    \item 协助文档编写
+\end{itemize}
+
+\end{document}
