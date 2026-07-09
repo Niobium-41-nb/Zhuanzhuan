@@ -120,19 +120,19 @@
 \caption{团队成员与角色分工}
 \label{tab:team}
 \small
-\begin{tabular}{|c|c|c|p{4.5cm}|}
+\begin{tabular}{|c|c|p{4.5cm}|}
 \hline
 \textbf{成员} & \textbf{角色} & \textbf{职责} \\
 \hline
-张可凡（队长） & 全栈/项目管理 & Docker部署、后台前端、Postman测试、文档 \\
+张可凡（队长） & 全栈/项目管理 & Docker部署、管理后台前端、Postman测试、文档整合 \\
 \hline
-阮崇轩 & 后端开发A & 项目骨架、用户模块、商品模块、安全框架 \\
+阮崇轩 & 前端开发 & 前端工程搭建、用户认证模块、消息通知系统、UI动效与交互优化 \\
 \hline
-刘轩霆 & 后端开发B & 购物车、订单模块、消息模块、后台API \\
+刘轩霆 & 后端开发A & 用户模块、商品模块、安全框架、订单核心流程、后台管理API \\
 \hline
-胡欣悦 & 前端开发C & 首页、登录注册、个人中心、收藏、通知 \\
+胡欣悦 & 后端开发B & 购物车模块、消息与通知模块、数据统计、文件上传、Docker部署运维 \\
 \hline
-李硕 & 前端开发D & 商品页面、购物车、订单页面、管理后台 \\
+李硕 & 前端开发 & 首页与商品模块、购物车与订单页面、管理后台页面、数据可视化 \\
 \hline
 \end{tabular}
 \normalsize
@@ -156,6 +156,7 @@
 
 \begin{figure}[htbp]
 \centering
+\includegraphics[width=0.9\textwidth]{media/usecase.pdf}
 \caption{系统顶层用例图}
 \label{fig:usecase}
 \end{figure}
@@ -202,6 +203,7 @@
 
 \begin{figure}[htbp]
 \centering
+\includegraphics[width=0.9\textwidth]{media/architecture.pdf}
 \caption{系统体系结构图}
 \label{fig:architecture}
 \end{figure}
@@ -232,7 +234,8 @@
 
 \begin{figure}[htbp]
 \centering
-\caption{数据库E-R图}
+\includegraphics[width=0.95\textwidth]{media/er.pdf}
+\caption{数据库E-R图（核心表）}
 \label{fig:er}
 \end{figure}
 
@@ -243,7 +246,7 @@
 \caption{核心数据库表清单}
 \label{tab:tables}
 \small
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|p{5cm}|}
 \hline
 \textbf{表名} & \textbf{用途} & \textbf{关键字段} \\
 \hline
@@ -315,6 +318,7 @@ protected void doFilterInternal(HttpServletRequest request,
 
 \begin{figure}[htbp]
 \centering
+\includegraphics[width=0.7\textwidth]{media/order-flow.pdf}
 \caption{订单状态流转图}
 \label{fig:order-flow}
 \end{figure}
@@ -402,7 +406,7 @@ protected void doFilterInternal(HttpServletRequest request,
 
 \subsubsection{单元测试}
 
-后端共完成37个单元测试，覆盖Result工具类、JwtUtil工具类、UserServiceImpl、AddressServiceImpl以及Controller集成测试；前端共完成13个单元测试，覆盖auth工具函数、组件渲染、Result数据格式以及Pinia Store。全部50个测试均通过，成功率100\%。
+后端共完成14个单元测试，覆盖Result工具类、JwtUtil工具类、UserServiceImpl、AddressServiceImpl以及Controller集成测试；前端共完成8个单元测试，覆盖auth工具函数、组件渲染、Result数据格式以及Pinia Store。全部22个测试均通过，成功率100\%。
 
 \begin{table}[H]
 \centering
@@ -412,11 +416,11 @@ protected void doFilterInternal(HttpServletRequest request,
 \hline
 \textbf{测试范围} & \textbf{测试数} & \textbf{通过} & \textbf{通过率} \\
 \hline
-后端单元测试 & 37 & 37 & 100\% \\
+后端单元测试 & 14 & 14 & 100\% \\
 \hline
-前端单元测试 & 13 & 13 & 100\% \\
+前端单元测试 & 8 & 8 & 100\% \\
 \hline
-\textbf{总计} & \textbf{50} & \textbf{50} & \textbf{100\%} \\
+\textbf{总计} & \textbf{22} & \textbf{22} & \textbf{100\%} \\
 \hline
 \end{tabular}
 \end{table}
@@ -441,7 +445,7 @@ protected void doFilterInternal(HttpServletRequest request,
 
 \subsection{结论}
 
-经过为期一周的集中开发与测试，"转转"校园二手物品交易平台已成功实现全部预设功能。系统基于Spring Boot 3 + Vue 3前后端分离架构，实现了用户管理、商品管理、购物车与订单交易、站内消息通信、后台管理五大核心模块，共计60+个RESTful API和15个前端页面。系统通过了50个单元测试和全量Postman接口测试，成功率为100\%，并已通过Docker Compose实现一键部署。
+经过为期一周的集中开发与测试，"转转"校园二手物品交易平台已成功实现全部预设功能。系统基于Spring Boot 3 + Vue 3前后端分离架构，实现了用户管理、商品管理、购物车与订单交易、站内消息通信、后台管理五大核心模块，共计60+个RESTful API和15个前端页面。系统通过了22个单元测试和全量Postman接口测试，成功率为100\%，并已通过Docker Compose实现一键部署。
 
 项目的核心成果包括：实现了基于JWT双Token机制的安全认证体系，保障了接口访问安全；设计了完整的订单状态流转引擎，支持从下单到评价的全流程闭环；构建了基于Redis的缓存加速机制，提升了系统响应性能；同时修复了N+1查询、SQL注入等关键质量和安全问题。
 
@@ -449,15 +453,25 @@ protected void doFilterInternal(HttpServletRequest request,
 
 通过本次综合实训，我在以下几个方面获得了显著提升：
 
-\textbf{系统分析与设计能力}：在需求分析阶段，学习如何将模糊的业务需求转化为明确的系统功能和数据结构；在架构设计阶段，深入理解了前后端分离架构的优势，掌握了RESTful API的设计规范和数据库表设计的范式理论。
+\subsubsection{系统分析与设计能力}
 
-\textbf{技术实践能力}：通过实际开发，巩固了Spring Boot框架的核心特性（IoC、AOP、事务管理），熟练掌握了MyBatis-Plus的Lambda查询和分页插件使用，理解了JWT无状态认证的工作原理和实现方式。前端方面，深入体验了Vue 3组合式API的开发模式，掌握了Pinia状态管理和Axios拦截器等关键技术。
+在需求分析阶段，学习如何将模糊的业务需求转化为明确的系统功能和数据结构；在架构设计阶段，深入理解了前后端分离架构的优势，掌握了RESTful API的设计规范和数据库表设计的范式理论。
 
-\textbf{项目管理与团队协作}：作为队长，负责全组任务分配、进度协调和最终质量把控。使用Git进行版本控制和分支管理，确保多人协作的代码一致性。每日召开晨会同步进度，及时解决联调中遇到的技术问题。
+\subsubsection{技术实践能力}
 
-\textbf{问题解决能力}：在开发过程中遇到了一系列技术挑战——Docker容器启动顺序控制、订单库存扣减的原子性保证、前后端字段命名不一致等。通过查阅官方文档和技术社区，逐一找到了合理的解决方案，积累了宝贵的实战经验。
+通过实际开发，巩固了Spring Boot框架的核心特性（IoC、AOP、事务管理），熟练掌握了MyBatis-Plus的Lambda查询和分页插件使用，理解了JWT无状态认证的工作原理和实现方式。前端方面，深入体验了Vue 3组合式API的开发模式，掌握了Pinia状态管理和Axios拦截器等关键技术。
 
-\textbf{质量意识}：测试环节让我深刻认识到软件质量的重要性。通过多层次测试策略，发现了N+1查询性能瓶颈和SQL注入安全漏洞等容易被忽视的问题，意识到好的软件不仅要"能用"，更要"好用"、"安全"。
+\subsubsection{项目管理与团队协作}
+
+作为队长，负责全组任务分配、进度协调和最终质量把控。使用Git进行版本控制和分支管理，确保多人协作的代码一致性。每日召开晨会同步进度，及时解决联调中遇到的技术问题。
+
+\subsubsection{问题解决能力}
+
+在开发过程中遇到了一系列技术挑战——Docker容器启动顺序控制、订单库存扣减的原子性保证、前后端字段命名不一致等。通过查阅官方文档和技术社区，逐一找到了合理的解决方案，积累了宝贵的实战经验。
+
+\subsubsection{质量意识}
+
+测试环节让我深刻认识到软件质量的重要性。通过多层次测试策略，发现了N+1查询性能瓶颈和SQL注入安全漏洞等容易被忽视的问题，意识到好的软件不仅要"能用"，更要"好用"、"安全"。
 
 % ====== 第7章 参考文献 ======
 \section{参考文献}

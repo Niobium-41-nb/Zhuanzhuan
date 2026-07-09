@@ -1,0 +1,99 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 转转——校园二手物品交易平台}
+\fancyhead[R]{\small 胡欣悦·后端开发工作汇报}
+\fancyfoot[C]{\thepage}
+
+\title{{\Huge 后端开发工作汇报}\\[0.3cm]{\Large 校园二手物品交易平台——转转}}
+\author{{\large 胡欣悦}\\{\small 后端开发工程师}}
+\date{2026年7月4日 — 2026年7月10日}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{个人角色与职责}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{项目} & \textbf{内容} \\
+\midrule
+姓名 & 胡欣悦 \\
+角色 & 后端开发工程师（后端B） \\
+主要职责 & 购物车模块、消息与通知模块、数据统计、文件上传、Docker 部署运维 \\
+Git 提交 & 16 次 \\
+新增代码 & $\sim$3500 行 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{每日工作内容}
+
+\subsection{7月4日（周六）—— 项目启动与环境搭建}
+\begin{itemize}
+    \item 协助前端项目搭建，配置 Vite 构建工具与路径别名
+    \item 协助数据库表结构设计，参与建表 SQL 评审
+    \item 完成 Docker Compose 编排方案设计，配置 MySQL + Redis + 后端 + 前端 四容器架构
+    \item 编写 nginx.conf 反向代理配置与静态资源服务配置
+\end{itemize}
+
+\subsection{7月5日（周日）—— 基础框架与核心后端}
+\begin{itemize}
+    \item 完成 Docker 全栈环境联调验证（后端 + 前端 + 数据库连通性测试）
+    \item 编写 Redis 配置类与缓存工具类（RedisTemplate 序列化配置、Key 前缀管理）
+    \item 编写 deploy/mysql/my.cnf、deploy/redis/redis.conf 配置文件
+    \item 编写 settings-docker.xml Maven 容器构建配置
+\end{itemize}
+
+\subsection{7月6日（周一）—— 用户模块 + 商品模块}
+\begin{itemize}
+    \item 实现购物车模块 4 个接口（增删改查 + 选中结算）
+    \item 实现购物车与商品库存联动校验
+    \item 编写 migration-indexes.sql 索引优化脚本（新增 4 个复合索引）
+\end{itemize}
+
+\subsection{7月7日（周二）—— 订单模块 + 商品管理}
+\begin{itemize}
+    \item 实现消息模块 4 个接口（会话列表、聊天记录、发送消息、标记已读）
+    \item 实现系统通知 2 个接口（通知列表、标记已读）
+    \item 实现公告 CRUD 3 个接口
+    \item 实现公开公告列表接口
+\end{itemize}
+
+\subsection{7月8日（周三）—— 消息模块 + 后台管理}
+\begin{itemize}
+    \item 实现后台管理 API（订单管理列表、订单状态查询）
+    \item 实现数据统计 API（注册用户量、商品发布量、成交量、分类占比）
+    \item 编写文件上传接口，配置静态资源映射
+\end{itemize}
+
+\subsection{7月9日（周四）—— 管理后台 + 联调}
+\begin{itemize}
+    \item 完成 Docker 部署方案验证与优化
+    \item 配合前端全量联调，修复接口字段命名不一致问题
+    \item 配置 map-underscore-to-camel-case 全局转换解决下划线/驼峰映射
+    \item 验证订单状态流转全流程正确性
+\end{itemize}
+
+\subsection{7月10日（周五）—— 收尾与文档}
+\begin{itemize}
+    \item 运行全部后端单元测试（14 个），全部通过
+    \item 验证消息收发完整性
+    \item 协助文档编写，完善接口设计说明书
+    \item 优化 Docker 容器启动顺序（depends\_on + 健康检查）
+\end{itemize}
+
+\end{document}

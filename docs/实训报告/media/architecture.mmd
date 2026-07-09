@@ -1,0 +1,28 @@
+---
+title: 系统体系结构图
+---
+graph TD
+    subgraph 用户层
+        Browser["浏览器 (Chrome/Edge)"]
+    end
+
+    subgraph 接入层
+        Nginx["Nginx 反向代理<br/>(静态资源 + API转发)"]
+    end
+
+    subgraph 应用层
+        Frontend["前端 Vue 3<br/>TypeScript + Vite<br/>Element Plus UI<br/>Pinia 状态管理<br/>Axios 请求"]
+        Backend["后端 Spring Boot 3<br/>Controller 层<br/>Service 层<br/>DAO 层 (MyBatis)<br/>Spring Security"]
+    end
+
+    subgraph 数据层
+        MySQL[("MySQL 8.0<br/>(业务数据)")]
+        Redis[("Redis 7<br/>(缓存/会话)")]
+    end
+
+    Browser --> Nginx
+    Nginx --> Frontend
+    Nginx --> Backend
+    Frontend -.->|RESTful API| Backend
+    Backend --> MySQL
+    Backend --> Redis

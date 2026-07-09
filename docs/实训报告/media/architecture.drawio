@@ -1,0 +1,102 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.7.17">
+  <diagram id="architecture" name="系统体系结构图">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- 标题 -->
+        <mxCell id="t" value="系统体系结构图" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="310" y="10" width="300" height="40" as="geometry" />
+        </mxCell>
+        <!-- ===== 第一层：用户层 ===== -->
+        <mxCell id="l1_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="60" width="840" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l1_label" value="用户层" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#1565C0;" parent="1" vertex="1">
+          <mxGeometry x="50" y="65" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="browser" value="🌐 浏览器&lt;br&gt;(Chrome/Edge)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1565C0;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="350" y="90" width="120" height="55" as="geometry" />
+        </mxCell>
+        <!-- 箭头 浏览器 -> Nginx -->
+        <mxCell id="a1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=0;endArrow=blockThin;endFill=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="145" as="sourcePoint" />
+            <mxPoint x="410" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- ===== 第二层：接入层 ===== -->
+        <mxCell id="l2_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="180" width="840" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="l2_label" value="接入层" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#E65100;" parent="1" vertex="1">
+          <mxGeometry x="50" y="185" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nginx" value="Nginx 反向代理&lt;br&gt;(静态资源服务 + API转发)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E65100;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="330" y="200" width="160" height="45" as="geometry" />
+        </mxCell>
+        <!-- 箭头 Nginx -> 前端 + 后端 -->
+        <mxCell id="a2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.3;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="370" y="245" as="sourcePoint" />
+            <mxPoint x="250" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.7;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="245" as="sourcePoint" />
+            <mxPoint x="570" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- ===== 第三层：前端 + 后端 ===== -->
+        <mxCell id="l3_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="280" width="840" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="l3_label" value="应用层" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#2E7D32;" parent="1" vertex="1">
+          <mxGeometry x="50" y="285" width="80" height="20" as="geometry" />
+        </mxCell>
+        <!-- 前端 -->
+        <mxCell id="frontend" value="&lt;b&gt;前端 (Vue 3)&lt;/b&gt;&lt;br&gt;TypeScript + Vite&lt;br&gt;Element Plus UI&lt;br&gt;Pinia 状态管理&lt;br&gt;Axios HTTP 请求" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D32;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="120" y="320" width="180" height="130" as="geometry" />
+        </mxCell>
+        <!-- 后端 -->
+        <mxCell id="backend" value="&lt;b&gt;后端 (Spring Boot 3)&lt;/b&gt;&lt;br&gt;Controller 层 (RESTful API)&lt;br&gt;Service 层 (业务逻辑)&lt;br&gt;DAO 层 (MyBatis-Plus)&lt;br&gt;Spring Security (JWT)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2E7D32;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="480" y="320" width="180" height="130" as="geometry" />
+        </mxCell>
+        <!-- API 交互箭头 -->
+        <mxCell id="a4" value="RESTful API" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;dashed=0;endArrow=blockThin;endFill=1;fontSize=11;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="385" as="sourcePoint" />
+            <mxPoint x="480" y="385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- 箭头 后端 -> 数据库 -->
+        <mxCell id="a5" value="JDBC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.3;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;fontSize=11;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="450" as="sourcePoint" />
+            <mxPoint x="300" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a6" value="Redis协议" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.7;exitY=1;entryX=0.5;entryY=0;endArrow=blockThin;endFill=1;fontSize=11;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610" y="450" as="sourcePoint" />
+            <mxPoint x="620" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- ===== 第四层：数据层 ===== -->
+        <mxCell id="l4_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#6A1B9A;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="510" width="840" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l4_label" value="数据层" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#6A1B9A;" parent="1" vertex="1">
+          <mxGeometry x="50" y="515" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="mysql" value="🗄 MySQL 8.0&lt;br&gt;(业务数据持久化)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFFFFF;strokeColor=#6A1B9A;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="220" y="535" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="redis" value="⚡ Redis 7&lt;br&gt;(缓存/验证码/会话)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#FFFFFF;strokeColor=#6A1B9A;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="540" y="535" width="140" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

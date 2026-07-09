@@ -1,0 +1,106 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.7.17">
+  <diagram id="usecase" name="系统顶层用例图">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- 系统边界框 -->
+        <mxCell id="2" value="转转校园二手交易平台" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#F5F5F5;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="320" y="80" width="560" height="680" as="geometry" />
+        </mxCell>
+        <!-- ===== 游客 Actor ===== -->
+        <mxCell id="3" value="游客" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#2D6A4F;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="100" y="160" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- 游客用例 -->
+        <mxCell id="4" value="浏览商品" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2D6A4F;" parent="1" vertex="1">
+          <mxGeometry x="380" y="130" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="搜索商品" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2D6A4F;" parent="1" vertex="1">
+          <mxGeometry x="380" y="210" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="用户注册" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2D6A4F;" parent="1" vertex="1">
+          <mxGeometry x="380" y="290" width="120" height="50" as="geometry" />
+        </mxCell>
+        <!-- 游客连线 -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="3" target="4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="3" target="5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="3" target="6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- ===== 普通用户 Actor ===== -->
+        <mxCell id="7" value="普通用户&lt;br&gt;(买家/卖家)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#2D6A4F;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="100" y="460" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- 普通用户用例 - 左侧列 -->
+        <mxCell id="8" value="用户登录" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="380" y="400" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="管理个人信息" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="380" y="480" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="发布商品" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="380" y="560" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="管理商品" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="380" y="640" width="120" height="50" as="geometry" />
+        </mxCell>
+        <!-- 普通用户用例 - 右侧列 -->
+        <mxCell id="12" value="购物车管理" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="560" y="130" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="下单购买" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="560" y="210" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="订单管理" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="560" y="290" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="收藏商品" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="560" y="370" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="站内通信" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="560" y="450" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="交易评价" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#1B5E20;" parent="1" vertex="1">
+          <mxGeometry x="560" y="530" width="120" height="50" as="geometry" />
+        </mxCell>
+        <!-- 普通用户连线 -->
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;" parent="1" source="7" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="320" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <!-- ===== 管理员 Actor ===== -->
+        <mxCell id="18" value="管理员" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#E76F51;fontColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="100" y="640" width="40" height="60" as="geometry" />
+        </mxCell>
+        <!-- 管理用例 -->
+        <mxCell id="19" value="用户管理" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E76F51;" parent="1" vertex="1">
+          <mxGeometry x="380" y="720" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="商品审核" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E76F51;" parent="1" vertex="1">
+          <mxGeometry x="560" y="620" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="订单管理" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E76F51;" parent="1" vertex="1">
+          <mxGeometry x="560" y="700" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="数据统计" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E76F51;" parent="1" vertex="1">
+          <mxGeometry x="380" y="620" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="公告管理" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#E76F51;" parent="1" vertex="1">
+          <mxGeometry x="560" y="780" width="120" height="50" as="geometry" />
+        </mxCell>
+        <!-- 管理员连线 -->
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;" parent="1" source="18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
