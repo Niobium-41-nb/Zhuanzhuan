@@ -161,19 +161,22 @@ function scrollBottom() {
 }
 function showDateSep(i: number) {
   if (i===0) return true
-  const a = new Date(messages[i].createdAt).toDateString()
-  const b = new Date(messages[i-1].createdAt).toDateString()
+  if (!messages.value[i]?.createdAt || !messages.value[i-1]?.createdAt) return false
+  const a = new Date(messages.value[i].createdAt).toDateString()
+  const b = new Date(messages.value[i-1].createdAt).toDateString()
   return a !== b
 }
 function fmtTime(t: string) {
-  if (!t) return ''; const d = new Date(t); const n = Date.now(); const df = n - d.getTime()
+  if (!t) return ''; const d = new Date(t); if (isNaN(d.getTime())) return ''
+  const n = Date.now(); const df = n - d.getTime()
   if (df<6e4) return '刚刚'; if (df<36e5) return Math.floor(df/6e4)+'分钟前'
   if (df<864e5) return Math.floor(df/36e5)+'小时前'
   if (df<6048e5) return Math.floor(df/864e5)+'天前'
   return d.toLocaleDateString('zh-CN')
 }
 function fmtDate(t: string) {
-  if (!t) return ''; const d = new Date(t); const n = new Date()
+  if (!t) return ''; const d = new Date(t); if (isNaN(d.getTime())) return ''
+  const n = new Date()
   if (d.toDateString()===n.toDateString()) return '今天'
   const y = new Date(n.getTime()-864e5)
   if (d.toDateString()===y.toDateString()) return '昨天'

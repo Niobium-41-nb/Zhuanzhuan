@@ -1,6 +1,6 @@
 <template>
   <div><h2>公告管理</h2>
-    <el-button type="primary" @click="showDialog = true" style="margin-bottom:16px">发布公告</el-button>
+    <el-button type="primary" @click="openCreate" style="margin-bottom:16px">发布公告</el-button>
     <el-table :data="list" border stripe>
       <el-table-column prop="title" label="标题" min-width="200" />
       <el-table-column prop="status" label="状态" width="80">
@@ -35,16 +35,24 @@ import { adminApi } from '@/api'
 const list = ref<any[]>([])
 const showDialog = ref(false)
 const editingId = ref<number | null>(null)
+const saving = ref(false)
 const form = reactive({ title: '', content: '' })
 
-onMounted(async () => { const res = await adminApi.getAnnouncements(); list.value = res.data || [] })
+onMounted(async () => { await loadList() })
+async function loadList() { const res = await adminApi.getAnnouncements(); list.value = res.data || [] }
 
+function openCreate() { editingId.value = null; form.title = ''; form.content = ''; showDialog.value = true }
 function edit(row: any) { editingId.value = row.id; form.title = row.title; form.content = row.content; showDialog.value = true }
 
 async function save() {
-  if (editingId.value) await adminApi.updateAnnouncement(editingId.value, form)
-  else await adminApi.createAnnouncement(form)
-  ElMessage.success('保存成功'); showDialog.value = false; editingId.value = null; location.reload()
+  if (saving.value) return
+  saving.value = true
+  try {
+    if (editingId.value) await adminApi.updateAnnouncement(editingId.value, form)
+    else await adminApi.createAnnouncement(form)
+    ElMessage.success('保存成功'); showDialog.value = false; editingId.value = null
+    await loadList() // 刷新列表而非 reload 页面
+  } catch (_) {} finally { saving.value = false }
 }
 
 async function remove(id: number) { await adminApi.deleteAnnouncement(id); ElMessage.success('已删除'); list.value = list.value.filter(i => i.id !== id) }
