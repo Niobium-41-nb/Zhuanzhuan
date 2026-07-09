@@ -22,8 +22,10 @@ services:
     volumes:
       # 数据持久化到宿主机
       - mysql_data:/var/lib/mysql
-      # 启动时自动执行初始化 SQL 脚本
+      # 启动时自动执行初始化 SQL 脚本（仅首次创建数据库时执行）
       - ./docs/数据库设计/zhuanzhuan.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./deploy/mysql/02-seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
+      - ./deploy/mysql/migration-indexes.sql:/docker-entrypoint-initdb.d/03-migration-indexes.sql
       # 自定义 MySQL 配置
       - ./deploy/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     command:
