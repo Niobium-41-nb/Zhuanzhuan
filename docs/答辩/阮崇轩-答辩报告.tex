@@ -1,9 +1,8 @@
 \documentclass[12pt,a4paper]{ctexart}
 \usepackage[top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.5cm]{geometry}
-\usepackage{xcolor,hyperref,enumitem,booktabs,longtable,caption,graphicx,fancyhdr,titlesec,listings}
+\usepackage{xcolor,hyperref,enumitem,booktabs,listings}
 \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
-\pagestyle{fancy}\fancyhf{}\fancyhead[L]{阮崇轩·前端开发工作汇报}\fancyhead[R]{转转——校园二手交易平台}\fancyfoot[C]{\thepage}
-\titleformat{\section}{\Large\bfseries}{}{0em}{}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{阮崇轩·前端开发工作汇报}\fancyhead[R]{转转}\fancyfoot[C]{\thepage}
 \lstset{basicstyle=\small\ttfamily,breaklines=true,frame=single,backgroundcolor=\color{gray!5}}
 
 \begin{document}
@@ -12,387 +11,412 @@
 \centering\vspace*{3cm}
 {\Huge\bfseries 前端开发技术报告}\\[0.5cm]
 {\LARGE 校园二手物品交易平台——转转}\\[1.5cm]
-{\Large 答辩人：阮崇轩}\\[0.3cm]
-{\Large 角色：前端开发工程师}\\[0.3cm]
-{\Large 技术栈：Vue3 + TypeScript + Vite + Element Plus + Pinia + Axios}\\[2cm]
-{\large 软件工程实训·课程设计答辩}\\[0.3cm]
-{\large 华中农业大学·2026年7月}
+{\Large 阮崇轩 · 前端开发}\\[0.3cm]
+{\large 华中农业大学 · 2026年7月}
 \end{titlepage}
 
 \tableofcontents\newpage
 
-\section{个人角色与工作概述}
+% ============================================
+\section{概述}
 
-在本次软件工程实训项目中，我担任前端开发工程师，主要负责以下模块的开发工作：
-
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{前端工程搭建}：使用 Vue3 Composition API + TypeScript + Vite5 从零搭建项目，配置路由、状态管理、HTTP 客户端、UI 组件库等基础设施
-    \item \textbf{用户认证模块}：登录页面、注册页面、找回密码页面的完整前端实现，包含 Token 管理、验证码机制、表单校验
-    \item \textbf{消息通知系统}：站内信双栏聊天界面、系统通知铃铛组件、实时轮询机制、商品详情页联系卖家功能
-    \item \textbf{订单详情页面}：买家卖家双视角操作、发货收货全流程、评价系统
-    \item \textbf{UI 动效与交互优化}：骨架屏加载、页面过渡动画、滚动感知导航栏、按钮微交互、全局 CSS 设计令牌体系
-    \item \textbf{后端 Bug 修复}：验证码类型隔离、防暴力破解、密码重置 Token 消费时序问题、浏览量统计错误
+我在项目中负责前端基础设施和用户交互模块的开发。具体来说：
+\begin{itemize}
+  \item 前端项目从零搭建（Vue3 + TypeScript + Vite）
+  \item 登录、注册、找回密码页面
+  \item 消息聊天系统（站内信 + 通知）
+  \item 订单详情页面（支付、发货、收货、评价全流程）
+  \item Axios 网络请求封装（Token 自动管理）
+  \item 后端 5 个 Bug 修复
 \end{itemize}
 
-\section{技术栈与工程架构}
+以下按模块逐一说明做了什么、怎么做的、为什么这么做。
 
-\subsection{前端技术选型}
+% ============================================
+\section{前端项目如何启动和运行}
 
-本项目前端采用 Vue 3 Composition API 配合 TypeScript 开发，构建工具使用 Vite 5。选择这一技术栈的核心考量如下：
+\subsection{项目是怎么组织起来的}
 
-\textbf{Vue 3 Composition API} 相较于 Options API，提供了更好的逻辑复用能力和 TypeScript 支持。通过 \texttt{setup()} 语法糖，可以将相关的响应式状态、计算属性、方法组织在一起，而非分散在 data、methods、computed 等选项中。这在开发消息系统等复杂交互组件时尤为重要。
+当你打开浏览器访问 \texttt{http://localhost:3000}，发生了什么：
 
-\textbf{TypeScript} 提供了静态类型检查，能够在编译阶段捕获大量潜在错误。虽然初始开发成本略高，但对于一个 5 人团队协作的项目，类型系统显著降低了前后端接口联调时的沟通成本——API 返回数据的结构通过类型定义形成契约。
+\begin{enumerate}
+  \item Nginx 收到请求，返回 \texttt{index.html}（一个几乎空的 HTML 文件）
+  \item HTML 中引用了一个 \texttt{<script>} 标签，指向打包后的 JavaScript 文件
+  \item 浏览器下载并执行这个 JS 文件，Vue 框架启动
+  \item Vue Router 读取当前 URL，决定渲染哪个页面组件
+  \item 页面组件发出 API 请求获取数据，渲染到屏幕上
+\end{enumerate}
 
-\textbf{Vite 5} 基于浏览器原生 ES Module 的开发服务器实现了极快的热更新，大型项目的冷启动时间通常在 1 秒以内。其生产构建使用 Rollup，配合 Tree Shaking 和代码分割，优化了最终包体积。
+这叫做\ 单页应用（SPA）——页面不会整体刷新，只替换变化的部分。
 
-\subsection{项目目录结构}
+\subsection{项目的文件结构}
+
+每个文件夹有明确的职责：
 
 \begin{verbatim}
-zhuanzhuan-frontend/
-  src/
-    api/          # API 接口封装（按模块划分）
-    assets/       # 静态资源
-    components/   # 通用组件
-    layouts/      # 布局组件（MainLayout, AdminLayout）
-    router/       # Vue Router 路由配置
-    stores/       # Pinia 状态管理
-    types/        # TypeScript 类型定义
-    utils/        # 工具函数（auth, request, productImage）
-    views/        # 页面组件（按功能模块分组）
+src/
+  api/index.ts      → 所有后端接口的封装（30+ 个 API 函数）
+  router/index.ts   → URL 和页面的映射关系
+  stores/user.ts    → 登录状态管理（全局共享）
+  utils/request.ts  → Axios 实例 + 拦截器（请求前自动加 Token）
+  utils/auth.ts     → localStorage 读写工具（存 Token）
+  views/            → 页面组件（每个 .vue 文件是一个页面）
+  layouts/          → 布局组件（导航栏+页脚公共结构）
 \end{verbatim}
 
-\subsection{CSS 设计令牌体系}
+% ============================================
+\section{Axios 封装：所有网络请求的基础}
 
-我设计了一套基于 CSS Variables 的全局主题系统，定义了 15 个设计令牌变量，实现了品牌色、间距、圆角、阴影的全局统一管理：
+这是最重要也最容易被忽略的基础设施。项目中所有后端通信都经过这一个入口。
 
-\begin{lstlisting}[language=CSS]
-:root {
-  --c-primary: #2D6A4F;        /* 主色-森林绿 */
-  --c-primary-dark: #1B4332;   /* 深色变体 */
-  --c-primary-light: #52B788;  /* 浅色变体 */
-  --c-primary-bg: #E8F5E9;     /* 浅绿背景 */
-  --c-accent: #E76F51;         /* 强调色-暖橙 */
-  --c-accent-hover: #D65A3E;   /* 强调色悬停 */
-  --c-warm: #F4A261;           /* 暖色点缀 */
-  --c-bg: #FDFBF7;             /* 全局背景 */
-  --c-surface: #FFFFFF;        /* 卡片/面板背景 */
-  --c-text: #1F2937;           /* 正文颜色 */
-  --c-text-secondary: #6B7280; /* 次要文字 */
-  --c-muted: #9CA3AF;          /* 弱化文字 */
-  --c-border: #E5E7EB;         /* 边框 */
-  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
-  --shadow-sm/md/lg: ...;      /* 三级阴影 */
-}
-\end{lstlisting}
+\subsection{什么是 Axios}
 
-这套令牌体系的核心价值在于：通过覆盖 Element Plus 的 CSS 变量，实现了对官方组件库的全局样式统一。例如，所有按钮 \texttt{el-button--primary} 的背景色被覆盖为 \texttt{var(--c-primary)}，确保了品牌一致性。21 个页面、数百个组件实例共享同一套设计语言，修改一个变量即可全局生效。
+Axios 是一个 HTTP 客户端库。简单来说，它负责在浏览器和服务器之间发送和接收数据。比如你点击"登录"按钮，前端通过 Axios 把用户名密码发给后端，后端返回一个 Token，前端再把这个 Token 存起来。
 
-\section{用户认证模块}
+\subsection{为什么要封装}
 
-\subsection{登录页面}
-
-登录页面实现了渐变绿色背景配合浮动几何圆形装饰的视觉设计。技术要点包括：
-
-\textbf{表单校验}：使用 Element Plus 的 \texttt{el-form} 配合自定义 \texttt{rules} 实现前端校验。账号字段支持用户名、邮箱、手机号三种登录方式，密码字段支持显示/隐藏切换。
-
-\textbf{Token 管理}：登录成功后，后端返回 Access Token（2小时有效）和 Refresh Token（7天有效）。前端通过 Pinia store 管理登录状态，将 Token 存储到 localStorage 中：
-
-\begin{lstlisting}[language=TypeScript]
-async function login(credentials: any) {
-  const res = await userApi.login(credentials)
-  token.value = res.data.accessToken
-  setToken(res.data.accessToken)
-  setRefreshToken(res.data.refreshToken)
-  userInfo.value = res.data.user
-  setUserInfo(res.data.user)
-  return res.data
-}
-\end{lstlisting}
-
-\subsection{注册页面}
-
-注册页面实现了邮箱验证码注册流程。关键实现细节：
-
-\textbf{验证码倒计时}：点击"获取验证码"按钮后进入 60 秒冷却期，按钮文字显示剩余秒数，防止用户重复点击导致后端频率限制或邮件轰炸。
-
-\begin{lstlisting}[language=TypeScript]
-let count = 60
-codeBtnText.value = `${count}s`
-const timer = setInterval(() => {
-  count--
-  codeBtnText.value = `${count}s`
-  if (count <= 0) { clearInterval(timer); ... }
-}, 1000)
-\end{lstlisting}
-
-\textbf{前端校验}：用户名正则校验（2-20位字母数字下划线）、密码强度校验（8-20位含字母和数字）、验证码非空校验。
-
-\subsection{找回密码页面}
-
-这是一个原创实现的两步流程页面：
-
-\textbf{Step 1}：输入注册邮箱 → 点击获取验证码 → 输入收到的验证码 → 点击"下一步"
-
-\textbf{Step 2}：输入新密码 → 确认新密码 → 密码强度校验 → 两次密码一致性校验 → 提交
-
-核心设计思想：将验证步骤和密码设置步骤分离，避免单页信息过载。每一步只关注一个核心任务，降低用户认知负担。
-
-\subsection{Axios 封装与 Token 自动刷新}
-
-这是前端工程中最关键的基础设施之一。我封装了一个 Axios 实例，实现了以下功能：
-
-\textbf{请求拦截器}：自动从 localStorage 读取 Token 并注入到请求头的 Authorization 字段（Bearer Token 格式）。
-
-\textbf{响应拦截器——Token 自动刷新}：当收到 401 状态码时，自动使用 Refresh Token 换取新的 Access Token。这是一个教科书级别的并发控制实现：
-
-\begin{lstlisting}[language=TypeScript]
-let isRefreshing = false
-let failedQueue: Array<{resolve, reject}> = []
-
-// 当多个请求同时遇到401时，只发起一次刷新请求
-if (isRefreshing) {
-  return new Promise((resolve, reject) => {
-    failedQueue.push({ resolve, reject })
-  }).then(token => {
-    originalRequest.headers.Authorization = `Bearer ${token}`
-    return request(originalRequest)
-  })
-}
-isRefreshing = true
-// 发起刷新请求...
-\end{lstlisting}
-
-核心原理：使用 \texttt{isRefreshing} 标志位确保多个并发请求只触发一次 Token 刷新。其余请求被放入 \texttt{failedQueue} 队列等待，刷新成功后批量重试。这避免了并发 401 导致的多次刷新和潜在的 Token 竞争问题。
-
-\textbf{403 过期登录处理}：当收到 403 且本地存在 Token 时，说明 Token 指向的用户已被删除或禁用，自动清除登录状态并跳转到登录页。
-
-\textbf{错误分类提示}：区分网络超时（ECONNABORTED）、网络断开（无 response）、服务器错误（5xx）、权限不足（403）、资源不存在（404）、请求过频（429）等多种错误类型，给用户提供明确的错误信息。
-
-\section{消息通知系统}
-
-\subsection{消息页面重写}
-
-原始的消息页面仅有 86 行基础布局代码。我将其完全重写为一个 300+ 行的现代化聊天界面，包含以下核心特性：
-
-\textbf{双栏布局}：左侧 340px 会话列表 + 右侧自适应聊天面板，使用 CSS Grid 实现：
-
-\begin{lstlisting}[language=CSS]
-.msg-layout {
-  display: grid;
-  grid-template-columns: 340px 1fr;
-  height: calc(100vh - 140px);
-  border-radius: 16px;
-  overflow: hidden;
-}
-\end{lstlisting}
-
-\textbf{聊天气泡设计}：我方消息使用主色背景、白色文字、右对齐、右下角小圆角；对方消息使用灰色背景、深色文字、左对齐、左下角小圆角。这种视觉区分让用户一眼就能分辨消息来源。
-
-\textbf{实时轮询}：使用 JavaScript \texttt{setInterval} 实现每 5 秒自动拉取当前会话的新消息。关键技术点在于使用 \texttt{onUnmounted} 生命周期钩子清理定时器，防止内存泄漏。
-
-\textbf{URL 参数自动开聊}：通过 Vue Router 的 \texttt{route.query.to} 参数，支持从商品详情页一键跳转到与卖家的聊天窗口。在页面 \texttt{onMounted} 时检测 URL 参数，自动打开对应会话甚至创建新会话。
-
-\textbf{搜索会话}：使用 \texttt{computed} 属性实现会话列表的实时过滤搜索。
-
-\textbf{日期分隔线}：当两条消息不在同一天时，在中间插入日期标签，提升长时间对话的可读性。
-
-\subsection{通知铃铛组件}
-
-在页面头部（MainLayout）中新增了一个通知铃铛图标。核心实现：
-
-\textbf{Popover 下拉面板}：使用 Element Plus 的 \texttt{el-popover} 组件，点击铃铛图标展开通知列表。列表最多显示 10 条通知，每条通知包含标题、内容、时间。
-
-\textbf{未读红点}：使用 \texttt{el-badge} 组件显示未读通知数量，每 30 秒自动轮询后端 \texttt{/notification/unread/count} 接口更新数字。
-
-\textbf{点击跳转}：点击通知项根据其类型（订单/消息/系统）跳转到对应的页面，实现了通知到操作的闭环。
-
-\subsection{商品详情页联系卖家}
-
-在商品详情页的卖家信息卡片中添加了一个绿色的"联系卖家"按钮。点击后跳转到 \texttt{/message?to=sellerId}，消息页面会自动打开与该卖家的聊天窗口。未登录用户点击后会先跳转到登录页。
-
-\section{订单详情页面}
-
-\subsection{买家卖家双视角}
-
-订单详情页根据当前登录用户自动判断角色（通过比较当前用户 ID 与订单的 buyerId/sellerId），展示不同的操作按钮：
-
+直接使用 Axios 的话，每次发请求都要手动写：
 \begin{itemize}
-    \item \textbf{买家视角}：待付款时显示"去支付"和"取消订单"按钮；待收货时显示"确认收货"按钮；已完成时显示"去评价"按钮
-    \item \textbf{卖家视角}：待发货时显示"录入物流发货"按钮
+  \item 请求的基础 URL（\texttt{/api/v1}）
+  \item 请求头中的 Token（\texttt{Authorization: Bearer xxx}）
+  \item 错误处理（401 过期、403 无权、500 服务器错）
 \end{itemize}
 
-需要特别指出的是，后端 OrderVO 原本没有 buyerId 和 sellerId 字段，无法支持前端角色判断。我发现了这个问题后，在后端 OrderVO 中添加了这两个字段，并在 OrderServiceImpl 的 batchToOrderVO 方法中进行了赋值。
+封装之后，这些逻辑只写一次，所有页面共享。
 
-\subsection{发货物流录入}
+\subsection{核心代码和解释}
 
-卖家发货时，弹出一个对话框，以彩色卡片网格的形式展示 8 家物流公司（顺丰、中通、圆通、韵达、申通、EMS、京东、极兔），每家使用品牌识别色。用户选择后输入快递单号即可完成发货。
+\begin{lstlisting}[language=JavaScript]
+// 创建一个 Axios 实例，配置基础行为
+const request = axios.create({
+  baseURL: '/api/v1',       // 所有请求都从这个路径开始
+  timeout: 15000,           // 超过 15 秒自动取消请求
+  headers: { 'Content-Type': 'application/json' }
+})
 
-\subsection{评价系统}
+// 请求拦截器：每次发请求之前自动执行
+request.interceptors.request.use(config => {
+  const token = getToken()   // 从 localStorage 读取 Token
+  if (token) {
+    // 把 Token 放进请求头，格式是 "Bearer <token>"
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+\end{lstlisting}
 
-交易完成后，买家可以对订单进行评价：使用 El-Rate 组件进行 1-5 星评分，配合文本输入框填写评价内容。提交后对接后端 \texttt{/order/{id}/review} 接口。
+通俗理解：拦截器就像一个门卫，每次有人要出门（发请求），门卫自动检查有没有带钥匙（Token），有就帮你挂在身上，没有就空手出门。
 
-\section{UI 动效与交互优化}
+\subsection{Token 自动刷新：最精巧的部分}
 
-\subsection{骨架屏加载}
+Token 有有效期（2小时）。过期后需要拿 Refresh Token 去换新的。关键问题是：如果同时有 3 个请求都遇到 Token 过期，要不要刷新 3 次？当然不要。只需要刷新 1 次，刷新成功后 3 个请求都用新 Token 重试。
 
-首页商品列表加载时，先展示 8 个灰色占位卡片，使用 CSS Shimmer 动画（渐变色从左到右移动的光效），给用户即时的视觉反馈，降低等待焦虑。数据加载完成后，骨架屏消失，真实卡片以 \texttt{fadeInUp} 动画交错入场。
+\begin{lstlisting}[language=JavaScript]
+let isRefreshing = false  // 标志位：是否正在刷新
+let failedQueue = []       // 等待队列
 
-实现原理：使用 CSS 动画配合 \texttt{background: linear-gradient(90deg, ...)} 和 \texttt{background-size: 200\%} 实现光效移动。
+// 当收到 401（未授权）时
+if (error.response?.status === 401) {
+  if (isRefreshing) {
+    // 如果已经在刷新了，把请求放进队列等待
+    return new Promise((resolve) => {
+      failedQueue.push({ resolve })
+    }).then(token => {
+      // 刷新成功后，用新 Token 重试
+      originalRequest.headers.Authorization = `Bearer ${token}`
+      return request(originalRequest)
+    })
+  }
+  isRefreshing = true
+  // 发起刷新请求...
+}
+\end{lstlisting}
 
-\subsection{页面过渡动画}
+这个模式叫"请求队列排队"。类比：三个人同时发现门锁坏了（Token 过期），第一个去拿新钥匙，其余两个在旁边排队等着，新钥匙拿回来后三个人都用新钥匙进门。
 
-在 App.vue 中使用 Vue Router 的 \texttt{router-view} 插槽配合 \texttt{<transition>} 组件，实现了路由切换时的 fade（淡入淡出）过渡效果。设置 \texttt{mode="out-in"} 确保旧页面完全离开后再进入新页面。
+% ============================================
+\section{登录与认证流程}
 
-\subsection{回到顶部按钮}
+\subsection{完整登录流程}
 
-使用 Vue 的响应式系统监听 \texttt{window.scrollY}，当滚动超过 400px 时，在右下角显示一个绿色的圆形回到顶部按钮，点击后使用 \texttt{window.scrollTo({top:0, behavior:'smooth'})} 平滑滚动到顶部。按钮的出现和消失使用 CSS transition 实现弹性缩放动画。
+\begin{enumerate}
+  \item 用户在登录页输入用户名/邮箱/手机号 + 密码
+  \item 前端发送 \texttt{POST /api/v1/user/login}，请求体包含 \texttt{\{account, password\}}
+  \item 后端验证密码（用 BCrypt 比对哈希值），成功则返回两个 Token：
+    \begin{itemize}
+      \item Access Token：2小时有效期，用于日常请求的身份验证
+      \item Refresh Token：7天有效期，仅用于刷新 Access Token
+    \end{itemize}
+  \item 前端把两个 Token 存到 localStorage（浏览器的本地存储，关闭页面也不会丢失）
+  \item 前端把用户信息（昵称、头像、角色）也存到 localStorage
+  \item 后续所有请求，前端自动在请求头中携带 Access Token
+  \item 后端 JwtAuthenticationFilter 拦截每个请求，解析 Token 获取用户 ID，从数据库查用户状态，设置认证上下文
+\end{enumerate}
 
-\subsection{导航栏滚动感知}
+\subsection{为什么需要两个 Token}
 
-在 MainLayout 中，通过监听 \texttt{window.scrollY}，当页面滚动超过 10px 时，为导航栏添加阴影和毛玻璃模糊效果（\texttt{backdrop-filter: blur(12px)}），提供视觉层次感。
+单 Token 的问题：如果有效期短（比如 30 分钟），用户频繁操作时会不断掉线；如果有效期长（比如 30 天），Token 一旦泄露危害时间长。
 
-\subsection{按钮微交互}
+双 Token 方案：Access Token 短（2h）但高频使用，Refresh Token 长（7d）但只在刷新时用。这样泄露 Access Token 的危害窗口只有 2 小时，而用户体验不受影响（自动刷新）。
 
-全局覆盖了 Element Plus 按钮的默认行为：hover 时按钮上浮 1px 并增加阴影，active 时按钮下压回弹，所有变化使用 cubic-bezier 缓动函数实现平滑过渡。
+\subsection{登出时的安全处理}
 
-\section{后端 Bug 修复贡献}
+用户点击退出登录时，不只是清除前端的 Token：
+\begin{enumerate}
+  \item 前端发送 \texttt{POST /api/v1/user/logout}
+  \item 后端把当前 Token 的 ID 加入 Redis 黑名单，TTL 设置为 Token 的剩余有效时间
+  \item 后续请求中，JwtAuthenticationFilter 会检查 Token 是否在黑名单中
+  \item 即使在有效期内的 Token，如果被加入了黑名单，也会被拒绝
+\end{enumerate}
 
-虽然我的主要角色是前端开发，但我也发现并修复了后端的多个安全和逻辑问题：
+这解决了 Token 无法主动失效的问题（JWT 是无状态的，服务器无法在签发后撤销它，除非用黑名单）。
+
+% ============================================
+\section{注册与验证码机制}
+
+\subsection{注册流程}
+
+\begin{enumerate}
+  \item 用户输入用户名、邮箱、密码
+  \item 点击"获取验证码"，前端发送 \texttt{POST /api/v1/user/code}，请求体 \texttt{\{target: email, type: "register"\}}
+  \item 后端生成 6 位随机数字，存到 Redis，Key 为 \texttt{captcha:register:邮箱}，TTL 5 分钟
+  \item 后端通过 JavaMailSender 发送邮件到用户邮箱
+  \item 用户输入收到的验证码，点击注册
+  \item 前端发送 \texttt{POST /api/v1/user/register}，携带用户名、密码、邮箱、验证码
+  \item 后端从 Redis 读取验证码比对，通过后用 BCrypt 加密密码存储到 user 表
+  \item 注册成功后删除 Redis 中的验证码
+\end{enumerate}
+
+\subsection{验证码的安全设计}
+
+三个层面的安全措施：
+
+\begin{enumerate}
+  \item \textbf{类型隔离}：Redis Key 中包含类型前缀（register/reset），注册验证码不能用于重置密码，反之亦然。这是因为我发现原始代码的验证码 Key 没有类型区分。
+  \item \textbf{频率限制}：同一邮箱每 5 分钟最多发 3 次验证码，超过返回 429（请求过多）。防止恶意刷验证码。
+  \item \textbf{防消费}：验证码只在业务流程真正成功后删除。如果用户输入了正确的验证码但密码不符合要求，验证码不会被消耗，用户可以修改密码后重试。
+\end{enumerate}
+
+\subsection{验证码防消费的实现细节}
+
+这是我从 Bug 修复中总结的经验。原始代码的顺序是：
+
+\begin{verbatim}
+1. 从 Redis 读取验证码 → 比对   ← 通过
+2. 删除 Redis 中的验证码        ← 删了！
+3. 从数据库查用户               ← 通过
+4. 检查新旧密码是否相同         ← 失败！抛异常
+\end{verbatim}
+
+第 4 步失败后，验证码已经在第 2 步被删除了。用户重试时需要重新获取验证码，体验极差。
+
+修复后的顺序：把第 2 步（删除验证码）移到整个方法的最后。只有当密码真正更新成功后才删除。这样中间任何一步失败，用户都可以直接重试而不需要重新获取验证码。
+
+% ============================================
+\section{消息系统}
+
+\subsection{数据流}
+
+消息系统的数据流是这样的：
+
+\begin{enumerate}
+  \item 用户 A 在聊天输入框输入文字，点击发送
+  \item 前端调用 \texttt{POST /api/v1/message/send}，请求体 \texttt{\{toUserId, content, type:"text"\}}
+  \item 后端 MessageServiceImpl.sendMessage 插入一条记录到 message 表（fromUserId, toUserId, content, isRead=0）
+  \item 同时创建一条 Notification 记录到 notification 表，内容是"XXX 给你发来一条消息"
+  \item 用户 B 的前端每 5 秒轮询一次 \texttt{GET /api/v1/message/conversation/\{userId\}}，发现新消息后更新界面
+\end{enumerate}
+
+\subsection{为什么用轮询而不是 WebSocket}
+
+WebSocket 是真正的"实时"通信（服务器主动推送），但需要额外的后端配置。对于这个项目，每 5 秒轮询一次的体验已经足够好——用户发消息后最多等 5 秒就能看到回复，对非即时通讯场景完全可接受。而且轮询方案更简单、更稳定、更容易调试。
+
+\subsection{轮询的具体实现}
+
+\begin{lstlisting}[language=JavaScript]
+// 在组件挂载时启动 5 秒定时器
+onMounted(() => {
+  poller = setInterval(pollMessages, 5000)
+})
+
+// 在组件卸载时清除定时器（否则离开页面后还在请求！）
+onUnmounted(() => {
+  if (poller) clearInterval(poller)
+})
+
+async function pollMessages() {
+  // 只有打开了某个会话时才轮询（避免无效请求）
+  if (!selectedUserId.value) return
+
+  const res = await messageApi.getConversation(selectedUserId.value, {page:1,size:50})
+  const newMsgs = res.data || []
+
+  // 如果消息数量变了，说明有新消息，更新界面
+  if (newMsgs.length !== messages.value.length) {
+    messages.value = [...newMsgs].reverse()
+    loadConversations()  // 同时刷新会话列表
+  }
+}
+\end{lstlisting}
+
+\subsection{商品页联系卖家的实现}
+
+商品详情页有一个"联系卖家"按钮。点击后的流程：
+
+\begin{enumerate}
+  \item 检查是否登录，未登录跳转登录页
+  \item 跳转到 \texttt{/message?to=卖家userId}
+  \item 消息页面读取 URL 参数 \texttt{route.query.to}，自动打开与该卖家的聊天窗口
+  \item 即使之前没聊过天（没有会话记录），也能直接开始新对话
+\end{enumerate}
+
+这个设计的巧妙之处在于：URL 参数携带了"我要和谁聊天"的信息，消息页面无需额外的 API 调用就能确定聊天对象。
+
+\subsection{通知系统的实现}
+
+头部导航栏的铃铛图标是一个 \texttt{el-popover} 组件（点击弹出浮动面板）。每 30 秒轮询 \texttt{GET /api/v1/notification/unread/count} 更新红点数字。点击铃铛时调用 \texttt{GET /api/v1/notification/list} 获取最近 10 条通知。
+
+\begin{lstlisting}[language=JavaScript]
+// 通知轮询（每30秒）
+async function refreshUnread() {
+  const nRes = await notificationApi.getUnreadCount()
+  notifUnread.value = nRes.data?.count || 0
+}
+// 点击通知后跳转到对应页面
+async function readNotif(n) {
+  await notificationApi.markRead(n.id)
+  if (n.type === 'order') router.push('/order/list')
+  else router.push('/message')
+}
+\end{lstlisting}
+
+通知的创建是由后端自动触发的。我在 MessageServiceImpl 和 OrderServiceImpl 中添加了通知创建逻辑：发消息 → 创建通知、下单 → 通知卖家、付款 → 通知卖家、发货 → 通知买家。
+
+% ============================================
+\section{订单详情页面}
+
+\subsection{角色判断：你怎么知道我是买家还是卖家}
+
+订单同时涉及两个人：买家（下单的人）和卖家（发布商品的人）。页面需要根据当前登录用户来判断应该显示什么按钮。
+
+\begin{lstlisting}[language=JavaScript]
+const currentUser = getUserInfo()  // 从 localStorage 读取当前登录用户
+
+// 判断是不是买家：当前用户的 ID 等于订单的 buyerId
+const isBuyer = computed(() => currentUser?.userId === order.value?.buyerId)
+
+// 判断是不是卖家：当前用户的 ID 等于订单的 sellerId
+const isSeller = computed(() => currentUser?.userId === order.value?.sellerId)
+\end{lstlisting}
+
+这两个计算属性会随着 \texttt{order.value} 的变化自动更新。Vue 的 \texttt{computed} 是响应式的——当它依赖的数据变化时，它自动重新计算。
+
+\subsection{根据状态和角色决定显示什么}
+
+\begin{lstlisting}[language=HTML]
+<!-- 买家 + 待付款 = 显示 "去支付" 和 "取消订单" -->
+<div v-if="isBuyer && order.status === '待付款'">
+  <el-button @click="goToPay">去支付</el-button>
+  <el-button @click="cancel">取消订单</el-button>
+</div>
+
+<!-- 卖家 + 待发货 = 显示 "录入物流发货" -->
+<div v-if="isSeller && order.status === '待发货'">
+  <el-button @click="showShipDialog = true">录入物流发货</el-button>
+</div>
+
+<!-- 买家 + 待收货 = 显示 "确认收货" -->
+<div v-if="isBuyer && order.status === '待收货'">
+  <el-button @click="receive">确认收货</el-button>
+</div>
+
+<!-- 买家 + 已完成 + 还没评价 = 显示 "去评价" -->
+<div v-if="isBuyer && order.status === '已完成' && !reviewed">
+  <el-button @click="showReviewDialog = true">去评价</el-button>
+</div>
+\end{lstlisting}
+
+Vue 的 \texttt{v-if} 指令根据条件决定是否渲染这段 HTML。如果条件不满足，这段 HTML 根本不会出现在页面上。
+
+\subsection{支付页面：模拟支付的四步流程}
+
+支付页面不是真正的支付（没有对接微信/支付宝），而是对支付流程的前端模拟。它的价值在于：让项目演示有完整的交易闭环。
+
+\begin{enumerate}
+  \item \textbf{选择支付方式}：展示三种方式（微信、支付宝、校园卡），用不同颜色的卡片区分。用户选择后点击"确认支付"。
+  \item \textbf{处理中}：显示旋转动画，用 \texttt{setTimeout} 模拟 1.5-2.5 秒的支付处理时间。然后调用 \texttt{PUT /api/v1/order/\{id\}/pay}。
+  \item \textbf{成功}：SVG 勾选动画 + 价格确认 + 2 秒倒计时自动跳转。
+  \item \textbf{失败}：抖动动画 + 错误信息 + 重试按钮。
+\end{enumerate}
+
+状态管理使用一个 \texttt{step} 响应式变量（'select' → 'processing' → 'success'/'error'），不同步骤渲染不同 UI。
+
+\subsection{发货功能}
+
+卖家点击"录入物流发货"后，弹出对话框，选择物流公司（8 个选项）并输入快递单号。前端调用 \texttt{PUT /api/v1/order/\{id\}/ship}，请求体 \texttt{\{logisticsCompany, logisticsNo\}}。后端更新订单状态为"待收货"，记录发货时间，创建订单日志，通知买家。
+
+% ============================================
+\section{后端 Bug 修复}
 
 \subsection{验证码类型隔离（安全漏洞）}
 
-原始代码中，\texttt{sendCode} 方法使用 \texttt{captcha:\{target\}} 作为 Redis Key 存储验证码，未区分验证码的用途（注册/重置密码）。这意味着一个注册验证码可以被用于重置密码，存在安全漏洞。
+\textbf{问题}：原始代码中，验证码存储在 Redis 中的 Key 是 \texttt{captcha:邮箱}，没有区分是注册验证码还是重置密码验证码。攻击者可以先注册一个账号（获取注册验证码），然后用这个验证码去重置别人的密码。
 
-\textbf{修复方案}：将 Redis Key 改为 \texttt{captcha:\{type\}:\{target\}} 格式，注册码和重置码存储在独立的命名空间中，互不可用。同时更新了 \texttt{register} 和 \texttt{resetPassword} 方法中的 Key 匹配逻辑。
-
-\subsection{密码重置验证码提前消费（逻辑Bug）}
-
-原始代码在验证码校验通过后立即执行 \texttt{redisTemplate.delete(cacheKey)}，然后才进行"新旧密码是否相同"等后续校验。如果后续校验失败，验证码已被删除，用户需要重新获取验证码，体验极差。
-
-\textbf{修复方案}：将 \texttt{delete(cacheKey)} 移至整个方法的最末尾，确保只有在密码真正重置成功后才删除验证码。注册流程中的同类问题也一并修复。
+\textbf{修复}：将 Redis Key 改为 \texttt{captcha:类型:邮箱} 格式。注册时 Key 为 \texttt{captcha:register:xxx@qq.com}，重置时 Key 为 \texttt{captcha:reset:xxx@qq.com}。两者互不可用。
 
 \subsection{密码重置暴力破解防护}
 
-为 \texttt{resetPassword} 方法新增了频率限制：同一邮箱 5 次/15 分钟，使用 Redis Key \texttt{pwd:reset:rate:\{target\}} 计数。同时新增了邮箱格式校验和空值检查。
+\textbf{问题}：6 位数字验证码只有 100 万种可能，如果无限次尝试，理论上可以暴力破解。原始代码的 \texttt{resetPassword} 方法没有任何频率限制。
+
+\textbf{修复}：同一邮箱每 15 分钟最多尝试 5 次。使用 Redis Key \texttt{pwd:reset:rate:邮箱} 计数，超过限制返回 429。
 
 \subsection{浏览量统计错误}
 
-原始代码中，卖家查看自己发布的商品也会增加浏览量。修改为仅在非卖家浏览时才执行 \texttt{incrementViewCount} 操作。
+\textbf{问题}：卖家查看自己发布的商品也增加浏览量，导致数据不真实。
 
-\subsection{订单通知联动}
+\textbf{修复}：在 \texttt{ProductServiceImpl.getProductDetail} 中增加判断——如果请求用户是该商品的发布者，则跳过浏览量 +1。
 
-在 \texttt{MessageServiceImpl.sendMessage} 中增加了自动创建系统通知的逻辑。每次发消息时，自动为接收方创建一条通知。在 \texttt{OrderServiceImpl} 的各状态流转方法（支付、发货、收货）中也增加了通知触发逻辑。
+\subsection{订单 VO 缺少字段}
 
-\section{代码贡献统计}
+\textbf{问题}：后端返回给前端的订单数据中没有 buyerId 和 sellerId，前端无法判断当前用户是买家还是卖家。
 
-\begin{table}[h]
-\centering
-\begin{tabular}{lr}
-\toprule
-\textbf{模块} & \textbf{代码行数（估计）} \\
-\midrule
-用户认证（Login/Register/ForgotPassword） & 约 800 行 \\
-消息通知系统（MessagePage/MainLayout） & 约 700 行 \\
-订单详情（OrderDetail） & 约 600 行 \\
-UI 动效系统（App.vue/HomePage/全局CSS） & 约 500 行 \\
-Axios 封装（request.ts） & 约 120 行 \\
-后端 Bug 修复（Java） & 约 100 行 \\
-\cmidrule{2-2}
-\textbf{合计} & \textbf{约 2,820 行} \\
-\bottomrule
-\end{tabular}
-\end{table}
+\textbf{修复}：在 OrderVO 中增加 buyerId 和 sellerId 字段，在 OrderServiceImpl 中赋值。
 
-\section{核心技术亮点}
+\subsection{订单状态变更自动通知}
 
-\begin{enumerate}[leftmargin=2em]
-    \item \textbf{Token 队列刷新机制}：多请求并发 401 时只发一次刷新请求，其余排队等待。这是一个经典的并发控制模式，确保了 Token 刷新过程的原子性。
-    \item \textbf{验证码三段式安全防护}：类型隔离（不同用途不可互用）+ 频率限制（防暴力破解）+ 防消费（校验失败不删除），构成了完整的验证码安全体系。
-    \item \textbf{CSS 设计令牌体系}：15 个 CSS Variables 实现 21 个页面、数百个组件的风格统一，通过覆盖 Element Plus 原生变量实现第三方组件库的深度定制。
-    \item \textbf{骨架屏 + 交错动画}：骨架屏 Shimmer 动画提供即时加载反馈，数据就绪后以瀑布流交错动画入场，显著提升了感知性能。
-    \item \textbf{消息通知实时化}：5 秒聊天轮询 + 30 秒通知轮询 + 订单状态自动通知联动，构建了完整的前端实时通信方案。
-\end{enumerate}
+\textbf{问题}：订单状态变更后（付款、发货、收货），相关方（买家/卖家）没有任何通知，只能手动刷新页面查看。
 
-\section{消息系统实时通信原理}
+\textbf{修复}：在 OrderServiceImpl 的各状态流转方法中增加通知创建逻辑。封装了 \texttt{notifyUser(userId, title, content)} 方法统一处理。
 
-消息系统的实时性是通过前端轮询（Polling）机制实现的。选择轮询而非 WebSocket 的考量：项目规模决定了消息量较低，轮询的简单性和可靠性更适合当前场景，且无需额外的服务端 WebSocket 配置。
+% ============================================
+\section{页面动效的实现}
 
-\textbf{轮询实现}：使用 JavaScript 的 \texttt{setInterval} 函数，每 5 秒向 \texttt{/message/conversation/\{userId\}} 端点发起 GET 请求，将返回的消息列表与当前列表进行长度比较，如果有新消息则更新 UI 并滚动到底部。
+\subsection{骨架屏：加载中的占位动画}
 
-\textbf{性能优化}：轮询仅在用户打开了某个会话时进行（\texttt{selectedUserId !== null}），避免无效请求。轮询间隔 5 秒是在实时性和服务器负载之间的平衡选择。消息通知的轮询间隔为 30 秒，因为通知的时效性要求低于聊天消息。
+当页面正在请求数据时，如果显示一片空白，用户会觉得卡住了。骨架屏预先画好几个灰色的卡片形状，提示用户"内容正在加载中"。
 
-\textbf{定时器生命周期管理}：在 \texttt{onMounted} 中启动定时器，在 \texttt{onUnmounted} 中清理。这防止了用户离开页面后定时器继续运行导致的内存泄漏和无效网络请求。这是 Vue 3 Composition API 中生命周期管理的一个典型应用。
+实现原理：用 CSS animation 做一个从左到右移动的光效（渐变色背景 + 移动 background-position）。数据加载完成后，\texttt{v-if} 切换到真实内容。
 
-\section{订单状态机设计}
+\subsection{回到顶部按钮}
 
-订单详情页的核心是一个有限状态机。订单有 5 种状态：待付款、待发货、待收货、已完成、已取消。状态之间的转换遵循严格的规则：
+监听 \texttt{window.scrollY}，超过 400 像素时显示一个圆形按钮，点击后调用 \texttt{window.scrollTo(\{top: 0, behavior: 'smooth'\})} —— 浏览器原生平滑滚动。按钮的显示/隐藏用 CSS transition 做弹性缩放。
 
-\begin{itemize}[leftmargin=2em]
-    \item 待付款 → 待发货（买家支付后）/ 已取消（买家取消）
-    \item 待发货 → 待收货（卖家发货后）
-    \item 待收货 → 已完成（买家确认收货后）
-    \item 已取消和已完成是终态，不可再转换
+\subsection{页面切换动画}
+
+Vue Router 的 \texttt{<router-view>} 支持 \texttt{<transition>} 包裹。设置 \texttt{mode="out-in"} 表示旧页面完全离开后新页面再进入，避免两个页面同时出现在屏幕上。动画效果用 CSS transition 实现——旧页面淡出，新页面从下方 16px 处淡入上滑。
+
+% ============================================
+\section{总结}
+
+这个项目中我写的代码主要解决了以下问题：
+
+\begin{itemize}
+  \item \textbf{前端如何与后端通信}：通过 Axios 封装，自动处理 Token 注入、过期刷新、错误分类
+  \item \textbf{用户如何登录和保持登录状态}：JWT 双 Token 方案，Access Token 2h + Refresh Token 7d，自动刷新
+  \item \textbf{验证码如何保证安全}：类型隔离（不同用途不通用）+ 频率限制（防暴力）+ 防消费（失败不删除）
+  \item \textbf{消息如何实时更新}：前端轮询（每 5 秒拉一次），比 WebSocket 简单但效果足够
+  \item \textbf{订单流转如何控制}：根据"当前用户角色 × 订单状态"两个维度决定显示什么操作按钮
+  \item \textbf{支付流程如何模拟}：四步状态机（选择→处理中→成功/失败），纯前端实现
 \end{itemize}
-
-前端通过 \texttt{computed} 属性动态计算当前用户角色（通过比较 \texttt{currentUser.userId} 与 \texttt{order.buyerId/sellerId}），然后根据角色和订单状态组合决定显示哪些操作按钮。这是一个典型的"状态 × 角色"二维决策矩阵。
-
-\textbf{订单进度条实现}：定义了一个 \texttt{steps} 数组（待付款、待发货、待收货、已完成），通过 \texttt{currentStep} 计算属性根据订单状态确定当前步骤索引。通过 CSS 类名 \texttt{done/active/pending} 控制各步骤的视觉样式——已完成步骤显示绿色填充圆+勾选图标、当前步骤显示绿色脉冲动画圆+数字、未完成步骤显示灰色空心圆+数字。
-
-\section{支付系统设计}
-
-支付页面实现了四步流程的模拟支付体验。这不是真正的支付集成，而是对支付流程的前端模拟，用于演示完整的交易闭环。
-
-\textbf{Step 1——选择支付方式}：展示订单摘要（商品名、订单号、金额）和三种支付方式卡片（微信支付绿色渐变、支付宝蓝色渐变、校园卡绿色渐变）。用户选择后点击"确认支付"。
-
-\textbf{Step 2——处理中动画}：显示旋转的 CSS spinner 配合点状动画（"正在连接支付网关…"）。使用 \texttt{setTimeout} 模拟 1.5-2.5 秒的支付处理延迟，然后调用后端 \texttt{PUT /order/\{id\}/pay} 接口。
-
-\textbf{Step 3——成功状态}：使用 SVG 绘制勾选图标，配合 \texttt{stroke-dashoffset} 动画实现勾选线条的绘制效果。显示支付金额确认，2 秒倒计时后自动跳转到订单详情页。
-
-\textbf{Step 4——失败状态}：显示抖动动画的 X 图标、"支付失败"文字和错误信息，提供"重试"和"返回订单"两个按钮。使用 CSS \texttt{@keyframes shake} 实现左右抖动效果。
-
-\section{密码重置安全设计}
-
-找回密码功能虽然看起来简单，但涉及多个安全设计要点：
-
-\textbf{两步验证流程}：将邮箱验证和密码重置分为两个步骤，确保用户在验证身份后才能设置新密码。这种分步设计不仅提升了安全性，也改善了用户体验（每步只关注一件事情）。
-
-\textbf{验证码安全}：验证码发送时带有类型标签（reset），存储在 Redis 中与注册验证码（register）隔离。验证码 5 分钟有效，发送频率限制为每 5 分钟 3 次。
-
-\textbf{密码强度要求}：新密码必须满足 8-20 位且包含字母和数字的正则校验。前后端双重校验确保数据一致性。
-
-\textbf{防消费机制}：验证码只在密码重置成功后才删除。如果中间任何校验失败（如新旧密码相同），验证码不会被消耗。这意味着用户不需要因为密码不符合要求而重新获取验证码。
-
-\section{前端安全实践}
-
-除了后端的 JWT、BCrypt、频率限制等安全措施，前端也实现了多层安全防护：
-
-\textbf{XSS 防护}：商品描述可能包含用户输入的 HTML。通过 \texttt{sanitizedDescription} 计算属性实现三重过滤——正则移除 \texttt{<script>} 和 \texttt{<style>} 标签、剥离所有 HTML 标签、使用 DOM textarea 的 \texttt{innerHTML} → \texttt{value} 转换解码 HTML 实体。
-
-\textbf{Token 安全}：Access Token 存储在 localStorage 中并在每次请求时自动注入。Token 过期后的刷新过程使用队列机制防止并发冲突。登出时调用后端接口将 Token 加入 Redis 黑名单。
-
-\textbf{路由守卫}：在 \texttt{router.beforeEach} 中实现全局路由守卫。检查 \texttt{meta.requiresAuth} 标志，未登录用户重定向到登录页。检查 \texttt{meta.requiresAdmin} 标志，非管理员重定向到首页。
-
-\textbf{输入校验}：所有表单都实现了前端校验规则（Element Plus Form Rules），包括必填检查、格式校验（邮箱、手机号、密码强度）、长度限制。前端校验不能替代后端校验，但能提供即时反馈和减少无效请求。
-
-\section{项目中的技术决策与权衡}
-
-\textbf{为什么使用 Pinia 而非 Vuex}：Pinia 是 Vue 3 官方推荐的状态管理库，提供了更好的 TypeScript 支持和更简洁的 API。本项目只有一个 store（user），管理登录状态、用户信息、Token。对于这种中等复杂度的应用，Pinia 的模块化设计和 devtools 集成提供了足够的开发体验。
-
-\textbf{为什么使用 Element Plus 而非从头写 CSS}：Element Plus 提供了 80+ 组件，覆盖了本项目需要的所有 UI 元素（表单、表格、对话框、标签页、分页等）。使用成熟的组件库可以大幅减少开发时间，但需要通过 CSS 变量覆盖来定制主题以匹配品牌设计。
-
-\textbf{为什么使用 CSS Variables 而非 CSS-in-JS}：CSS Variables 是浏览器原生支持的动态样式方案，无需额外的运行时开销。通过 \texttt{:root} 中定义的变量，可以在全局范围内统一修改主题色、间距等设计参数。Element Plus 也从 2.x 版本开始支持 CSS 变量覆盖。
-
-\textbf{消息轮询 vs WebSocket 的决策}：对于校园二手交易平台这种非实时性要求极高的应用场景，轮询已足够满足需求。WebSocket 需要额外的服务端配置（Spring WebSocket + STOMP），增加了部署复杂度。5 秒的轮询间隔在用户体验和服务器负载之间取得了平衡。
-
-\section{遇到的问题与解决方案}
-
-\textbf{问题一：Docker 时区导致时间显示错误}。Docker 容器默认使用 UTC 时区，而中国使用 UTC+8。导致前端显示的所有时间都晚 8 小时。解决：在 docker-compose.yml 中为 MySQL 和 Backend 容器添加 \texttt{TZ: Asia/Shanghai} 环境变量。
-
-\textbf{问题二：旧 Token 导致全站 403}。重新导入种子数据后，浏览器中存储的旧用户 Token 对应的用户已被删除，JWT 过滤器拒绝该 Token，所有需要认证的页面返回 403。解决：在前端 Axios 响应拦截器中，检测到 403 且本地存在 Token 时，自动清除登录状态并跳转登录页。
-
-\textbf{问题三：CSS 设计令牌的跨组件一致性}。21 个页面分布在不同文件中，如果没有统一的设计令牌体系，每个开发者会自行选择颜色和间距，导致风格不一致。解决：在 App.vue 的 \texttt{:root} 中定义全局 CSS Variables，所有组件通过 \texttt{var(--c-primary)} 等变量引用，确保全局一致性。
-
-\textbf{问题四：Element Plus 组件样式覆盖}。Element Plus 的组件使用了自己的 CSS 变量和类名体系。直接修改组件内部样式需要使用 \texttt{:deep()} 或 \texttt{!important}，容易造成样式冲突。解决：通过覆盖 Element Plus 的 CSS 变量（如 \texttt{--el-button-bg-color}）实现全局主题定制，避免直接修改组件内部样式。
 
 \end{document}
