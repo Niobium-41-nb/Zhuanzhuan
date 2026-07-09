@@ -1,0 +1,22 @@
+USE zhuanzhuan;
+INSERT INTO product(user_id,category_id,title,description,price,original_price,`condition`,cover_image,view_count,favorite_count,status,created_at) VALUES
+(16,17,'宿舍迷你冰箱 15L','夏天冰饮料冬天热牛奶。功率低不跳闸。',129.00,299.00,'轻微使用痕迹','https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=640&h=480&fit=crop',534,75,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(5,17,'LED护眼台灯 三档调光','无频闪+长臂调节。夹子底座两用。',49.00,99.00,'几乎全新','https://images.unsplash.com/photo-1503676260728-1bb6b3f6a83f?w=640&h=480&fit=crop',345,47,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(12,17,'电热水壶 1.7L 不锈钢','快速烧水自动断电。宿舍泡面神器。',25.00,59.00,'轻微使用痕迹','https://images.unsplash.com/photo-1506880131783-1c3c2ce7e6a0?w=640&h=480&fit=crop',278,36,'在售',DATE_SUB(NOW(),INTERVAL 3 DAY)),
+(12,18,'美的电饭煲 3L 智能预约','宿舍小厨房必备。煮饭煲汤内胆不粘。',89.00,199.00,'轻微使用痕迹','https://images.unsplash.com/photo-1586105251261-72a75640488e?w=640&h=480&fit=crop',345,47,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(8,18,'小熊空气炸锅 3.5L','无油健康烹饪。可视窗口看食物。',129.00,299.00,'轻微使用痕迹','https://images.unsplash.com/photo-1598928506311-2c3c2ce7e6a0?w=640&h=480&fit=crop',423,58,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(11,19,'SK-II 神仙水 230ml 全新','免税店购入。日期到2027年。',799.00,1590.00,'全新','https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=640&h=480&fit=crop',345,48,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(16,19,'MUJI 香薰机+精油套装','超声波静音。薰衣草+甜橙精油。',129.00,298.00,'轻微使用痕迹','https://images.unsplash.com/photo-1571781926291-2c3c2ce7e6a0?w=640&h=480&fit=crop',178,23,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(11,20,'优衣库 轻薄羽绒服 女 米色 M','轻暖便携可收纳。只穿了一季。',149.00,399.00,'轻微使用痕迹','https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=640&h=480&fit=crop',423,58,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(6,20,'Nike 加绒卫衣 灰色 S码','加绒保暖版型好看。买小了穿不了。',99.00,299.00,'几乎全新','https://images.unsplash.com/photo-1521572163474-2c3c2ce7e6a0?w=640&h=480&fit=crop',345,47,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(5,21,'Levis 501 直筒牛仔裤 28码','经典501中腰直筒。穿洗过几次。',299.00,799.00,'轻微使用痕迹','https://images.unsplash.com/photo-1475178626620-a4d074967452?w=640&h=480&fit=crop',345,48,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(6,22,'Nike Air Force 1 小白鞋 42码','经典AF1百搭神器。正常穿着痕迹。',299.00,799.00,'轻微使用痕迹','https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=640&h=480&fit=crop',534,72,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(11,22,'Adidas Samba OG 德训鞋 37码','复古德训鞋颜值在线。穿不到十次。',399.00,799.00,'轻微使用痕迹','https://images.unsplash.com/photo-1525966222134-2c3c2ce7e6a0?w=640&h=480&fit=crop',423,58,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(5,23,'小米 20寸登机箱 商务款','静音万向轮+TSA海关锁。短途出差好伙伴。',199.00,399.00,'轻微使用痕迹','https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=640&h=480&fit=crop',345,48,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(6,24,'Keep 动感单车 C1 智能调阻','静音磁控+App自动调节。用了半年。',699.00,1799.00,'轻微使用痕迹','https://images.unsplash.com/photo-1571019614242-c5c5a6e2bed2?w=640&h=480&fit=crop',456,62,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(10,24,'YONEX 天斧88D Pro 羽毛球拍','进攻型杀球暴力。打五六次送拍套。',699.00,1299.00,'轻微使用痕迹','https://images.unsplash.com/photo-1517836357463-2c3c2ce7e6a0?w=640&h=480&fit=crop',345,47,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(10,25,'牧高笛 双人帐篷 3季帐','防雨防风露营首选。用过三四次。',299.00,699.00,'轻微使用痕迹','https://images.unsplash.com/photo-1504280390367-361c97edc0a3?w=640&h=480&fit=crop',423,58,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(9,25,'膳魔师 保温杯 1.2L','24小时保温。冬天爬山一杯热水。',99.00,249.00,'轻微使用痕迹','https://images.unsplash.com/photo-1478131143085-2c3c2ce7e6a0?w=640&h=480&fit=crop',267,35,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(13,6,'雅马哈 F310 民谣吉他 41寸','入门吉他经典款。附教程书+调音器。',499.00,899.00,'几乎全新','https://images.unsplash.com/photo-1511671782779-2c3c2ce7e6a0?w=640&h=480&fit=crop',423,58,'在售',DATE_SUB(NOW(),INTERVAL 1 DAY)),
+(5,6,'富士 Instax Mini 12 拍立得 粉色','可爱拍立得出片有质感。含相纸8张。',299.00,499.00,'轻微使用痕迹','https://images.unsplash.com/photo-1598488036847-2c3c2ce7e6a0?w=640&h=480&fit=crop',345,48,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(4,6,'Kindle Paperwhite 5 8G 黑色','6.8寸纯平墨水屏。看过几本书。',599.00,1068.00,'轻微使用痕迹','https://images.unsplash.com/photo-1598488036847-2c3c2ce7e6a0?w=640&h=480&fit=crop',312,42,'在售',DATE_SUB(NOW(),INTERVAL 3 DAY));
