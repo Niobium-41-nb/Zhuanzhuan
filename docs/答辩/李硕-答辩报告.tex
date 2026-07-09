@@ -412,9 +412,210 @@ for pid, title, cat_id in products:
   \item \textbf{首页如何展示大量商品}：CSS Grid 响应式布局 + 骨架屏加载 + 4 个并行 API 请求
   \item \textbf{筛选条件如何持久化}：URL query string 同步，刷新页面筛选不丢失
   \item \textbf{购物车的状态管理}：全选/单选用 computed 属性联动，数量修改用防抖优化
-  \item \textbf{卖家如何看到并处理自己的订单}：订单列表增加"我买的/我卖的"切换，修复了原始代码写死 buyer 的问题
+  \item \textbf{卖家如何看到并处理自己的订单}：订单列表增加"我买的/我卖的"切换
   \item \textbf{管理后台的数据可视化}：ECharts 饼图+折线图，带 resize 自适应和 dispose 防泄漏
   \item \textbf{商品数据从哪里来}：155 件种子数据 SQL + Python 自定义生成图片，100\% 可靠
 \end{itemize}
+
+% ============================================
+\section{深入：CSS Grid 布局原理}
+
+\subsection{Grid vs Flexbox}
+
+\textbf{Flexbox}：一维布局。适合排列一行（或一列）中的元素。例如导航栏水平排列、卡片内的文字和按钮垂直排列。
+
+\textbf{Grid}：二维布局。同时控制行和列。适合整个页面的布局、商品网格等。本项目的首页商品网格使用 Grid。
+
+\subsection{auto-fill 和 minmax 的工作原理}
+
+\begin{lstlisting}[language=CSS]
+grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+\end{lstlisting}
+
+这行 CSS 的背后逻辑：
+\begin{enumerate}
+  \item 浏览器先算出容器宽度（比如 1200px）
+  \item 用 \texttt{minmax(240px, 1fr)} 来计算：每个列最少 240px，如果空间够就平均分配
+  \item \texttt{auto-fill} 告诉浏览器：尽可能多地创建列，填不满就留空
+  \item 1200 / 240 = 5 列
+  \item 如果窗口缩小到 800px：800 / 240 = 3 列（第 4 列不够 240px，换行）
+\end{enumerate}
+
+这就是为什么同一段 CSS 在宽屏和窄屏上表现不同——浏览器自动计算列数，实现了真正的响应式布局。
+
+\subsection{绝对单位 vs 相对单位}
+
+\texttt{px}（像素）：绝对单位，在任何屏幕上都是一样大。\texttt{fr}（fraction）：相对单位，表示"剩余空间的 N 分之一"。\texttt{1fr 2fr} 表示前者占 1/3，后者占 2/3。
+
+\textbf{为什么用 fr 而不是 px}：如果用固定像素，屏幕变大后卡片不会自动变宽，两侧留白。用 fr，卡片自动填满可用空间。
+
+\texttt{rem}：相对于根元素（\texttt{<html>}）的字体大小。默认 1rem = 16px。修改根元素字体大小可以全局缩放所有使用 rem 的元素。
+
+% ============================================
+\section{深入：MySQL FULLTEXT 全文索引}
+
+\subsection{什么是全文索引}
+
+普通的 \texttt{LIKE '\%keyword\%'} 搜索虽然能用，但是遍历整张表逐行匹配，数据量大时非常慢（O(n) 复杂度）。全文索引通过建立倒排索引（记录每个词出现在哪些行），将搜索复杂度降到接近 O(log n)。
+
+\textbf{倒排索引的原理}：假设有三件商品：
+\begin{itemize}
+  \item 商品 1："全新 iPhone 手机"
+  \item 商品 2："二手 小米 手机"
+  \item 商品 3："iPhone 手机壳 全新"
+\end{itemize}
+
+倒排索引：
+\begin{itemize}
+  \item "全新" → 商品1, 商品3
+  \item "iPhone" → 商品1, 商品3
+  \item "手机" → 商品1, 商品2, 商品3
+  \item "小米" → 商品2
+  \item "二手" → 商品2
+  \item "壳" → 商品3
+\end{itemize}
+
+搜索 "iPhone 手机" 时，MySQL 查到 "iPhone" 出现在商品 1 和 3，"手机"出现在商品 1、2、3。取交集得到商品 1 和 3。这比逐行扫描快得多。
+
+\subsection{为什么用 FULLTEXT 而不是 LIKE}
+
+\begin{itemize}
+  \item \texttt{LIKE '\%iPhone\%'}：必须扫描每一行的 title 和 description 字段，计算量大
+  \item \texttt{MATCH(title,description) AGAINST('iPhone')}：利用倒排索引直接定位匹配行，速度快几个数量级
+  \item 全文索引还支持自然语言模式、布尔模式（+必须包含、-排除、*通配符）等高级搜索
+\end{itemize}
+
+本项目在 product 表上建立了 \texttt{FULLTEXT KEY ft\_title\_desc (title, description)}，支持对标题和描述的同时搜索。
+
+\subsection{全文索引的代价}
+
+索引不是免费的。每次 INSERT 或 UPDATE 都会更新索引，占用额外的磁盘空间。所以只在搜索频繁的列上建全文索引。对于像 view\_count 这种只用于排序统计的列，普通 B-Tree 索引就够用了。
+
+% ============================================
+\section{深入：ECharts 的工作原理}
+
+\subsection{声明式 vs 命令式}
+
+ECharts 是声明式的：你告诉它"我要一个饼图，数据是这些，颜色用这些"，它自动完成绘制。你不需要告诉它"先画一个圆，再画一个扇形，加上标签"。这类似于 Vue 的声明式模板——你说"这个 div 里显示 count"，Vue 自动处理 DOM 更新。
+
+\textbf{声明式的优势}：开发者关注"要什么"而不是"怎么做"；框架负责底层实现和性能优化；代码更简洁、更易维护。\textbf{命令式}（如 Canvas API）：灵活但代码量大，每个像素都要手动控制。
+
+\subsection{ECharts 的渲染管线}
+
+当你调用 \texttt{chart.setOption(...)} 后，ECharts 内部执行以下步骤：
+\begin{enumerate}
+  \item 解析配置对象，验证必要字段是否存在
+  \item 数据预处理：对数据进行排序、过滤、聚合
+  \item 布局计算：根据图表类型和容器大小，计算每个元素的位置和大小
+  \item 坐标系统建立：确定 X 轴和 Y 轴的范围、刻度、标签
+  \item 图形渲染：使用 Canvas 或 SVG 引擎绘制图形
+  \item 交互绑定：绑定 hover、click 等事件处理
+\end{enumerate}
+
+其中第 3 步（布局计算）是最复杂的。饼图需要计算每个扇区的起始角度和角度范围，折线图需要把所有数据点映射到像素坐标。
+
+\subsection{为什么折线图用双 Y 轴}
+
+本项目的数据统计页展示两个不同量级的数据：用户注册量（通常几十到几百）和订单成交量（同样几十到几百，但趋势不同）。如果共用一个 Y 轴，两条线的波动幅度可能差异很大，视觉上不友好。
+
+双 Y 轴（左轴和右轴各有自己的刻度）让每条线都在自己的合理范围内展示，更容易看出各自的趋势变化。
+
+\subsection{Canvas vs SVG}
+
+ECharts 默认使用 Canvas 渲染。Canvas 和 SVG 是两种不同的 Web 图形技术：
+
+\textbf{Canvas}：位图模式。你告诉画笔"在坐标 (100, 200) 画一个圆"，它就真的在那个位置画像素。画完后原来的圆"消失了"（只剩像素）。适合大量图形元素、频繁重绘的场景（如数据可视化）。
+
+\textbf{SVG}：矢量模式。每个图形是一个独立的 DOM 元素（\texttt{<circle>}、\texttt{<rect>} 等）。你可以用 CSS 修改它的样式、用 JS 绑定事件。适合图形数量不多、需要交互的场景（如图标、按钮）。
+
+ECharts 也支持 SVG 模式（通过 \texttt{renderer: 'svg'} 配置），但 Canvas 在大数据量下性能更好。对于本项目的几十个数据点，两种模式几乎没有性能差异。
+
+\subsection{内存泄漏的机制}
+
+JavaScript 的内存管理依赖垃圾回收（GC）。当一个对象不再被任何变量引用时，GC 会在某个时刻回收它。
+
+ECharts 实例持有对 DOM 元素的引用（通过 \texttt{chartRef.value}）、对 Canvas 上下文的引用、对事件监听器的引用。如果不在组件销毁时手动释放这些引用，GC 无法判断这些对象是否还需要。即使页面已经切换走了，ECharts 实例仍然"活"在内存中。
+
+在 SPA 中，用户频繁切换页面会积累大量"僵尸"图表实例，内存占用持续增长。这就是为什么必须在 \texttt{onUnmounted} 中调用 \texttt{chart.dispose()} 和 \texttt{removeEventListener}。
+
+% ============================================
+\section{深入：MySQL 数据库设计基础}
+
+\subsection{为什么用 InnoDB 引擎}
+
+MySQL 支持多种存储引擎，最常用的是 InnoDB 和 MyISAM。
+
+\textbf{InnoDB}：支持事务（ACID）、行级锁、外键约束。适合需要数据一致性的业务场景。本项目全部使用 InnoDB。
+
+\textbf{MyISAM}：不支持事务、表级锁。读取速度快但不适合频繁写入的场景。全文索引在 MySQL 5.6 之前只有 MyISAM 支持，现在 InnoDB 也支持了。
+
+\subsection{什么是事务}
+
+事务是一组数据库操作，它们要么全部成功，要么全部失败（原子性）。经典的例子是银行转账：从 A 账户扣款和向 B 账户加款必须同时成功或同时失败，不能出现"扣了 A 的钱但没加到 B"。
+
+本项目在订单创建时使用事务。Spring 的 \texttt{@Transactional} 注解让方法内的所有数据库操作在一个事务中执行。任何一步失败，整个事务回滚。
+
+\subsection{索引的原理}
+
+数据库索引类似于书的目录。没有索引时，查找"数据结构"这本书需要从第一页翻到最后一页（全表扫描）。有了索引，先查目录找到"数据结构"在哪一页，直接翻过去。
+
+\textbf{B-Tree 索引}（MySQL 默认索引类型）：数据按顺序存储，查询复杂度 O(log n)。适合范围查询（>、<、BETWEEN）。
+
+\textbf{Hash 索引}：O(1) 常数时间，但只支持等值查询（=）。MySQL 的 Memory 引擎支持 Hash 索引。
+
+\textbf{为什么不要给所有列都建索引}：每个索引都是额外存储空间，写入（INSERT、UPDATE、DELETE）时需要同时更新所有索引。索引太多会拖慢写入速度。只在查询条件经常用到的列上建索引。
+
+\subsection{utf8mb4 vs utf8}
+
+MySQL 的 utf8 字符集实际只支持最多 3 字节的字符（BMP 平面），不能存储 Emoji（需要 4 字节）。utf8mb4（UTF-8 for Multilingual Plane 4-byte）是真正的 UTF-8，支持所有 Unicode 字符。本项目统一使用 utf8mb4，确保中文、Emoji 都能正确存储和显示。
+
+% ============================================
+\section{深入：前端性能优化}
+
+\subsection{路由懒加载}
+
+如果不做懒加载，所有页面的 JS 代码在首次访问时全部下载。对于本项目 21 个页面，这会导致首次加载缓慢。路由懒加载将每个页面分离成独立的 JS 文件（chunk），只在真正访问时才下载。Vite 构建时自动处理动态 import 的分割。
+
+\subsection{骨架屏（Skeleton Screen）}
+
+传统的 loading spinner（转圈圈）让用户感觉"系统在忙"。骨架屏预先画出页面的大致结构（灰色方块代替图片、灰色条代替文字），让用户感觉"内容马上就来"。研究表明骨架屏能显著降低用户的感知等待时间。
+
+实现方式：在数据加载前用 \texttt{v-if="!loaded"} 显示骨架屏的灰色占位元素；数据加载完成后 \texttt{v-if="loaded"} 切换到真实内容。
+
+\subsection{防抖（Debounce）和节流（Throttle）}
+
+\textbf{防抖}：在事件触发后延迟执行，如果延迟时间内又触发了，重新计时。适用场景：搜索框输入（用户停止输入后再发请求）、购物车数量修改（停止点击后再同步）。
+
+\textbf{节流}：无论触发多少次，固定时间间隔执行一次。适用场景：滚动事件（每 100ms 检查一次）、窗口 resize。
+
+\subsection{为什么要把图片下载到本地}
+
+外部 URL 图片有三个问题：加载慢（依赖第三方服务器）、不稳定（URL 可能失效）、不可控（图片内容可能变化）。下载到本地后的优势：加载快（同服务器、无跨域延迟）、稳定（不受外部影响）、可控（内容确定）。CDN 虽然能加速，但对于本项目的 155 张小图片，本地存储完全够用。
+
+% ============================================
+\section{深入：RESTful API 设计}
+
+\subsection{什么是 REST}
+
+REST（Representational State Transfer）是一套 API 设计规范。核心思想：URL 代表资源，HTTP 方法代表操作。
+
+本项目的 API 设计遵循 REST 风格：
+\begin{itemize}
+  \item \texttt{GET /api/v1/product/list} —— 获取商品列表
+  \item \texttt{GET /api/v1/product/123} —— 获取商品 123 的详情
+  \item \texttt{POST /api/v1/product} —— 创建新商品
+  \item \texttt{PUT /api/v1/product/123} —— 更新商品 123
+  \item \texttt{DELETE /api/v1/product/123} —— 删除商品 123
+\end{itemize}
+
+这种设计的好处：URL 结构一致、易于理解和文档化、前后端可以独立开发（只要约定好接口格式）。
+
+\subsection{版本号}
+
+本项目 API 路径中包含 \texttt{/v1/}。版本号的作用：当 API 需要不兼容的变更时，可以发布 \texttt{/v2/} 版本，旧的 \texttt{/v1/} 继续保持。这样不会破坏已有的客户端。
+
+\subsection{统一返回格式}
+
+所有接口返回相同的 JSON 结构：\texttt{\{code, message, data\}}。前端只需要写一个响应拦截器处理所有接口的返回，不用每个接口单独判断成功/失败。
 
 \end{document}
