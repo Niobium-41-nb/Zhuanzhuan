@@ -1,0 +1,16 @@
+USE zhuanzhuan;
+DELETE FROM product;
+
+INSERT INTO product(user_id,category_id,title,description,price,original_price,`condition`,cover_image,view_count,favorite_count,status,created_at) VALUES
+(7,7,'iPhone 15 Pro 原色钛 256G','A17 Pro+钛金属+USB-C。3个月电池98%配件全。',6799.00,8999.00,'几乎全新','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-naturaltitanium?wid=640&hei=480&fmt=png',456,62,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(3,7,'iPhone 14 午夜色 128G','A15戴壳贴膜无划痕电池92%配件齐全。',4299.00,5999.00,'轻微使用痕迹','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-14-finish-select-202209-6-1inch-midnight?wid=640&hei=480&fmt=png',320,45,'在售',DATE_SUB(NOW(),INTERVAL 3 DAY)),
+(11,7,'iPhone 15 粉色 128G','不到一月电池100%家人送Pro Max所以出。',5299.00,5999.00,'全新','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-15-finish-select-202309-6-1inch-pink?wid=640&hei=480&fmt=png',289,42,'在售',DATE_SUB(NOW(),INTERVAL 4 DAY)),
+(5,7,'iPhone 13 Pro 远峰蓝 256G','A15+ProMotion高刷电池换新正常磨损。',3099.00,7999.00,'明显使用痕迹','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-13-pro-alpine-green-select?wid=640&hei=480&fmt=png',423,56,'在售',DATE_SUB(NOW(),INTERVAL 5 DAY)),
+(17,7,'小米14 Pro 白色 16+512G','骁龙8Gen3+徕卡6.36寸旗舰120W快充。',3999.00,4999.00,'几乎全新','https://i02.appmifile.com/mi-com-product/fly-birds/pc/xiaomi-14/xiaomi14-white.png',201,30,'在售',DATE_SUB(NOW(),INTERVAL 7 DAY)),
+(3,8,'MacBook Air 15 M2 星光色 8+256G','M2芯片15寸轻薄本续航一天保修到明年。',7299.00,10499.00,'几乎全新','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mba15-midnight-select-202306?wid=640&hei=480&fmt=png',380,52,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(8,8,'MacBook Pro 14 M3 Pro 深空黑','M3 Pro+18G+512G剪辑编程XDR屏。',12999.00,16999.00,'几乎全新','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/mbp14-spaceblack-select-202310?wid=640&hei=480&fmt=png',267,38,'在售',DATE_SUB(NOW(),INTERVAL 3 DAY)),
+(10,8,'MacBook Air M1 深空灰 8+256G','经典M1日常办公续航一天半边缘磕碰。',3299.00,7999.00,'明显使用痕迹','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/macbook-air-gold-select-201810?wid=640&hei=480&fmt=png',534,72,'在售',DATE_SUB(NOW(),INTERVAL 4 DAY)),
+(5,9,'iPad Air M2 11寸 紫色 128G','M2+笔+键盘记笔记神器不到两月。',4299.00,5499.00,'几乎全新','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/ipad-air-finish-select-202405-11inch-purple?wid=640&hei=480&fmt=png',267,38,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY)),
+(9,9,'iPad Pro M2 12.9寸 256G','Mini-LED XDR屏附带二代Pencil。',6199.00,9299.00,'轻微使用痕迹','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/ipad-pro-finish-select-202210-12-9inch-spacegray?wid=640&hei=480&fmt=png',189,25,'在售',DATE_SUB(NOW(),INTERVAL 3 DAY)),
+(4,9,'iPad mini 6 64G 星光色','A15便携阅读游戏屏幕细微划痕。',2199.00,3799.00,'轻微使用痕迹','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/ipad-mini-finish-select-202109-starlight?wid=640&hei=480&fmt=png',312,44,'在售',DATE_SUB(NOW(),INTERVAL 4 DAY)),
+(13,10,'AirPods Pro 2 USB-C版','主动降噪+通透+空间音频换新耳塞。',1299.00,1899.00,'轻微使用痕迹','https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MQD83?wid=640&hei=640&fmt=png',423,58,'在售',DATE_SUB(NOW(),INTERVAL 2 DAY));
