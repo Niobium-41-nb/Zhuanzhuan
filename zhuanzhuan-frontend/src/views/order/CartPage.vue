@@ -37,11 +37,17 @@ async function remove(id: number) { await cartApi.delete(id); list.value = list.
 
 async function checkout() {
   const selected = list.value.filter(i => i.selected)
+  const orderIds: number[] = []
   for (const item of selected) {
-    await orderApi.create({ productId: item.productId })
+    const res = await orderApi.create({ productId: item.productId })
+    if (res.data?.orderId) orderIds.push(res.data.orderId)
   }
   ElMessage.success('下单成功')
-  router.push('/order/list')
+  if (orderIds.length > 0) {
+    router.push(`/order/${orderIds[0]}/pay`)
+  } else {
+    router.push('/order/list')
+  }
 }
 </script>
 
