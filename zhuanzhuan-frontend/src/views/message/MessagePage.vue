@@ -201,11 +201,15 @@ function formatTime(t: string) {
   display: grid;
   grid-template-columns: 340px 1fr;
   height: calc(100vh - 140px);
+  max-height: calc(100vh - 140px);
   background: var(--c-surface);
   border: 1px solid var(--c-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
+.msg-sidebar { overflow-y: auto; max-height: calc(100vh - 140px); }
+.msg-chat { overflow: hidden; }
+.chat-messages { overflow-y: auto; }
 
 /* Sidebar */
 .msg-sidebar {
