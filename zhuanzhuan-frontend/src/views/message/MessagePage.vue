@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { messageApi } from '@/api'
 import { getUserInfo } from '@/utils/auth'
@@ -83,6 +83,7 @@ const inputMsg = ref('')
 const msgContainer = ref<any>(null)
 const sending = ref(false)
 const loadingConvs = ref(true)
+const msgPollTimer = ref<ReturnType<typeof setInterval> | null>(null)
 
 const totalUnread = computed(() =>
   conversations.value.reduce((sum: number, c: any) => sum + (c.unreadCount || 0), 0)
@@ -90,12 +91,28 @@ const totalUnread = computed(() =>
 
 onMounted(async () => {
   await loadConversations()
-  // 如果 URL 带有 ?to=xxx，自动打开该会话
   const toUserId = Number(route.query.to)
-  if (toUserId) {
-    openConversation(toUserId)
-  }
+  if (toUserId) { openConversation(toUserId) }
+  // 每5秒轮询当前会话的新消息
+  msgPollTimer.value = setInterval(pollMessages, 5000)
 })
+
+onUnmounted(() => {
+  if (msgPollTimer.value) clearInterval(msgPollTimer.value)
+})
+
+async function pollMessages() {
+  if (!selectedUserId.value) return
+  try {
+    const res = await messageApi.getConversation(selectedUserId.value, { page: 1, size: 50 })
+    const newMsgs = (res.data || [])
+    if (newMsgs.length !== messages.value.length) {
+      messages.value = [...newMsgs].reverse()
+      nextTick(() => { if (msgContainer.value) msgContainer.value.scrollTop = msgContainer.value.scrollHeight })
+      await loadConversations() // 刷新会话列表
+    }
+  } catch (_) {}
+}
 
 async function loadConversations() {
   try {

@@ -101,6 +101,32 @@
       </div>
     </div>
 
+    <!-- Buy Dialog: Address Selection -->
+    <el-dialog v-model="showBuyDialog" title="确认订单 — 选择收货地址" width="520px">
+      <div class="buy-dialog-order">
+        <img :src="product.coverImage" style="width:60px;height:60px;object-fit:cover;border-radius:6px" />
+        <div style="margin-left:12px">
+          <p style="font-weight:700;color:var(--c-text)">{{ product.title }}</p>
+          <p style="font-size:18px;font-weight:700;color:var(--c-accent)">¥{{ product.price }}</p>
+        </div>
+      </div>
+      <div class="buy-address-list" v-if="addresses.length">
+        <div v-for="addr in addresses" :key="addr.id" class="buy-addr-item" :class="{ selected: selectedAddressId === addr.id }" @click="selectedAddressId = addr.id">
+          <div class="addr-radio"><span v-if="selectedAddressId===addr.id" class="addr-dot" /></div>
+          <div>
+            <p><b>{{ addr.receiver }}</b> {{ addr.phone }}</p>
+            <p style="color:var(--c-muted);font-size:12px">{{ addr.province }}{{ addr.city }}{{ addr.district }} {{ addr.detail }}</p>
+          </div>
+          <el-tag v-if="addr.isDefault" size="small" type="success">默认</el-tag>
+        </div>
+      </div>
+      <el-empty v-else description="请先去个人中心添加收货地址"><el-button type="primary" @click="router.push('/user/address')">去添加</el-button></el-empty>
+      <template #footer>
+        <el-button @click="showBuyDialog=false">取消</el-button>
+        <el-button type="primary" @click="confirmBuy" :loading="buyLoading" :disabled="!selectedAddressId">确认下单</el-button>
+      </template>
+    </el-dialog>
+
     <!-- Description -->
     <section class="detail-section">
       <h2 class="section-title">商品描述</h2>
@@ -114,7 +140,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Star, StarFilled, ShoppingCart, ChatLineSquare } from '@element-plus/icons-vue'
-import { productApi, orderApi, cartApi } from '@/api'
+import { productApi, orderApi, cartApi, userApi } from '@/api'
 import { isLoggedIn, getUserInfo } from '@/utils/auth'
 import { getCategoryCover } from '@/utils/productImage'
 
@@ -164,13 +190,28 @@ async function toggleFav() {
   ElMessage.success(product.value.isFavorited ? '已收藏' : '已取消收藏')
 }
 
+const showBuyDialog = ref(false)
+const selectedAddressId = ref<number | null>(null)
+const addresses = ref<any[]>([])
+const buyLoading = ref(false)
+
 async function buyNow() {
   if (!isLoggedIn()) { router.push('/login'); return }
+  // 先加载地址
+  try { const r = await userApi.getAddresses(); addresses.value = r.data || [] } catch (_) { addresses.value = [] }
+  selectedAddressId.value = addresses.value.find((a: any) => a.isDefault)?.id || addresses.value[0]?.id || null
+  showBuyDialog.value = true
+}
+
+async function confirmBuy() {
+  if (!selectedAddressId.value) { ElMessage.warning('请选择收货地址'); return }
+  buyLoading.value = true
   try {
-    const res = await orderApi.create({ productId: product.value.id })
+    const res = await orderApi.create({ productId: product.value.id, addressId: selectedAddressId.value })
     ElMessage.success('下单成功')
+    showBuyDialog.value = false
     router.push(`/order/${res.data.orderId}`)
-  } catch (_) {}
+  } catch (_) {} finally { buyLoading.value = false }
 }
 
 async function addToCart() {
@@ -546,6 +587,15 @@ function contactSeller() {
 }
 
 /* Responsive */
+.buy-dialog-order { display:flex; align-items:center; padding:12px; background:var(--c-border-light); border-radius:var(--radius-sm); margin-bottom:16px; }
+.buy-address-list { max-height:260px; overflow-y:auto; }
+.buy-addr-item { display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--c-border); border-radius:var(--radius-sm); margin-bottom:8px; cursor:pointer; transition:all 0.2s; }
+.buy-addr-item:hover { border-color:var(--c-primary); background:var(--c-primary-bg); }
+.buy-addr-item.selected { border-color:var(--c-primary); background:var(--c-primary-bg); border-width:2px; padding:11px; }
+.addr-radio { width:20px; height:20px; border:2px solid var(--c-border); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.buy-addr-item.selected .addr-radio { border-color:var(--c-primary); }
+.addr-dot { width:10px; height:10px; border-radius:50%; background:var(--c-primary); }
+
 @media (max-width: 768px) {
   .detail-layout {
     grid-template-columns: 1fr;

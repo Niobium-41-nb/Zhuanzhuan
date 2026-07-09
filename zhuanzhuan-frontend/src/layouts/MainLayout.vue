@@ -163,6 +163,10 @@ async function readNotif(n: any) {
     n.isRead = 1
     notifUnread.value = Math.max(0, notifUnread.value - 1)
   }
+  // 根据通知类型跳转
+  if (n.type === 'order') router.push('/order/list')
+  else if (n.type === 'review') router.push('/order/list')
+  else router.push('/message')
 }
 
 function formatNotifTime(t: string) {
