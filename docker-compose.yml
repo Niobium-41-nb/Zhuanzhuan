@@ -26,6 +26,7 @@ services:
       - ./docs/数据库设计/zhuanzhuan.sql:/docker-entrypoint-initdb.d/01-init.sql
       - ./deploy/mysql/02-seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql
       - ./deploy/mysql/migration-indexes.sql:/docker-entrypoint-initdb.d/03-migration-indexes.sql
+      - ./deploy/mysql/04-image-updates.sql:/docker-entrypoint-initdb.d/04-image-updates.sql
       # 自定义 MySQL 配置
       - ./deploy/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     command:
