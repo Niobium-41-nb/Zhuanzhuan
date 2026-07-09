@@ -79,6 +79,6 @@ public class OrderController {
 
     @GetMapping("/{id}/log")
     public Result<List<Map<String, Object>>> getOrderLogs(@PathVariable Long id) {
-        return Result.success(orderService.getOrderLogs(id));
+        return Result.success(orderService.getOrderLogs(getCurrentUserId(), id));
     }
 }

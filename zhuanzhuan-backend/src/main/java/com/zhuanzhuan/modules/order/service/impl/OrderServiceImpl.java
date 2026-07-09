@@ -189,7 +189,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Map<String, Object>> getOrderLogs(Long orderId) {
+    public List<Map<String, Object>> getOrderLogs(Long userId, Long orderId) {
+        // 鉴权：只有买家或卖家可查看订单日志
+        Order order = orderMapper.selectById(orderId);
+        if (order == null) throw new BusinessException(404, "订单不存在");
+        if (!order.getBuyerId().equals(userId) && !order.getSellerId().equals(userId))
+            throw new BusinessException(403, "无权查看此订单");
         List<OrderLog> logs = orderLogMapper.selectList(
                 new LambdaQueryWrapper<OrderLog>().eq(OrderLog::getOrderId, orderId).orderByAsc(OrderLog::getCreatedAt));
         return logs.stream().map(log -> {

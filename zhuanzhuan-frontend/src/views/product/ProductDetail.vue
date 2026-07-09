@@ -178,16 +178,20 @@ const conditionClass = computed(() => {
 })
 
 onMounted(async () => {
-  const res: any = await productApi.getDetail(Number(route.params.id))
-  product.value = res.data
-  if (product.value.images?.length) currentImage.value = product.value.images[0].url
+  try {
+    const res: any = await productApi.getDetail(Number(route.params.id))
+    product.value = res.data
+    if (product.value.images?.length) currentImage.value = product.value.images[0].url
+  } catch (_) { ElMessage.error('加载商品失败') }
 })
 
 async function toggleFav() {
   if (!isLoggedIn()) { router.push('/login'); return }
-  await productApi.toggleFavorite({ productId: product.value.id })
-  product.value.isFavorited = !product.value.isFavorited
-  ElMessage.success(product.value.isFavorited ? '已收藏' : '已取消收藏')
+  try {
+    await productApi.toggleFavorite({ productId: product.value.id })
+    product.value.isFavorited = !product.value.isFavorited
+    ElMessage.success(product.value.isFavorited ? '已收藏' : '已取消收藏')
+  } catch (_) { ElMessage.error('操作失败') }
 }
 
 const showBuyDialog = ref(false)

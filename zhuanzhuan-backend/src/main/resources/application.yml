@@ -59,7 +59,6 @@ mybatis-plus:
       logic-not-delete-value: 'null'
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 knife4j:
   enable: ${KNIFE4J_ENABLE:true}

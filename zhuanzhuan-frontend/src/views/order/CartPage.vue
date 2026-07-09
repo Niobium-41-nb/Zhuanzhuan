@@ -50,10 +50,10 @@ const checkoutLoading = ref(false)
 
 const total = computed(() => list.value.filter(i => i.selected).reduce((s, i) => s + i.price * i.quantity, 0))
 
-onMounted(async () => { const res = await cartApi.getList(); list.value = res.data || [] })
+onMounted(async () => { try { const res = await cartApi.getList(); list.value = res.data || [] } catch(_) { ElMessage.error('加载购物车失败') } })
 
-async function updateItem(item: any) { await cartApi.update(item.id, { quantity: item.quantity, selected: item.selected ? 1 : 0 }) }
-async function remove(id: number) { await cartApi.delete(id); list.value = list.value.filter(i => i.id !== id); ElMessage.success('已删除') }
+async function updateItem(item: any) { try { await cartApi.update(item.id, { quantity: item.quantity, selected: item.selected ? 1 : 0 }) } catch(_) { ElMessage.error('更新失败') } }
+async function remove(id: number) { try { await cartApi.delete(id); list.value = list.value.filter(i => i.id !== id); ElMessage.success('已删除') } catch(_) { ElMessage.error('删除失败') } }
 
 async function openCheckout() {
   const selected = list.value.filter(i => i.selected)

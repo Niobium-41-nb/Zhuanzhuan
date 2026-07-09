@@ -16,5 +16,5 @@ public interface OrderService {
     void pay(Long userId, Long orderId);
     void ship(Long userId, Long orderId, OrderShipDTO dto);
     void receive(Long userId, Long orderId);
-    List<Map<String, Object>> getOrderLogs(Long orderId);
+    List<Map<String, Object>> getOrderLogs(Long userId, Long orderId);
 }

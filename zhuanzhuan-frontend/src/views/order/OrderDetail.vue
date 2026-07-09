@@ -323,7 +323,7 @@ async function loadOrder() {
     ])
     order.value = orderRes.data
     logs.value = logRes.data || []
-  } catch (_) {}
+  } catch (_) { ElMessage.error('操作失败，请重试') }
 }
 
 function goToPay() {
@@ -336,7 +336,7 @@ async function cancel() {
     await orderApi.cancel(order.value.orderId)
     ElMessage.success('订单已取消')
     await loadOrder()
-  } catch (_) {} finally { loading.value = false }
+  } catch (_) { ElMessage.error('操作失败，请重试') } finally { loading.value = false }
 }
 
 async function ship() {
@@ -346,7 +346,7 @@ async function ship() {
     ElMessage.success('已发货')
     showShipDialog.value = false
     await loadOrder()
-  } catch (_) {} finally { loading.value = false }
+  } catch (_) { ElMessage.error('操作失败，请重试') } finally { loading.value = false }
 }
 
 async function receive() {
@@ -355,7 +355,7 @@ async function receive() {
     await orderApi.receive(order.value.orderId)
     ElMessage.success('已确认收货')
     await loadOrder()
-  } catch (_) {} finally { loading.value = false }
+  } catch (_) { ElMessage.error('操作失败，请重试') } finally { loading.value = false }
 }
 
 async function submitReview() {
@@ -365,7 +365,7 @@ async function submitReview() {
     ElMessage.success('评价成功')
     showReviewDialog.value = false
     reviewed.value = true
-  } catch (_) {} finally { loading.value = false }
+  } catch (_) { ElMessage.error('操作失败，请重试') } finally { loading.value = false }
 }
 
 async function copyTrackingNo() {

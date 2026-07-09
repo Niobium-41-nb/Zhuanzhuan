@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -48,10 +49,10 @@ public class SecurityConfig {
                     "/api/v1/index/**",
                     "/api/v1/category/**",
                     "/api/v1/product/list",
-                    "/api/v1/product/*",
                     "/api/v1/announcement/list",
                     "/uploads/**"
                 ).permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/product/*").permitAll()
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
