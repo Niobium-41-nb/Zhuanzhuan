@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">技术架构与安全</text>
+
+<rect x="40" y="95" width="380" height="240" rx="10" fill="white" stroke="#2D6A4F" stroke-width="2"/><rect x="40" y="95" width="380" height="44" rx="10" fill="#2D6A4F"/><rect x="40" y="119" width="380" height="20" fill="#2D6A4F"/><text x="230" y="123" text-anchor="middle" font-size="17" font-weight="700" fill="white">前端 Vue3 SPA</text>
+<text x="70" y="175" font-size="16" fill="#1F2937"><tspan font-weight="700">框架</tspan>  Vue 3 + TypeScript + Vite 5</text>
+<text x="70" y="205" font-size="16" fill="#1F2937"><tspan font-weight="700">组件</tspan>  Element Plus + Pinia + Router</text>
+<text x="70" y="235" font-size="16" fill="#1F2937"><tspan font-weight="700">通信</tspan>  Axios + Token 自动刷新队列</text>
+<text x="70" y="265" font-size="16" fill="#1F2937"><tspan font-weight="700">图表</tspan>  ECharts 5 + CSS 设计令牌</text>
+<text x="70" y="295" font-size="16" fill="#1F2937"><tspan font-weight="700">构建</tspan>  Vite → Nginx :3000 部署</text>
+<text x="70" y="320" font-size="14" fill="#2D6A4F">21 页面 · 18,000+ 行代码</text>
+
+<text x="455" y="220" font-size="32" fill="#2D6A4F">→</text>
+
+<rect x="500" y="95" width="380" height="240" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/><rect x="500" y="95" width="380" height="44" rx="10" fill="#E76F51"/><rect x="500" y="119" width="380" height="20" fill="#E76F51"/><text x="690" y="123" text-anchor="middle" font-size="17" font-weight="700" fill="white">后端 SpringBoot 3</text>
+<text x="530" y="175" font-size="16" fill="#1F2937"><tspan font-weight="700">框架</tspan>  SpringBoot 3.2 + MyBatis-Plus</text>
+<text x="530" y="205" font-size="16" fill="#1F2937"><tspan font-weight="700">安全</tspan>  Spring Security + JWT + BCrypt</text>
+<text x="530" y="235" font-size="16" fill="#1F2937"><tspan font-weight="700">数据</tspan>  MySQL 8.0 + Redis 7 + 13 张表</text>
+<text x="530" y="265" font-size="16" fill="#1F2937"><tspan font-weight="700">API</tspan>  RESTful 30+ 端点 + Knife4j</text>
+<text x="530" y="295" font-size="16" fill="#1F2937"><tspan font-weight="700">部署</tspan>  Docker → Tomcat :8080</text>
+<text x="530" y="320" font-size="14" fill="#E76F51">8,000+ 行 · 14 单元测试</text>
+
+<text x="910" y="220" font-size="32" fill="#52B788">→</text>
+
+<rect x="950" y="95" width="270" height="240" rx="10" fill="white" stroke="#52B788" stroke-width="2"/><rect x="950" y="95" width="270" height="44" rx="10" fill="#52B788"/><rect x="950" y="119" width="270" height="20" fill="#52B788"/><text x="1085" y="123" text-anchor="middle" font-size="17" font-weight="700" fill="white">数据层</text>
+<text x="980" y="175" font-size="16" fill="#1F2937">MySQL 8.0</text><text x="980" y="200" font-size="13" fill="#6B7280">InnoDB · 全文索引</text>
+<text x="980" y="235" font-size="16" fill="#1F2937">Redis 7</text><text x="980" y="260" font-size="13" fill="#6B7280">缓存 · Token 黑名单</text>
+<text x="980" y="295" font-size="16" fill="#1F2937">Docker</text><text x="980" y="320" font-size="13" fill="#6B7280">5 容器 · 一键部署</text>
+
+<rect x="40" y="365" width="1180" height="160" rx="10" fill="white" stroke="#E5E7EB"/><rect x="40" y="365" width="220" height="160" rx="10" fill="#1B4332"/><rect x="40" y="505" width="220" height="20" fill="#1B4332"/><text x="150" y="420" text-anchor="middle" font-size="20" font-weight="700" fill="white">安全</text><text x="150" y="450" text-anchor="middle" font-size="14" fill="rgba(255,255,255,0.8)">JWT 双 Token</text><text x="150" y="475" text-anchor="middle" font-size="14" fill="rgba(255,255,255,0.8)">BCrypt + RBAC</text><text x="150" y="500" text-anchor="middle" font-size="14" fill="rgba(255,255,255,0.8)">验证码隔离</text>
+<text x="290" y="410" font-size="16" fill="#1F2937"><tspan font-weight="700">双 Token 机制</tspan> — Access Token 2h + Refresh Token 7d，请求队列防并发刷新</text>
+<text x="290" y="440" font-size="16" fill="#1F2937"><tspan font-weight="700">三层防护</tspan> — 公开接口 / 认证接口 / ROLE_ADMIN 三级权限，CORS 白名单</text>
+<text x="290" y="470" font-size="16" fill="#1F2937"><tspan font-weight="700">验证码安全</tspan> — 类型隔离（注册/重置互斥）+ 频率限制 + 防消费</text>
+<text x="290" y="500" font-size="16" fill="#1F2937"><tspan font-weight="700">数据保护</tspan> — BCrypt 密码哈希 · XSS 过滤 · MIME 校验 · 敏感信息脱敏</text>
+
+<rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/><text x="1230" y="705" text-anchor="end" font-size="11" fill="#9CA3AF">4 / 20</text></svg>

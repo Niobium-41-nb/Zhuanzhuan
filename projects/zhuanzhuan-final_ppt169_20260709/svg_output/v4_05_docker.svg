@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">Docker 部署架构</text>
+<text x="80" y="88" font-size="16" fill="#6B7280">docker-compose up -d --build  一键启动五个容器</text>
+
+<rect x="60" y="125" width="210" height="110" rx="10" fill="#FFF3E0" stroke="#E76F51" stroke-width="2"/><text x="165" y="170" text-anchor="middle" font-size="20" font-weight="700" fill="#E65100">Nginx</text><text x="165" y="195" text-anchor="middle" font-size="13" fill="#6B7280">Vue3 SPA</text><text x="165" y="215" text-anchor="middle" font-size="13" fill="#6B7280">:3000</text>
+<rect x="310" y="125" width="210" height="110" rx="10" fill="#E8F5E9" stroke="#2D6A4F" stroke-width="2"/><text x="415" y="170" text-anchor="middle" font-size="20" font-weight="700" fill="#2D6A4F">SpringBoot</text><text x="415" y="195" text-anchor="middle" font-size="13" fill="#6B7280">Java 17</text><text x="415" y="215" text-anchor="middle" font-size="13" fill="#6B7280">:8080</text>
+<rect x="560" y="125" width="210" height="110" rx="10" fill="#E3F2FD" stroke="#1976D2" stroke-width="2"/><text x="665" y="170" text-anchor="middle" font-size="20" font-weight="700" fill="#1565C0">MySQL</text><text x="665" y="195" text-anchor="middle" font-size="13" fill="#6B7280">8.0</text><text x="665" y="215" text-anchor="middle" font-size="13" fill="#6B7280">:3306</text>
+<rect x="810" y="125" width="210" height="110" rx="10" fill="#FCE4EC" stroke="#C62828" stroke-width="2"/><text x="915" y="170" text-anchor="middle" font-size="20" font-weight="700" fill="#C62828">Redis</text><text x="915" y="195" text-anchor="middle" font-size="13" fill="#6B7280">7 Alpine</text><text x="915" y="215" text-anchor="middle" font-size="13" fill="#6B7280">:6379</text>
+<rect x="1060" y="125" width="160" height="110" rx="10" fill="#F5F5F5" stroke="#999" stroke-width="2"/><text x="1140" y="170" text-anchor="middle" font-size="18" font-weight="700" fill="#666">phpMyAdmin</text><text x="1140" y="195" text-anchor="middle" font-size="13" fill="#6B7280">管理工具</text><text x="1140" y="215" text-anchor="middle" font-size="13" fill="#6B7280">:3001</text>
+
+<line x1="280" y1="180" x2="300" y2="180" stroke="#E76F51" stroke-width="2"/><line x1="530" y1="180" x2="550" y2="180" stroke="#2D6A4F" stroke-width="2"/><line x1="780" y1="180" x2="800" y2="180" stroke="#1976D2" stroke-width="2"/><line x1="1030" y1="180" x2="1050" y2="180" stroke="#999" stroke-width="1"/>
+
+<rect x="60" y="270" width="560" height="200" rx="10" fill="white" stroke="#E5E7EB"/><rect x="60" y="270" width="560" height="42" rx="10" fill="#2D6A4F"/><rect x="60" y="292" width="560" height="20" fill="#2D6A4F"/><text x="340" y="297" text-anchor="middle" font-size="17" font-weight="700" fill="white">容器特性</text>
+<text x="90" y="340" font-size="16" font-weight="700" fill="#2D6A4F">健康检查</text><text x="195" y="340" font-size="15" fill="#1F2937">MySQL/Redis healthy 后启动后端</text>
+<text x="90" y="372" font-size="16" font-weight="700" fill="#2D6A4F">数据持久化</text><text x="195" y="372" font-size="15" fill="#1F2937">mysql_data / redis_data / upload_data 三个 Volume</text>
+<text x="90" y="404" font-size="16" font-weight="700" fill="#2D6A4F">自动初始化</text><text x="195" y="404" font-size="15" fill="#1F2937">4 个 SQL 脚本按序执行：建库→种子→索引→图片</text>
+<text x="90" y="436" font-size="16" font-weight="700" fill="#2D6A4F">Nginx 代理</text><text x="195" y="436" font-size="15" fill="#1F2937">反向代理 /api/* → backend:8080 + Gzip + 限流 + CORS</text>
+
+<rect x="660" y="270" width="560" height="200" rx="10" fill="white" stroke="#E5E7EB"/><rect x="660" y="270" width="560" height="42" rx="10" fill="#E76F51"/><rect x="660" y="292" width="560" height="20" fill="#E76F51"/><text x="940" y="297" text-anchor="middle" font-size="17" font-weight="700" fill="white">运维配置</text>
+<text x="690" y="340" font-size="16" font-weight="700" fill="#E65100">时区</text><text x="760" y="340" font-size="15" fill="#1F2937">TZ=Asia/Shanghai 全容器统一</text>
+<text x="690" y="372" font-size="16" font-weight="700" fill="#E65100">环境分离</text><text x="760" y="372" font-size="15" fill="#1F2937">dev/prod/test 三套配置文件</text>
+<text x="690" y="404" font-size="16" font-weight="700" fill="#E65100">敏感信息</text><text x="760" y="404" font-size="15" fill="#1F2937">.env 管理密码/密钥，不入 Git</text>
+<text x="690" y="436" font-size="16" font-weight="700" fill="#E65100">构建</text><text x="760" y="436" font-size="15" fill="#1F2937">Dockerfile 多阶段构建（Maven编译+JRE运行）</text>
+
+<rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/><text x="1230" y="705" text-anchor="end" font-size="11" fill="#9CA3AF">5 / 20</text></svg>

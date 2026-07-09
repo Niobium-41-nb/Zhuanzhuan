@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">项目成果总结</text>
+<rect x="60" y="95" width="270" height="90" rx="8" fill="#2D6A4F"/><text x="195" y="130" text-anchor="middle" font-size="32" font-weight="900" fill="white">26,000+</text><text x="195" y="160" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.7)">总代码行数</text>
+<rect x="345" y="95" width="270" height="90" rx="8" fill="#52B788"/><text x="480" y="130" text-anchor="middle" font-size="32" font-weight="900" fill="white">30+</text><text x="480" y="160" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.7)">API 端点</text>
+<rect x="630" y="95" width="270" height="90" rx="8" fill="#E76F51"/><text x="765" y="130" text-anchor="middle" font-size="32" font-weight="900" fill="white">21</text><text x="765" y="160" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.7)">前端页面</text>
+<rect x="915" y="95" width="270" height="90" rx="8" fill="#1B4332"/><text x="1050" y="130" text-anchor="middle" font-size="32" font-weight="900" fill="white">7</text><text x="1050" y="160" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.7)">项目文档</text>
+
+<rect x="60" y="210" width="560" height="240" rx="10" fill="white" stroke="#E5E7EB"/><rect x="60" y="210" width="560" height="44" rx="10" fill="#2D6A4F"/><rect x="60" y="234" width="560" height="20" fill="#2D6A4F"/><text x="340" y="238" text-anchor="middle" font-size="17" font-weight="700" fill="white">技术栈成果</text>
+<text x="90" y="282" font-size="16" fill="#1F2937"><tspan font-weight="700">前端</tspan> Vue3+TS+Vite5+ElementPlus+Pinia+ECharts</text>
+<text x="90" y="312" font-size="16" fill="#1F2937"><tspan font-weight="700">后端</tspan> SpringBoot3.2+MyBatisPlus+Security+JWT+Knife4j</text>
+<text x="90" y="342" font-size="16" fill="#1F2937"><tspan font-weight="700">数据</tspan> MySQL8.0(13表)+Redis7+全文索引+软删除</text>
+<text x="90" y="372" font-size="16" fill="#1F2937"><tspan font-weight="700">部署</tspan> Docker Compose 五容器+一键启动+健康检查</text>
+<text x="90" y="402" font-size="16" fill="#1F2937"><tspan font-weight="700">安全</tspan> JWT双Token+BCrypt+RBAC+验证码隔离+频率限制</text>
+<text x="90" y="432" font-size="16" fill="#1F2937"><tspan font-weight="700">测试</tspan> JUnit14+Postman30++Vitest8 全部通过</text>
+
+<rect x="660" y="210" width="560" height="240" rx="10" fill="white" stroke="#E5E7EB"/><rect x="660" y="210" width="560" height="44" rx="10" fill="#E76F51"/><rect x="660" y="234" width="560" height="20" fill="#E76F51"/><text x="940" y="238" text-anchor="middle" font-size="17" font-weight="700" fill="white">项目亮点</text>
+<text x="690" y="282" font-size="16" fill="#1F2937"><tspan font-weight="700">完整C2C闭环</tspan> 浏览→沟通→下单→支付→发货→收货→评价</text>
+<text x="690" y="312" font-size="16" fill="#1F2937"><tspan font-weight="700">实时消息</tspan> 5s轮询聊天+30s轮询通知+订单自动推送</text>
+<text x="690" y="342" font-size="16" fill="#1F2937"><tspan font-weight="700">UI动效系统</tspan> 骨架屏+过渡动画+微交互+令牌体系</text>
+<text x="690" y="372" font-size="16" fill="#1F2937"><tspan font-weight="700">安全多层防护</tspan> 三级权限+验证码隔离+频率限制</text>
+<text x="690" y="402" font-size="16" fill="#1F2937"><tspan font-weight="700">Docker化</tspan> 五容器一键部署+自动初始4脚本</text>
+<text x="690" y="432" font-size="16" fill="#1F2937"><tspan font-weight="700">完整文档</tspan> 7份SE文档+16页答辩PPT</text>
+
+<rect x="60" y="475" width="1160" height="55" rx="8" fill="#E8F5E9"/><text x="640" y="510" text-anchor="middle" font-size="15" fill="#2D6A4F">7天·5人·15+Commits·前后端0阻塞·Docker一键部署·217件种子数据·22页答辩PPT</text>
+<rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/><text x="1230" y="705" text-anchor="end" font-size="11" fill="#9CA3AF">15 / 16</text></svg>

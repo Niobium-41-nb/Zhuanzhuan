@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#FDFBF7"/>
+
+  <!-- HZAU Logo -->
+  <image href="../images/hzau-logo.png" x="1120" y="14" width="130" height="37" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/>
+  <rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/>
+
+  <!-- Title -->
+  <rect x="60" y="30" width="6" height="32" rx="3" fill="#2D6A4F"/>
+  <text x="78" y="54" font-family="'Noto Sans SC', sans-serif" font-size="28" font-weight="700" fill="#1F2937">团队分工</text>
+
+  <!-- Team cards - 5 members -->
+  <!-- 张可凡 -->
+  <rect x="60" y="90" width="230" height="290" rx="10" fill="white" stroke="#2D6A4F" stroke-width="2"/>
+  <circle cx="175" cy="140" r="32" fill="#2D6A4F"/>
+  <text x="175" y="147" text-anchor="middle" font-size="22" fill="white" font-weight="700">张</text>
+  <text x="175" y="195" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="16" font-weight="700" fill="#1F2937">张可凡（队长）</text>
+  <rect x="80" y="208" width="190" height="24" rx="4" fill="#E8F5E9"/>
+  <text x="175" y="225" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="11" fill="#2D6A4F" font-weight="600">全栈 / 项目管理 / 测试</text>
+  <text x="80" y="260" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">Docker 容器化部署</text>
+  <text x="80" y="282" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">管理后台前端开发</text>
+  <text x="80" y="304" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">Postman 接口测试</text>
+  <text x="80" y="326" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">7 份项目文档撰写</text>
+  <text x="80" y="348" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">项目进度管理</text>
+
+  <!-- 阮崇轩 -->
+  <rect x="310" y="90" width="230" height="290" rx="10" fill="white" stroke="#52B788" stroke-width="2"/>
+  <circle cx="425" cy="140" r="32" fill="#52B788"/>
+  <text x="425" y="147" text-anchor="middle" font-size="22" fill="white" font-weight="700">阮</text>
+  <text x="425" y="195" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="16" font-weight="700" fill="#1F2937">阮崇轩</text>
+  <rect x="330" y="208" width="190" height="24" rx="4" fill="#E8F5E9"/>
+  <text x="425" y="225" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="11" fill="#52B788" font-weight="600">前端开发</text>
+  <text x="330" y="260" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">Vue3 前端工程搭建</text>
+  <text x="330" y="282" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">登录/注册/找回密码</text>
+  <text x="330" y="304" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">消息通知系统</text>
+  <text x="330" y="326" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">订单详情与操作</text>
+  <text x="330" y="348" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">UI 动效与交互优化</text>
+
+  <!-- 李硕 -->
+  <rect x="560" y="90" width="230" height="290" rx="10" fill="white" stroke="#52B788" stroke-width="2"/>
+  <circle cx="675" cy="140" r="32" fill="#52B788"/>
+  <text x="675" y="147" text-anchor="middle" font-size="22" fill="white" font-weight="700">李</text>
+  <text x="675" y="195" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="16" font-weight="700" fill="#1F2937">李硕</text>
+  <rect x="580" y="208" width="190" height="24" rx="4" fill="#E8F5E9"/>
+  <text x="675" y="225" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="11" fill="#52B788" font-weight="600">前端开发</text>
+  <text x="580" y="260" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">首页与商品模块</text>
+  <text x="580" y="282" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">购物车与订单列表</text>
+  <text x="580" y="304" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">5 个管理后台页面</text>
+  <text x="580" y="326" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">ECharts 数据可视化</text>
+  <text x="580" y="348" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">217 件种子数据</text>
+
+  <!-- 刘轩霆 -->
+  <rect x="810" y="90" width="210" height="290" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/>
+  <circle cx="915" cy="140" r="32" fill="#E76F51"/>
+  <text x="915" y="147" text-anchor="middle" font-size="22" fill="white" font-weight="700">刘</text>
+  <text x="915" y="195" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="16" font-weight="700" fill="#1F2937">刘轩霆</text>
+  <rect x="830" y="208" width="170" height="24" rx="4" fill="#FFF3E0"/>
+  <text x="915" y="225" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="11" fill="#E65100" font-weight="600">后端开发 A</text>
+  <text x="830" y="260" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">用户模块 API</text>
+  <text x="830" y="282" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">商品模块 API</text>
+  <text x="830" y="304" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">Spring Security + JWT</text>
+  <text x="830" y="326" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">订单核心流程</text>
+  <text x="830" y="348" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">后台管理 API</text>
+
+  <!-- 胡欣悦 -->
+  <rect x="1040" y="90" width="210" height="290" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/>
+  <circle cx="1145" cy="140" r="32" fill="#E76F51"/>
+  <text x="1145" y="147" text-anchor="middle" font-size="22" fill="white" font-weight="700">胡</text>
+  <text x="1145" y="195" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="16" font-weight="700" fill="#1F2937">胡欣悦</text>
+  <rect x="1060" y="208" width="170" height="24" rx="4" fill="#FFF3E0"/>
+  <text x="1145" y="225" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="11" fill="#E65100" font-weight="600">后端开发 B</text>
+  <text x="1060" y="260" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">购物车模块</text>
+  <text x="1060" y="282" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">消息通知模块</text>
+  <text x="1060" y="304" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">数据统计</text>
+  <text x="1060" y="326" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">文件上传</text>
+  <text x="1060" y="348" font-family="'Noto Sans SC', sans-serif" font-size="12" fill="#6B7280">Docker 部署运维</text>
+
+  <!-- Tech stack bar -->
+  <rect x="60" y="405" width="1190" height="50" rx="8" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+  <text x="90" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" fill="#6B7280">技术栈：</text>
+  <text x="170" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#2D6A4F">Vue3</text>
+  <text x="225" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="245" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#2D6A4F">TypeScript</text>
+  <text x="330" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="350" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#2D6A4F">Element Plus</text>
+  <text x="445" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="465" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#52B788">SpringBoot 3</text>
+  <text x="570" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="590" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#52B788">MyBatis-Plus</text>
+  <text x="690" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="710" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#E76F51">MySQL</text>
+  <text x="765" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="785" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#E76F51">Redis</text>
+  <text x="835" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="855" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#E76F51">JWT</text>
+  <text x="895" y="436" font-size="8" fill="#D1D5DB">|</text>
+  <text x="915" y="436" font-family="'Noto Sans SC', sans-serif" font-size="13" font-weight="600" fill="#E76F51">Docker</text>
+
+  <!-- Page number -->
+  <rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/>
+  <text x="1240" y="705" text-anchor="end" font-family="'Noto Sans SC', sans-serif" font-size="11" fill="#9CA3AF">3 / 15</text>
+</svg>

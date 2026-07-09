@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#E76F51"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">后端开发 B</text><rect x="80" y="75" width="100" height="30" rx="6" fill="#E76F51"/><text x="130" y="96" text-anchor="middle" font-size="14" font-weight="600" fill="white">胡欣悦</text>
+<rect x="60" y="125" width="560" height="280" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/><rect x="60" y="125" width="560" height="44" rx="10" fill="#E76F51"/><rect x="60" y="149" width="560" height="20" fill="#E76F51"/><text x="340" y="153" text-anchor="middle" font-size="17" font-weight="700" fill="white">购物车与消息模块</text>
+<text x="90" y="210" font-size="16" fill="#1F2937"><tspan font-weight="700">购物车</tspan> CRUD·去重·数量调整·选中结算</text>
+<text x="90" y="242" font-size="16" fill="#1F2937"><tspan font-weight="700">站内信</tspan> 发送/接收/会话列表/标记已读/未读计数 5端点</text>
+<text x="90" y="274" font-size="16" fill="#1F2937"><tspan font-weight="700">系统通知</tspan> 列表/标记已读/未读计数 3端点</text>
+<text x="90" y="306" font-size="16" fill="#1F2937"><tspan font-weight="700">自动联动</tspan> 发消息+订单状态→自动创建通知</text>
+<text x="90" y="338" font-size="16" fill="#1F2937"><tspan font-weight="700">数据统计</tspan> 首页统计·分类树Redis缓存·后台趋势</text>
+<rect x="660" y="125" width="560" height="280" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/><rect x="660" y="125" width="560" height="44" rx="10" fill="#E76F51"/><rect x="660" y="149" width="560" height="20" fill="#E76F51"/><text x="940" y="153" text-anchor="middle" font-size="17" font-weight="700" fill="white">文件与部署运维</text>
+<text x="690" y="210" font-size="16" fill="#1F2937"><tspan font-weight="700">文件上传</tspan> MIME校验·5MB限制·Docker Volume持久化</text>
+<text x="690" y="242" font-size="16" fill="#1F2937"><tspan font-weight="700">Dockerfile</tspan> 后端多阶段构建（Maven编译+JRE运行）</text>
+<text x="690" y="274" font-size="16" fill="#1F2937"><tspan font-weight="700">前端构建</tspan> Vue3构建+Nginx部署+nginx.conf配置</text>
+<text x="690" y="306" font-size="16" fill="#1F2937"><tspan font-weight="700">初始化脚本</tspan> MySQL 4脚本自动建库+种子+索引+图片</text>
+<text x="690" y="338" font-size="16" fill="#1F2937"><tspan font-weight="700">phpMyAdmin</tspan> 数据库可视化管理工具集成</text>
+<rect x="0" y="717" width="1280" height="3" fill="#E76F51"/><text x="1230" y="705" text-anchor="end" font-size="11" fill="#9CA3AF">10 / 16</text></svg>

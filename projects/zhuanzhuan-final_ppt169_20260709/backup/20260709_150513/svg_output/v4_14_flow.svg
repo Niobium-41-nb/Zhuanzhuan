@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">数据流与通知链路</text>
+<text x="80" y="88" font-size="16" fill="#6B7280">消息·订单·通知三系统联动，自动推送，实时轮询</text>
+
+<rect x="60" y="120" width="560" height="250" rx="10" fill="white" stroke="#1B4332" stroke-width="2"/><rect x="60" y="120" width="560" height="44" rx="10" fill="#1B4332"/><rect x="60" y="144" width="560" height="20" fill="#1B4332"/><text x="340" y="148" text-anchor="middle" font-size="17" font-weight="700" fill="white">消息通知链路</text>
+<rect x="90" y="180" width="500" height="36" rx="6" fill="#E8F5E9"/><text x="340" y="204" text-anchor="middle" font-size="14" fill="#2D6A4F">用户 A 发送消息 → MessageServiceImpl.sendMessage</text>
+<text x="340" y="235" text-anchor="middle" font-size="18" fill="#2D6A4F">↓</text>
+<rect x="90" y="245" width="500" height="36" rx="6" fill="#FFF3E0"/><text x="340" y="269" text-anchor="middle" font-size="14" fill="#E65100">写入 message 表 + 自动创建 Notification「A 给你发来消息」</text>
+<text x="340" y="300" text-anchor="middle" font-size="18" fill="#E76F51">↓</text>
+<rect x="90" y="310" width="500" height="36" rx="6" fill="#E3F2FD"/><text x="340" y="334" text-anchor="middle" font-size="14" fill="#1565C0">用户 B 前端 5s 轮询拉取新消息 + 30s 轮询拉取新通知</text>
+
+<rect x="660" y="120" width="560" height="250" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/><rect x="660" y="120" width="560" height="44" rx="10" fill="#E76F51"/><rect x="660" y="144" width="560" height="20" fill="#E76F51"/><text x="940" y="148" text-anchor="middle" font-size="17" font-weight="700" fill="white">订单通知链路</text>
+<rect x="690" y="180" width="500" height="30" rx="6" fill="#E8F5E9"/><text x="940" y="200" text-anchor="middle" font-size="13" fill="#2D6A4F">买家下单 → 通知卖家「有新订单」</text>
+<text x="940" y="225" text-anchor="middle" font-size="16" fill="#E76F51">↓</text>
+<rect x="690" y="233" width="500" height="30" rx="6" fill="#FFF3E0"/><text x="940" y="253" text-anchor="middle" font-size="13" fill="#E65100">买家付款 → 通知卖家「已付款，请发货」</text>
+<text x="940" y="278" text-anchor="middle" font-size="16" fill="#E76F51">↓</text>
+<rect x="690" y="286" width="500" height="30" rx="6" fill="#FFF3E0"/><text x="940" y="306" text-anchor="middle" font-size="13" fill="#E65100">卖家发货 → 通知买家「已发货，请查收」</text>
+<text x="940" y="331" text-anchor="middle" font-size="16" fill="#E76F51">↓</text>
+<rect x="690" y="339" width="500" height="30" rx="6" fill="#E3F2FD"/><text x="940" y="359" text-anchor="middle" font-size="13" fill="#1565C0">买家收货 → 通知卖家「交易完成」</text>
+
+<rect x="60" y="395" width="1160" height="140" rx="10" fill="white" stroke="#E5E7EB"/><rect x="60" y="395" width="1160" height="44" rx="10" fill="#2D6A4F"/><rect x="60" y="419" width="1160" height="20" fill="#2D6A4F"/><text x="640" y="423" text-anchor="middle" font-size="17" font-weight="700" fill="white">技术亮点</text>
+<text x="640" y="468" text-anchor="middle" font-size="16" fill="#1F2937"><tspan font-weight="700">Token 队列刷新</tspan> — 多请求并发 401 只发一次刷新，其余排队 | <tspan font-weight="700">验证码三重防护</tspan> — 类型隔离 + 频率限制 + 防消费</text>
+<text x="640" y="500" text-anchor="middle" font-size="16" fill="#1F2937"><tspan font-weight="700">悲观锁</tspan> — selectForUpdate 防双重出售 | <tspan font-weight="700">N+1 优化</tspan> — 分类名+卖家信息 1次JOIN | <tspan font-weight="700">Docker 一键部署</tspan> — 五容器自动初始化</text>
+<rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/><text x="1230" y="705" text-anchor="end" font-size="11" fill="#9CA3AF">14 / 16</text></svg>

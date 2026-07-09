@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1B4332"/>
+      <stop offset="50%" style="stop-color:#2D6A4F"/>
+      <stop offset="100%" style="stop-color:#40916C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="720" fill="url(#bg)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="1100" cy="100" r="200" fill="rgba(255,255,255,0.03)"/>
+  <circle cx="150" cy="550" r="150" fill="rgba(255,255,255,0.04)"/>
+  <circle cx="600" cy="350" r="300" fill="rgba(255,255,255,0.02)"/>
+
+  <!-- HZAU Logo top right -->
+  <image href="../images/hzau-logo.png" x="1120" y="20" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.9"/>
+
+  <!-- Main Title -->
+  <text x="640" y="260" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="52" font-weight="900" fill="white" letter-spacing="6">转转</text>
+  <text x="640" y="320" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="22" fill="rgba(255,255,255,0.85)" letter-spacing="3">校园二手物品交易平台</text>
+
+  <!-- Divider -->
+  <line x1="540" y1="350" x2="740" y2="350" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+
+  <!-- Subtitle -->
+  <text x="640" y="400" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="18" fill="rgba(255,255,255,0.7)">软件工程实训 · 课程设计答辩</text>
+
+  <!-- Team info -->
+  <text x="640" y="470" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="16" fill="rgba(255,255,255,0.6)">
+    张可凡（队长） · 阮崇轩 · 李硕 · 刘轩霆 · 胡欣悦
+  </text>
+
+  <!-- Date -->
+  <text x="640" y="510" text-anchor="middle" font-family="'Noto Sans SC', sans-serif" font-size="14" fill="rgba(255,255,255,0.5)">2026 年 7 月</text>
+
+  <!-- Bottom line -->
+  <rect x="0" y="717" width="1280" height="3" fill="rgba(255,255,255,0.3)"/>
+</svg>

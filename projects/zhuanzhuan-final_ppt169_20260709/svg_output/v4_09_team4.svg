@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#E76F51"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">后端开发 A</text><rect x="80" y="75" width="100" height="30" rx="6" fill="#E76F51"/><text x="130" y="96" text-anchor="middle" font-size="14" font-weight="600" fill="white">刘轩霆</text>
+<rect x="60" y="125" width="560" height="280" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/><rect x="60" y="125" width="560" height="44" rx="10" fill="#E76F51"/><rect x="60" y="149" width="560" height="20" fill="#E76F51"/><text x="340" y="153" text-anchor="middle" font-size="17" font-weight="700" fill="white">安全与商品模块</text>
+<text x="90" y="210" font-size="16" fill="#1F2937"><tspan font-weight="700">安全框架</tspan> SpringSecurity+JWT·双Token·RBAC三级权限</text>
+<text x="90" y="242" font-size="16" fill="#1F2937"><tspan font-weight="700">频率限制</tspan> 登录10次/15min·验证码3次/5min（Redis）</text>
+<text x="90" y="274" font-size="16" fill="#1F2937"><tspan font-weight="700">商品API</tspan> 分页+筛选+全文搜索+N+1批量优化</text>
+<text x="90" y="306" font-size="16" fill="#1F2937"><tspan font-weight="700">保护机制</tspan> 悲观锁·自买自卖校验·浏览量控制</text>
+<text x="90" y="338" font-size="16" fill="#1F2937"><tspan font-weight="700">数据库</tspan> 13张表DDL·ENUM约束·全文索引·软删除</text>
+<rect x="660" y="125" width="560" height="280" rx="10" fill="white" stroke="#E76F51" stroke-width="2"/><rect x="660" y="125" width="560" height="44" rx="10" fill="#E76F51"/><rect x="660" y="149" width="560" height="20" fill="#E76F51"/><text x="940" y="153" text-anchor="middle" font-size="17" font-weight="700" fill="white">订单与后台 API</text>
+<text x="690" y="210" font-size="16" fill="#1F2937"><tspan font-weight="700">订单状态机</tspan> 待付款→待发货→待收货→已完成/已取消</text>
+<text x="690" y="242" font-size="16" fill="#1F2937"><tspan font-weight="700">订单日志</tspan> order_log 每次状态变更全追溯</text>
+<text x="690" y="274" font-size="16" fill="#1F2937"><tspan font-weight="700">后台API</tspan> 用户管理·商品审核·订单管理·数据统计</text>
+<text x="690" y="306" font-size="16" fill="#1F2937"><tspan font-weight="700">工程配置</tspan> pom·逻辑删除·自动填充·分页插件</text>
+<text x="690" y="338" font-size="16" fill="#1F2937"><tspan font-weight="700">文档测试</tspan> Knife4j·14单元测试·Result封装</text>
+<rect x="0" y="717" width="1280" height="3" fill="#E76F51"/><text x="1230" y="705" text-anchor="end" font-size="11" fill="#9CA3AF">9 / 16</text></svg>

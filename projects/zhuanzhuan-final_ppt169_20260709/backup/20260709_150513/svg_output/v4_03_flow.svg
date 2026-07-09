@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">核心交易流程</text><text x="80" y="88" font-size="16" fill="#6B7280">完整 C2C 闭环 — 从浏览到评价的全链路</text>
+
+<rect x="40" y="125" width="180" height="70" rx="8" fill="#E8F5E9" stroke="#2D6A4F" stroke-width="2"/><text x="130" y="155" text-anchor="middle" font-size="17" font-weight="700" fill="#2D6A4F">浏览商品</text><text x="130" y="175" text-anchor="middle" font-size="12" fill="#6B7280">搜索筛选详情</text>
+<text x="235" y="165" font-size="24" fill="#2D6A4F" font-weight="700">→</text>
+<rect x="260" y="125" width="180" height="70" rx="8" fill="#E8F5E9" stroke="#2D6A4F" stroke-width="2"/><text x="350" y="155" text-anchor="middle" font-size="17" font-weight="700" fill="#2D6A4F">联系卖家</text><text x="350" y="175" text-anchor="middle" font-size="12" fill="#6B7280">站内信实时聊天</text>
+<text x="455" y="165" font-size="24" fill="#2D6A4F" font-weight="700">→</text>
+<rect x="480" y="125" width="180" height="70" rx="8" fill="#FFF3E0" stroke="#E76F51" stroke-width="2"/><text x="570" y="155" text-anchor="middle" font-size="17" font-weight="700" fill="#E65100">下单支付</text><text x="570" y="175" text-anchor="middle" font-size="12" fill="#6B7280">选地址+模拟支付</text>
+<text x="675" y="165" font-size="24" fill="#E76F51" font-weight="700">→</text>
+<rect x="700" y="125" width="180" height="70" rx="8" fill="#FFF3E0" stroke="#E76F51" stroke-width="2"/><text x="790" y="155" text-anchor="middle" font-size="17" font-weight="700" fill="#E65100">卖家发货</text><text x="790" y="175" text-anchor="middle" font-size="12" fill="#6B7280">物流录入</text>
+<text x="895" y="165" font-size="24" fill="#E76F51" font-weight="700">→</text>
+<rect x="920" y="125" width="180" height="70" rx="8" fill="#FFF3E0" stroke="#E76F51" stroke-width="2"/><text x="1010" y="155" text-anchor="middle" font-size="17" font-weight="700" fill="#E65100">确认收货</text><text x="1010" y="175" text-anchor="middle" font-size="12" fill="#6B7280">评价打分</text>
+
+<rect x="60" y="230" width="560" height="230" rx="10" fill="white" stroke="#E5E7EB"/><rect x="60" y="230" width="560" height="42" rx="10" fill="#2D6A4F"/><rect x="60" y="252" width="560" height="20" fill="#2D6A4F"/><text x="340" y="257" text-anchor="middle" font-size="17" font-weight="700" fill="white">购买与支付</text>
+<text x="90" y="310" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#2D6A4F">选择地址</text><text x="180" y="310" font-size="15" fill="#1F2937">弹出地址选择框，默认地址高亮</text>
+<text x="90" y="340" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#2D6A4F">模拟支付</text><text x="180" y="340" font-size="15" fill="#1F2937">微信/支付宝/校园卡 → spinner处理 → 成功动画</text>
+<text x="90" y="370" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#2D6A4F">订单状态</text><text x="180" y="370" font-size="15" fill="#1F2937">可视化进度条：待付款→待发货→待收货→已完成</text>
+<text x="90" y="400" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#2D6A4F">发货</text><text x="180" y="400" font-size="15" fill="#1F2937">8 家物流公司卡片选择 + 单号录入</text>
+<text x="90" y="430" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#2D6A4F">评价</text><text x="180" y="430" font-size="15" fill="#1F2937">El-Rate 星级 + 文字评价</text>
+
+<rect x="660" y="230" width="560" height="230" rx="10" fill="white" stroke="#E5E7EB"/><rect x="660" y="230" width="560" height="42" rx="10" fill="#E76F51"/><rect x="660" y="252" width="560" height="20" fill="#E76F51"/><text x="940" y="257" text-anchor="middle" font-size="17" font-weight="700" fill="white">消息与通知</text>
+<text x="690" y="310" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#E65100">实时聊天</text><text x="790" y="310" font-size="15" fill="#1F2937">双栏布局 · 5s 自动轮询新消息</text>
+<text x="690" y="340" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#E65100">联系卖家</text><text x="790" y="340" font-size="15" fill="#1F2937">商品详情页绿色按钮 → 一键开聊</text>
+<text x="690" y="370" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#E65100">系统通知</text><text x="790" y="370" font-size="15" fill="#1F2937">铃铛图标 + Popover + 30s 轮询</text>
+<text x="690" y="400" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#E65100">自动推送</text><text x="790" y="400" font-size="15" fill="#1F2937">下单→通知卖家/付款→通知发货/发货→通知买家</text>
+<text x="690" y="430" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="700" fill="#E65100">可点击</text><text x="790" y="430" font-size="15" fill="#1F2937">点击通知直接跳转订单或聊天</text>
+
+<rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/><text x="1230" y="705" text-anchor="end" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#9CA3AF">3 / 20</text></svg>

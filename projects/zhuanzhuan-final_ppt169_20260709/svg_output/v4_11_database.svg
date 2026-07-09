@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">数据库设计</text>
+<text x="80" y="88" font-size="16" fill="#6B7280">13 张表 · InnoDB · utf8mb4 · 全文索引 · 软删除 · ENUM 约束</text>
+<rect x="60" y="115" width="200" height="50" rx="6" fill="#E8F5E9"/><text x="160" y="146" text-anchor="middle" font-size="14" font-weight="600" fill="#2D6A4F">user</text>
+<rect x="270" y="115" width="200" height="50" rx="6" fill="#E8F5E9"/><text x="370" y="146" text-anchor="middle" font-size="14" font-weight="600" fill="#2D6A4F">product</text>
+<rect x="480" y="115" width="200" height="50" rx="6" fill="#E8F5E9"/><text x="580" y="146" text-anchor="middle" font-size="14" font-weight="600" fill="#2D6A4F">category</text>
+<rect x="690" y="115" width="200" height="50" rx="6" fill="#E8F5E9"/><text x="790" y="146" text-anchor="middle" font-size="14" font-weight="600" fill="#2D6A4F">product_image</text>
+<rect x="900" y="115" width="200" height="50" rx="6" fill="#FFF3E0"/><text x="1000" y="146" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100">order</text>
+<rect x="60" y="175" width="200" height="50" rx="6" fill="#FFF3E0"/><text x="160" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100">order_log</text>
+<rect x="270" y="175" width="200" height="50" rx="6" fill="#FFF3E0"/><text x="370" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100">cart</text>
+<rect x="480" y="175" width="200" height="50" rx="6" fill="#FFF3E0"/><text x="580" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100">address</text>
+<rect x="690" y="175" width="200" height="50" rx="6" fill="#E3F2FD"/><text x="790" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0">message</text>
+<rect x="900" y="175" width="200" height="50" rx="6" fill="#E3F2FD"/><text x="1000" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#1565C0">notification</text>
+<rect x="160" y="235" width="200" height="50" rx="6" fill="#FCE4EC"/><text x="260" y="266" text-anchor="middle" font-size="14" font-weight="600" fill="#C62828">favorite</text>
+<rect x="370" y="235" width="200" height="50" rx="6" fill="#FCE4EC"/><text x="470" y="266" text-anchor="middle" font-size="14" font-weight="600" fill="#C62828">review</text>
+<rect x="580" y="235" width="200" height="50" rx="6" fill="#FCE4EC"/><text x="680" y="266" text-anchor="middle" font-size="14" font-weight="600" fill="#C62828">announcement</text>
+
+<rect x="60" y="310" width="560" height="170" rx="10" fill="white" stroke="#E5E7EB"/><rect x="60" y="310" width="560" height="44" rx="10" fill="#2D6A4F"/><rect x="60" y="334" width="560" height="20" fill="#2D6A4F"/><text x="340" y="338" text-anchor="middle" font-size="17" font-weight="700" fill="white">关键设计决策</text>
+<text x="90" y="380" font-size="16" fill="#1F2937"><tspan font-weight="700">全文索引</tspan> FULLTEXT(title,description) 商品标题+描述全文搜索</text>
+<text x="90" y="410" font-size="16" fill="#1F2937"><tspan font-weight="700">软删除</tspan> @TableLogic deleted_at 数据可恢复</text>
+<text x="90" y="440" font-size="16" fill="#1F2937"><tspan font-weight="700">字符集</tspan> utf8mb4 完整支持中文+Emoji</text>
+<text x="90" y="470" font-size="16" fill="#1F2937"><tspan font-weight="700">N+1优化</tspan> 批量加载分类名+卖家信息 1次JOIN</text>
+
+<rect x="660" y="310" width="560" height="170" rx="10" fill="white" stroke="#E5E7EB"/><rect x="660" y="310" width="560" height="44" rx="10" fill="#E76F51"/><rect x="660" y="334" width="560" height="20" fill="#E76F51"/><text x="940" y="338" text-anchor="middle" font-size="17" font-weight="700" fill="white">订单状态机</text>
+<rect x="690" y="365" width="120" height="40" rx="6" fill="#FFF3E0"/><text x="750" y="390" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100">待付款</text>
+<text x="825" y="390" font-size="18" fill="#E76F51">→</text>
+<rect x="850" y="365" width="120" height="40" rx="6" fill="#FFF3E0"/><text x="910" y="390" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100">待发货</text>
+<text x="985" y="390" font-size="18" fill="#E76F51">→</text>
+<rect x="1010" y="365" width="120" height="40" rx="6" fill="#FFF3E0"/><text x="1070" y="390" text-anchor="middle" font-size="14" font-weight="600" fill="#E65100">待收货</text>
+<text x="750" y="435" font-size="18" fill="#E76F51">→</text>
+<rect x="850" y="420" width="120" height="40" rx="6" fill="#E8F5E9"/><text x="910" y="445" text-anchor="middle" font-size="14" font-weight="600" fill="#2D6A4F">已完成</text>
+<text x="690" y="435" font-size="18" fill="#999">↘</text>
+<rect x="690" y="460" width="120" height="35" rx="6" fill="#F5F5F5"/><text x="750" y="483" text-anchor="middle" font-size="13" fill="#999">已取消</text>
+<rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/><text x="1230" y="705" text-anchor="end" font-size="11" fill="#9CA3AF">11 / 16</text></svg>

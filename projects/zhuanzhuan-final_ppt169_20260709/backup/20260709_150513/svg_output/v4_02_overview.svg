@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><defs><linearGradient id="card1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2D6A4F"/><stop offset="100%" stop-color="#1B4332"/></linearGradient></defs><rect width="1280" height="720" fill="#FDFBF7"/><image href="../images/hzau-logo.png" x="1110" y="14" width="140" height="40" preserveAspectRatio="xMaxYMid meet" opacity="0.85"/><rect x="0" y="0" width="1280" height="4" fill="#2D6A4F"/><text x="80" y="60" font-family="Noto Sans SC,sans-serif" font-size="34" font-weight="700" fill="#1F2937">项目概述</text><text x="80" y="88" font-family="Noto Sans SC,sans-serif" font-size="16" fill="#6B7280">校园 C2C 二手交易平台 — 前后端分离 · 完整交易闭环 · Docker 容器化部署</text>
+
+<rect x="60" y="115" width="270" height="100" rx="8" fill="#2D6A4F"/><text x="195" y="155" text-anchor="middle" font-size="36" font-weight="900" fill="white">26,000+</text><text x="195" y="185" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.75)">总代码行数</text>
+<rect x="345" y="115" width="270" height="100" rx="8" fill="#52B788"/><text x="480" y="155" text-anchor="middle" font-size="36" font-weight="900" fill="white">30+</text><text x="480" y="185" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.75)">REST API 端点</text>
+<rect x="630" y="115" width="270" height="100" rx="8" fill="#E76F51"/><text x="765" y="155" text-anchor="middle" font-size="36" font-weight="900" fill="white">21</text><text x="765" y="185" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.75)">前端页面</text>
+<rect x="915" y="115" width="270" height="100" rx="8" fill="#1B4332"/><text x="1050" y="155" text-anchor="middle" font-size="36" font-weight="900" fill="white">217</text><text x="1050" y="185" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.75)">商品数据</text>
+
+<rect x="60" y="245" width="560" height="220" rx="10" fill="white" stroke="#E5E7EB"/><rect x="60" y="245" width="560" height="46" rx="10" fill="#1B4332"/><rect x="60" y="271" width="560" height="20" fill="#1B4332"/><text x="340" y="274" text-anchor="middle" font-size="18" font-weight="700" fill="white">技术架构</text>
+<text x="90" y="320" font-family="Noto Sans SC,sans-serif" font-size="17" font-weight="700" fill="#2D6A4F">前端</text><text x="150" y="320" font-size="17" fill="#1F2937">Vue 3 + TypeScript + Vite 5 + Element Plus + Pinia</text>
+<text x="90" y="350" font-family="Noto Sans SC,sans-serif" font-size="17" font-weight="700" fill="#2D6A4F">后端</text><text x="150" y="350" font-size="17" fill="#1F2937">SpringBoot 3.2 + MyBatis-Plus + Security + JWT + Knife4j</text>
+<text x="90" y="380" font-family="Noto Sans SC,sans-serif" font-size="17" font-weight="700" fill="#2D6A4F">数据</text><text x="150" y="380" font-size="17" fill="#1F2937">MySQL 8.0（13表/全文索引/软删除）+ Redis 7（缓存/黑名单）</text>
+<text x="90" y="410" font-family="Noto Sans SC,sans-serif" font-size="17" font-weight="700" fill="#2D6A4F">部署</text><text x="150" y="410" font-size="17" fill="#1F2937">Docker Compose 五容器 + Nginx + 健康检查</text>
+<text x="90" y="445" font-size="14" fill="#52B788">docker-compose up -d --build  一键启动</text>
+
+<rect x="660" y="245" width="560" height="220" rx="10" fill="white" stroke="#E5E7EB"/><rect x="660" y="245" width="560" height="46" rx="10" fill="#E76F51"/><rect x="660" y="271" width="560" height="20" fill="#E76F51"/><text x="940" y="274" text-anchor="middle" font-size="18" font-weight="700" fill="white">核心功能模块</text>
+<rect x="690" y="310" width="240" height="60" rx="6" fill="#E8F5E9"/><text x="810" y="348" text-anchor="middle" font-size="15" font-weight="600" fill="#2D6A4F">用户认证</text>
+<rect x="950" y="310" width="240" height="60" rx="6" fill="#E8F5E9"/><text x="1070" y="348" text-anchor="middle" font-size="15" font-weight="600" fill="#2D6A4F">商品交易</text>
+<rect x="690" y="385" width="240" height="60" rx="6" fill="#FFF3E0"/><text x="810" y="423" text-anchor="middle" font-size="15" font-weight="600" fill="#E65100">订单管理</text>
+<rect x="950" y="385" width="240" height="60" rx="6" fill="#FFF3E0"/><text x="1070" y="423" text-anchor="middle" font-size="15" font-weight="600" fill="#E65100">消息通知</text>
+
+<rect x="60" y="490" width="1160" height="55" rx="8" fill="#E8F5E9"/><text x="640" y="525" text-anchor="middle" font-size="15" fill="#2D6A4F">7 天开发周期 · 5 人团队 · 15+ GitHub Commits · 前后端分离架构 · 7 份软件工程文档 · Docker 一键部署</text>
+
+<rect x="0" y="717" width="1280" height="3" fill="#2D6A4F"/><text x="1230" y="705" text-anchor="end" font-family="Noto Sans SC,sans-serif" font-size="11" fill="#9CA3AF">2 / 20</text></svg>
