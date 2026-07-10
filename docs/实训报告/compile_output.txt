@@ -1,0 +1,656 @@
+﻿This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex.fmt)
+ restricted \write18 enabled.
+entering extended mode
+(缁煎悎瀹炶鎶ュ憡.tex
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-01-04>
+(D:\LaTeX\tex/latex/ctex\ctexart.cls
+(D:\LaTeX\tex/latex/ctex/config\ctexbackend.cfg)
+(D:\LaTeX\tex/latex/l3kernel\expl3.sty
+(D:\LaTeX\tex/latex/l3backend\l3backend-xetex.def))
+Document Class: ctexart 2022/07/14 v2.5.10 Chinese adapter for class article (C
+TEX)
+(D:\LaTeX\tex/latex/ctex\ctexhook.sty) (D:\LaTeX\tex/latex/ctex\ctexpatch.sty)
+(D:\LaTeX\tex/latex/base\fix-cm.sty (D:\LaTeX\tex/latex/base\ts1enc.def))
+(D:\LaTeX\tex/latex/ctex/config\ctexopts.cfg)
+(D:\LaTeX\tex/latex/base\article.cls
+Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
+(D:\LaTeX\tex/latex/base\size12.clo))
+(D:\LaTeX\tex/latex/ctex/engine\ctex-engine-xetex.def
+(D:\LaTeX\tex/xelatex/xecjk\xeCJK.sty
+(D:\LaTeX\tex/latex/l3packages/xtemplate\xtemplate.sty)
+(D:\LaTeX\tex/latex/fontspec\fontspec.sty
+(D:\LaTeX\tex/latex/l3packages/xparse\xparse.sty)
+(D:\LaTeX\tex/latex/fontspec\fontspec-xetex.sty
+(D:\LaTeX\tex/latex/base\fontenc.sty) (D:\LaTeX\tex/latex/fontspec\fontspec.cfg
+))) (D:\LaTeX\tex/xelatex/xecjk\xeCJK.cfg)))
+(D:\LaTeX\tex/latex/zhnumber\zhnumber.sty
+(D:\LaTeX\tex/latex/zhnumber\zhnumber-utf8.cfg))
+(D:\LaTeX\tex/latex/ctex/scheme\ctex-scheme-chinese-article.def
+(D:\LaTeX\tex/latex/ctex/config\ctex-name-utf8.cfg))
+(D:\LaTeX\tex/latex/ctex/fontset\ctex-fontset-windows.def))
+(D:\LaTeX\tex/latex/ctex/config\ctex.cfg)
+(D:\LaTeX\tex/latex/geometry\geometry.sty
+(D:\LaTeX\tex/latex/graphics\keyval.sty) (D:\LaTeX\tex/generic/iftex\ifvtex.sty
+(D:\LaTeX\tex/generic/iftex\iftex.sty))
+(D:\LaTeX\tex/latex/geometry\geometry.cfg))
+(D:\LaTeX\tex/latex/graphics\graphicx.sty
+(D:\LaTeX\tex/latex/graphics\graphics.sty (D:\LaTeX\tex/latex/graphics\trig.sty
+) (D:\LaTeX\tex/latex/graphics-cfg\graphics.cfg)
+(D:\LaTeX\tex/latex/graphics-def\xetex.def)))
+(D:\LaTeX\tex/latex/tools\array.sty) (D:\LaTeX\tex/latex/tools\tabularx.sty)
+(D:\LaTeX\tex/latex/tools\longtable.sty)
+(D:\LaTeX\tex/latex/booktabs\booktabs.sty)
+(D:\LaTeX\tex/latex/setspace\setspace.sty)
+(D:\LaTeX\tex/latex/fancyhdr\fancyhdr.sty)
+(D:\LaTeX\tex/latex/titlesec\titlesec.sty)
+(D:\LaTeX\tex/latex/tocloft\tocloft.sty)
+(D:\LaTeX\tex/latex/hyperref\hyperref.sty
+(D:\LaTeX\tex/generic/infwarerr\infwarerr.sty)
+(D:\LaTeX\tex/latex/kvsetkeys\kvsetkeys.sty)
+(D:\LaTeX\tex/generic/kvdefinekeys\kvdefinekeys.sty)
+(D:\LaTeX\tex/generic/pdfescape\pdfescape.sty
+(D:\LaTeX\tex/generic/ltxcmds\ltxcmds.sty)
+(D:\LaTeX\tex/generic/pdftexcmds\pdftexcmds.sty))
+(D:\LaTeX\tex/latex/hycolor\hycolor.sty)
+(D:\LaTeX\tex/latex/letltxmacro\letltxmacro.sty)
+(D:\LaTeX\tex/latex/auxhook\auxhook.sty)
+(D:\LaTeX\tex/latex/hyperref\nameref.sty
+(D:\LaTeX\tex/latex/refcount\refcount.sty)
+(D:\LaTeX\tex/generic/gettitlestring\gettitlestring.sty
+(D:\LaTeX\tex/latex/kvoptions\kvoptions.sty)))
+(D:\LaTeX\tex/latex/etoolbox\etoolbox.sty)
+(D:\LaTeX\tex/latex/hyperref\pd1enc.def)
+(D:\LaTeX\tex/generic/intcalc\intcalc.sty)
+(D:\LaTeX\tex/latex/hyperref\puenc.def) (D:\LaTeX\tex/latex/url\url.sty)
+(D:\LaTeX\tex/generic/bitset\bitset.sty
+(D:\LaTeX\tex/generic/bigintcalc\bigintcalc.sty))
+(D:\LaTeX\tex/latex/base\atbegshi-ltx.sty))
+(D:\LaTeX\tex/latex/hyperref\hxetex.def
+(D:\LaTeX\tex/generic/stringenc\stringenc.sty)
+(D:\LaTeX\tex/latex/rerunfilecheck\rerunfilecheck.sty
+(D:\LaTeX\tex/generic/uniquecounter\uniquecounter.sty)))
+(D:\LaTeX\tex/latex/float\float.sty) (D:\LaTeX\tex/latex/placeins\placeins.sty)
+ (D:\LaTeX\tex/latex/enumitem\enumitem.sty)
+(D:\LaTeX\tex/latex/listings\listings.sty
+(D:\LaTeX\tex/latex/listings\lstmisc.sty)
+(D:\LaTeX\tex/latex/listings\listings.cfg))
+(D:\LaTeX\tex/xelatex/xecjk\xeCJK-listings.sty)
+(D:\LaTeX\tex/latex/xcolor\xcolor.sty
+(D:\LaTeX\tex/latex/graphics-cfg\color.cfg)
+(D:\LaTeX\tex/latex/graphics\mathcolor.ltx))
+(D:\LaTeX\tex/latex/caption\caption.sty
+(D:\LaTeX\tex/latex/caption\caption3.sty)
+(D:\LaTeX\tex/latex/caption\ltcaption.sty))
+(D:\LaTeX\tex/latex/amsmath\amsmath.sty
+For additional information on amsmath, use the `?' option.
+(D:\LaTeX\tex/latex/amsmath\amstext.sty (D:\LaTeX\tex/latex/amsmath\amsgen.sty)
+) (D:\LaTeX\tex/latex/amsmath\amsbsy.sty)
+(D:\LaTeX\tex/latex/amsmath\amsopn.sty))
+No file 缁煎悎瀹炶鎶ュ憡.aux.
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
+
+
+LaTeX Font Warning: Font shape `TU/KaiTi(0)/b/n' undefined
+(Font)              using `TU/KaiTi(0)/m/n' instead on input line 94.
+
+[1]
+No file 缁煎悎瀹炶鎶ュ憡.toc.
+[1] [2]
+
+LaTeX Warning: Reference `fig:usecase' on page 3 undefined on input line 179.
+
+[3] [4]
+
+LaTeX Warning: Reference `fig:architecture' on page 5 undefined on input line 2
+28.
+
+[5] [6]
+
+LaTeX Warning: Reference `fig:module-relation' on page 7 undefined on input lin
+e 260.
+
+
+LaTeX Warning: Reference `fig:swimlane-auth' on page 7 undefined on input line 
+272.
+
+[7]
+
+LaTeX Warning: Reference `fig:swimlane-product' on page 8 undefined on input li
+ne 284.
+
+[8]
+
+LaTeX Warning: Reference `fig:swimlane-order' on page 9 undefined on input line
+ 296.
+
+[9]
+
+LaTeX Warning: Reference `fig:swimlane-message' on page 10 undefined on input l
+ine 308.
+
+[10]
+
+LaTeX Warning: Reference `fig:swimlane-admin' on page 11 undefined on input lin
+e 320.
+
+[11]
+
+LaTeX Warning: Reference `fig:er' on page 12 undefined on input line 332.
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 353--354
+[]|\TU/lmr/m/n/10.95 username, password_hash, email,
+
+Overfull \hbox (2.5178pt too wide) in paragraph at lines 359--359
+[]|\TU/lmr/m/n/10.95 product_image| 
+
+Underfull \hbox (badness 1418) in paragraph at lines 369--370
+[]|\TU/lmr/m/n/10.95 from_user_id, to_user_id, content,
+[13] (D:\LaTeX\tex/latex/listings\lstlang1.sty) [14] [15]
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/b/n/10.95 娴?璇?
+
+Overfull \hbox (35.56369pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_REG_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 姝?甯?娉?鍐?鏂?
+
+Overfull \hbox (35.56369pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_REG_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 閲?澶?鐢?鎴?鍚?
+
+Overfull \hbox (35.56369pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_REG_003| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 楠?璇?鐮?閿?璇?
+
+Overfull \hbox (47.57585pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_LOGIN_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?鍚?瀵?鐮?
+
+Overfull \hbox (47.57585pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_LOGIN_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 瀵?鐮?閿?璇?鐧?
+
+Overfull \hbox (47.57585pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_LOGIN_003| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 宸?绂?鐢?璐?鎴?
+
+Overfull \hbox (52.06534pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_TOKEN_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 Token
+
+Overfull \hbox (48.41899pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_RESET_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 瀵?鐮?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 姝?甯?閲?缃?瀵?
+
+Overfull \hbox (38.98009pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_INFO_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 涓?浜?
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鑾?鍙?涓?浜?淇?
+
+Overfull \hbox (44.4551pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_ADDR_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鍦?鍧€
+
+Overfull \hbox (44.4551pt too wide) in paragraph at lines 512--512
+[]|\TU/lmr/m/n/10.95 USER_ADDR_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鍦?鍧€
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--512
+[]|\TU/SimSun(0)/m/n/10.95 鍒?闄?闈?鏈?浜?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/b/n/10.95 娴?璇?
+
+Overfull \hbox (37.15143pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_PUB_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 姝?甯?鍙?甯?鍟?
+
+Overfull \hbox (37.15143pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_PUB_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鏈?鐧?褰?鍙?甯?
+
+Overfull \hbox (38.52019pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_LIST_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍒?椤?鏌?璇?鍟?
+
+Overfull \hbox (59.35803pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_SEARCH_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Overfull \hbox (59.35803pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_SEARCH_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍏?閿?璇?鍏?鏂?
+
+Overfull \hbox (34.87384pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_FAV_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Overfull \hbox (34.87384pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_FAV_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 閲?澶?鏀?钘?鍚?
+
+Overfull \hbox (41.41098pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_EDIT_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍗?瀹?缂?杈?鑷?
+
+Overfull \hbox (36.39589pt too wide) in paragraph at lines 546--546
+[]|\TU/lmr/m/n/10.95 PROD_DEL_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 546--546
+[]|\TU/SimSun(0)/m/n/10.95 鍗?瀹?鍒?闄?鑷?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/b/n/10.95 娴?璇?
+
+Overfull \hbox (37.75368pt too wide) in paragraph at lines 572--572
+[]|\TU/lmr/m/n/10.95 CART_ADD_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 娣?鍔?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+\TU/SimSun(0)/m/n/10.95 璐?鐗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 姝?甯?娣?鍔?鍟?
+
+Overfull \hbox (37.75368pt too wide) in paragraph at lines 572--572
+[]|\TU/lmr/m/n/10.95 CART_ADD_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 娣?鍔?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+\TU/SimSun(0)/m/n/10.95 璐?鐗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 娣?鍔?宸?瀛?鍦?
+
+Overfull \hbox (37.60039pt too wide) in paragraph at lines 572--572
+[]|\TU/lmr/m/n/10.95 CART_LIST_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 璐?鐗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+\TU/SimSun(0)/m/n/10.95 杞?鍒?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 鏌?璇?璐?鐗?杞?
+
+Overfull \hbox (59.20473pt too wide) in paragraph at lines 572--572
+[]|\TU/lmr/m/n/10.95 CART_UPDATE_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 鏇?鏂?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 淇?鏀?璐?鐗?杞?
+
+Overfull \hbox (35.47609pt too wide) in paragraph at lines 572--572
+[]|\TU/lmr/m/n/10.95 CART_DEL_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 鍒?闄?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+\TU/SimSun(0)/m/n/10.95 璐?鐗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 572--572
+[]|\TU/SimSun(0)/m/n/10.95 鍒?闄?璐?鐗?杞?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/b/n/10.95 娴?璇?
+
+Overfull \hbox (68.18373pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_CREATE_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 鍒?寤?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 姝?甯?鍒?寤?璁?
+
+Overfull \hbox (68.18373pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_CREATE_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 鍒?寤?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?涓?瀛?鍦?
+
+Overfull \hbox (44.15944pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_PAY_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 璁?鍗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 姝?甯?瀹?鎴?鏀?
+
+Overfull \hbox (44.15944pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_PAY_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 璁?鍗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 閲?澶?鏀?浠?宸?
+
+Overfull \hbox (47.80579pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_SHIP_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 鍗?瀹?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 褰?鍏?鐗?娴?淇?
+
+Overfull \hbox (53.72974pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_RECV_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 涔?瀹?
+
+Overfull \hbox (68.63268pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_CANCEL_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 鍙?娑?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 寰?浠?娆?鐘?鎬?
+
+Overfull \hbox (68.49033pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_REVIEW_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 璁?鍗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 瀹?鎴?璁?鍗?鍚?
+
+Overfull \hbox (46.05379pt too wide) in paragraph at lines 606--606
+[]|\TU/lmr/m/n/10.95 ORDER_LOG_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 璁?鍗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 606--606
+[]|\TU/SimSun(0)/m/n/10.95 鏌?璇?璁?鍗?鎿?
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/b/n/10.95 娴?璇?
+
+Overfull \hbox (36.48349pt too wide) in paragraph at lines 634--634
+[]|\TU/lmr/m/n/10.95 MSG_SEND_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鍙?閫?
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鍙?閫?鏂?鏈?娑?
+
+Overfull \hbox (36.48349pt too wide) in paragraph at lines 634--634
+[]|\TU/lmr/m/n/10.95 MSG_SEND_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鍙?閫?
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 缁?鑷?宸?鍙?閫?
+
+Overfull \hbox (31.15085pt too wide) in paragraph at lines 634--634
+[]|\TU/lmr/m/n/10.95 MSG_LIST_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 浼?璇?
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鏌?璇?鐢?鎴?浼?
+
+Overfull \hbox (32.51959pt too wide) in paragraph at lines 634--634
+[]|\TU/lmr/m/n/10.95 MSG_HIST_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鑱?澶?
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鍒?椤?鏌?璇?鑱?
+
+Overfull \hbox (38.4545pt too wide) in paragraph at lines 634--634
+[]|\TU/lmr/m/n/10.95 MSG_READ_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 宸?璇?
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鏍?璁?娑?鎭?涓?
+
+Overfull \hbox (42.16653pt too wide) in paragraph at lines 634--634
+[]|\TU/lmr/m/n/10.95 NOTIF_LIST_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 閫?鐭?
+
+Underfull \hbox (badness 10000) in paragraph at lines 634--634
+[]|\TU/SimSun(0)/m/n/10.95 鏌?璇?绯?缁?閫?
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/b/n/10.95 娴?璇?
+
+Overfull \hbox (50.2367pt too wide) in paragraph at lines 664--664
+[]|\TU/lmr/m/n/10.95 ADMIN_USER_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鏌?璇?鎵€ 鏈?鐢?
+
+Overfull \hbox (50.2367pt too wide) in paragraph at lines 664--664
+[]|\TU/lmr/m/n/10.95 ADMIN_USER_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鐢?鎴?
+
+Underfull \hbox (badness 1960) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 绂?鐢╘TU/lmr/m/n/10.95 /\TU/SimSun(0)/m/n/10.95 鍚?鐢?鐢?
+
+Overfull \hbox (52.5143pt too wide) in paragraph at lines 664--664
+[]|\TU/lmr/m/n/10.95 ADMIN_PROD_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 瀹?鏍?閫?杩?鍟?
+
+Overfull \hbox (52.5143pt too wide) in paragraph at lines 664--664
+[]|\TU/lmr/m/n/10.95 ADMIN_PROD_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鍟?鍝?
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 瀹?鏍?椹?鍥?鍟?
+
+Overfull \hbox (60.8801pt too wide) in paragraph at lines 664--664
+[]|\TU/lmr/m/n/10.95 ADMIN_ORDER_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 璁?鍗?
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鏌?璇?鍏?閮?璁?
+
+Overfull \hbox (48.71465pt too wide) in paragraph at lines 664--664
+[]|\TU/lmr/m/n/10.95 ADMIN_STAT_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鏁?鎹?
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鏌?鐪?缁?璁?鏁?
+
+Overfull \hbox (45.05734pt too wide) in paragraph at lines 664--664
+[]|\TU/lmr/m/n/10.95 ADMIN_ANN_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鍏?鍛?
+
+Underfull \hbox (badness 10000) in paragraph at lines 664--664
+[]|\TU/SimSun(0)/m/n/10.95 鍙?甯?绯?缁?鍏?
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/SimSun(0)/b/n/10.95 娴?璇?
+
+Overfull \hbox (35.3228pt too wide) in paragraph at lines 688--688
+[]|\TU/lmr/m/n/10.95 SEC_AUTH_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/SimSun(0)/m/n/10.95 鏉?闄?
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/SimSun(0)/m/n/10.95 鏈?璁?璇?璁?闂?
+
+Overfull \hbox (35.3228pt too wide) in paragraph at lines 688--688
+[]|\TU/lmr/m/n/10.95 SEC_AUTH_002| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/SimSun(0)/m/n/10.95 鏉?闄?
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/SimSun(0)/m/n/10.95 鏅?閫?鐢?鎴?璁?
+
+Overfull \hbox (35.3228pt too wide) in paragraph at lines 688--688
+[]|\TU/lmr/m/n/10.95 SEC_AUTH_003| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/SimSun(0)/m/n/10.95 鏉?闄?
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/SimSun(0)/m/n/10.95 宸?璁?璇?鐢?鎴?
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+\TU/SimSun(0)/m/n/10.95 璁?闂?鍏?寮€ 鎺?
+
+Overfull \hbox (43.69954pt too wide) in paragraph at lines 688--688
+[]|\TU/lmr/m/n/10.95 SEC_TOKEN_001| 
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/lmr/m/n/10.95 Token
+
+Underfull \hbox (badness 6461) in paragraph at lines 688--688
+\TU/lmr/m/n/10.95 ken \TU/SimSun(0)/m/n/10.95 璁?闂?鎺?
+[16] [17] [18] [19] [20]
+Overfull \hbox (127.3875pt too wide) in paragraph at lines 725--726
+[]\TU/SimSun(0)/b/n/12 鏁?鎹?搴?绱?寮?缂?澶盶TU/SimSun(0)/m/n/12 锛殀  鏂?澧?\TU/lmr/m/n/12
+ 4 \TU/SimSun(0)/m/n/12 涓?澶?鍚?绱?寮曪紝|  鍒?鍒?浼?鍖?娑?鎭?浼?璇?鏌?璇? |锛圽TU/lmtt/m/n/12 fro
+m_user_id+to_user_id+created_at\TU/SimSun(0)/m/n/12 锛?銆亅
+[21] [22] (缁煎悎瀹炶鎶ュ憡.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `缁煎悎瀹炶鎶ュ憡.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)
+Output written on 缁煎悎瀹炶鎶ュ憡.pdf (23 pages).
+Transcript written on 缁煎悎瀹炶鎶ュ憡.log.

@@ -1,16 +1,19 @@
 \documentclass[12pt,a4paper,oneside]{ctexart}
-\usepackage[top=2.3cm, bottom=2.3cm, left=3.2cm, right=3.2cm]{geometry}
+\usepackage[top=2.0cm, bottom=2.0cm, left=2.8cm, right=2.8cm]{geometry}
 \usepackage{graphicx}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{setspace}
 \usepackage{fancyhdr}
-\usepackage{titlesec}
+\usepackage[compact]{titlesec}
 \usepackage{tocloft}
 \usepackage{hyperref}
 \usepackage{float}
+\usepackage{placeins}
 \usepackage{enumitem}
+\setlist{noitemsep, topsep=2pt, parsep=0pt, partopsep=0pt}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{caption}
@@ -33,7 +36,27 @@
 \titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
 
-\setstretch{1.5}
+\setstretch{1.35}
+
+% 紧凑布局设置
+\setlength{\parskip}{0.3ex}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 3pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{4pt}
+\setlength{\abovedisplayskip}{4pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{4pt plus 2pt minus 2pt}
+
+% 目录紧凑
+\setcounter{tocdepth}{2}
+\renewcommand{\cftbeforesecskip}{2pt}
+\renewcommand{\cftbeforesubsecskip}{2pt}
+
+% 标题紧凑
+\titlespacing{\section}{0pt}{8pt plus 2pt minus 2pt}{4pt plus 2pt}
+\titlespacing{\subsection}{0pt}{6pt plus 2pt minus 2pt}{3pt plus 2pt}
+\titlespacing{\subsubsection}{0pt}{4pt plus 2pt minus 2pt}{2pt plus 2pt}
 
 \newcommand{\covername}[1]{{\fontsize{36pt}{40pt}\selectfont\heiti #1}}
 \newcommand{\coversub}[1]{{\fontsize{18pt}{22pt}\selectfont\heiti #1}}
@@ -46,8 +69,10 @@
     frame=single,
     backgroundcolor=\color{gray!5},
     extendedchars=true,
-    xleftmargin=2em,
-    xrightmargin=2em,
+    xleftmargin=1em,
+    xrightmargin=1em,
+    aboveskip=6pt,
+    belowskip=6pt,
 }
 
 \begin{document}
@@ -55,14 +80,14 @@
 % ========== 封面 ==========
 \begin{titlepage}
 \centering
-\vspace*{2cm}
+\vspace*{1.5cm}
 \includegraphics[width=4cm]{media/logo.jpeg}
-\vspace{1cm}
+\vspace{0.6cm}
 
 \covername{综合实训报告}
-\\[0.5cm]
+\\[0.3cm]
 \coversub{转转校园二手物品交易平台设计与实现}
-\\[2cm]
+\\[1.2cm]
 
 \begin{tabular}{>{\kaishu\bfseries\large}l>{\large}l}
   \hline
@@ -113,7 +138,7 @@
 
 \subsubsection{团队组成}
 
-实训小组共5人，分工如下：
+实训小组共5人，分工如表1所示：
 
 \begin{table}[htbp]
 \centering
@@ -135,7 +160,6 @@
 李硕 & 前端开发 & 首页与商品模块、购物车与订单页面、管理后台页面、数据可视化 \\
 \hline
 \end{tabular}
-\normalsize
 \end{table}
 
 \subsubsection{开发计划}
@@ -154,13 +178,14 @@
 
 转转校园二手交易平台作为面向高校学生的C2C交易平台，主要服务三类用户角色：游客（未登录用户）、普通用户（买家和卖家双重身份）以及管理员。系统的顶层用例如图\ref{fig:usecase}所示。
 
-\begin{figure}[htbp]
+\begin{figure}[ht!]
 \centering
-\includegraphics[width=0.95\textwidth]{media/usecase_plantuml.pdf}
+\includegraphics[width=0.85\textwidth]{media/usecase_plantuml.pdf}
 \caption{系统顶层用例图}
 \label{fig:usecase}
 \end{figure}
 
+\FloatBarrier
 \subsection{功能需求}
 
 系统包含以下五大核心功能模块：
@@ -194,6 +219,7 @@
     \item \textbf{可维护性}：前后端分离架构，RESTful API规范，Knife4j自动生成接口文档，统一返回结果封装，完善的订单日志审计。
 \end{itemize}
 
+\FloatBarrier
 % ====== 第3章 系统设计 ======
 \section{系统设计}
 
@@ -201,13 +227,14 @@
 
 系统采用前后端分离的B/S架构，前端与后端通过RESTful API进行数据交互。整体架构分为四层，如图\ref{fig:architecture}所示。
 
-\begin{figure}[htbp]
+\begin{figure}[ht!]
 \centering
-\includegraphics[width=0.9\textwidth]{media/architecture.png}
+\includegraphics[width=0.82\textwidth]{media/architecture.png}
 \caption{系统体系结构图}
 \label{fig:architecture}
 \end{figure}
 
+\FloatBarrier
 \subsubsection{前端架构}
 
 前端基于Vue 3.4 + TypeScript 5.3 + Vite 5构建，采用组合式API（Composition API）开发模式。使用Element Plus 2.5提供UI组件库，Pinia 2.1（结合持久化插件pinia-plugin-persistedstate）管理全局状态，Vue Router 4.2实现路由控制，共配置21条路由，全部采用懒加载方式。Axios封装请求拦截器自动携带JWT Token，响应拦截器统一处理错误并支持Token无感自动刷新。前端构建通过unplugin-auto-import和unplugin-vue-components实现Element Plus按需自动导入，使用vite-plugin-compression开启Gzip压缩。
@@ -228,17 +255,90 @@
 
 系统采用Docker Compose编排五容器架构：Nginx（前端静态资源服务与反向代理，映射端口3000）、Spring Boot后端、MySQL 8.0数据库、Redis 7缓存以及phpMyAdmin数据库管理工具（映射端口3001）。所有服务通过内部桥接网络通信，MySQL和Redis不对外暴露端口，后端仅通过Nginx反向代理对外暴露。使用数据卷持久化MySQL数据和Redis数据，确保容器重启不丢失。
 
+\subsection{功能设计}
+
+系统五大核心功能模块之间相互协作，共同构成完整的交易闭环。模块之间的调用关系如图\ref{fig:module-relation}所示。
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.75\textwidth]{media/module-relation.png}
+\caption{功能模块关系图}
+\label{fig:module-relation}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{用户认证模块流程}
+
+用户认证模块涵盖注册、登录、Token刷新、密码找回、退出登录等核心流程。用户注册后获取JWT双Token，后续请求携带Access Token访问受保护资源，Token过期后由Refresh Token无感刷新。图\ref{fig:swimlane-auth}展示了用户认证的完整流程。
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{media/swimlane-auth.png}
+\caption{用户认证模块泳道图}
+\label{fig:swimlane-auth}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{商品管理模块流程}
+
+商品管理模块支持商品的完整生命周期——卖家发布商品后需管理员审核方可上架，买家通过搜索、分类浏览、收藏等方式发现商品。图\ref{fig:swimlane-product}展示了商品从发布到上架的跨角色协作流程。
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{media/swimlane-product.png}
+\caption{商品管理模块泳道图}
+\label{fig:swimlane-product}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{订单交易模块流程}
+
+订单交易模块实现了从购物车、下单、支付、发货、收货到评价的完整交易闭环。买卖双方围绕订单状态流转进行协作，所有状态变更均记录订单日志。图\ref{fig:swimlane-order}展示了订单交易的跨角色流程。
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.85\textwidth,height=0.6\textheight,keepaspectratio]{media/swimlane-order.png}
+\caption{订单交易模块泳道图}
+\label{fig:swimlane-order}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{消息通知模块流程}
+
+消息通知模块支持买卖双方之间的站内即时通信，以及系统向用户推送订单状态变更、审核结果等通知。图\ref{fig:swimlane-message}展示了消息发送与通知推送的流程。
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{media/swimlane-message.png}
+\caption{消息通知模块泳道图}
+\label{fig:swimlane-message}
+\end{figure}
+
+\FloatBarrier
+\subsubsection{后台管理模块流程}
+
+后台管理模块为管理员提供用户管理、商品审核、订单管理、数据统计和公告管理等全面管理功能。图\ref{fig:swimlane-admin}展示了管理员执行审核与管理的流程。
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=0.85\textwidth,height=0.65\textheight,keepaspectratio]{media/swimlane-admin.png}
+\caption{后台管理模块泳道图}
+\label{fig:swimlane-admin}
+\end{figure}
+
+\FloatBarrier
 \subsection{数据设计}
 
 系统共设计13张核心业务表，涵盖用户、商品、订单、消息等全部业务实体。表结构和关系如图\ref{fig:er}所示。
 
-\begin{figure}[htbp]
+\begin{figure}[ht!]
 \centering
-\includegraphics[width=0.95\textwidth]{media/er.pdf}
-\caption{数据库E-R图（核心表）}
+\includegraphics[width=0.85\textwidth,height=0.7\textheight,keepaspectratio]{media/er_uml.png}
+\caption{数据库UML类图（核心表）}
 \label{fig:er}
 \end{figure}
 
+\FloatBarrier
 \subsubsection{核心数据库表}
 
 \begin{table}[htbp]
@@ -246,7 +346,7 @@
 \caption{核心数据库表清单}
 \label{tab:tables}
 \small
-\begin{tabular}{|c|c|p{5cm}|}
+\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{6.5cm}|}
 \hline
 \textbf{表名} & \textbf{用途} & \textbf{关键字段} \\
 \hline
@@ -277,11 +377,11 @@ notification & 通知表 & user\_id, title, content, type \\
 announcement & 公告表 & admin\_id, title, content, status \\
 \hline
 \end{tabular}
-\normalsize
 \end{table}
 
 数据表设计特点：所有表使用InnoDB引擎和utf8mb4字符集；采用软删除策略（deleted\_at字段配合MyBatis-Plus @TableLogic）；created\_at和updated\_at通过MyMetaObjectHandler自动填充；product表含全文索引支持商品搜索；通过复合索引优化消息会话查询、未读计数、收藏排序等高频查询场景。
 
+\FloatBarrier
 % ====== 第4章 系统实现 ======
 \section{系统实现}
 
@@ -337,9 +437,9 @@ private String extractToken(HttpServletRequest request) {
 
 订单模块是整个系统的核心业务，涉及多个状态的流转和数据一致性。采用状态模式设计，每个状态变更均记录订单日志（order\_log表），关键操作（创建订单扣减库存）通过@Transactional保证原子性。此外，系统采用模拟支付流程，无需接入真实第三方支付即可完整体验交易闭环。
 
-\begin{figure}[htbp]
+\begin{figure}[ht!]
 \centering
-\includegraphics[width=0.7\textwidth]{media/order-flow.png}
+\includegraphics[width=0.62\textwidth]{media/order-flow.png}
 \caption{订单状态流转图}
 \label{fig:order-flow}
 \end{figure}
@@ -362,6 +462,7 @@ private String extractToken(HttpServletRequest request) {
 
 管理后台的数据统计模块基于ECharts实现数据可视化，包括用户增长趋势折线图、商品分类分布饼图、每日订单成交量柱状图等。后端通过SQL聚合查询获取统计数据，前端使用ECharts图表组件渲染展示。
 
+\FloatBarrier
 % ====== 第5章 系统测试 ======
 \section{系统测试}
 
@@ -371,54 +472,211 @@ private String extractToken(HttpServletRequest request) {
 
 \subsection{测试用例设计}
 
-以订单模块的核心功能为例，采用黑盒测试法设计的测试用例如表\ref{tab:testcase}所示。
+系统采用黑盒测试法，针对五大核心模块设计了共计32个测试用例，覆盖各模块的主要功能路径、异常场景和边界条件。以下按模块逐一列出。
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
-\caption{订单模块核心测试用例}
-\label{tab:testcase}
-\begin{tabular}{|p{3cm}|p{8cm}|}
+\caption{用户模块测试用例}
+\label{tab:test-user}
+\renewcommand{\arraystretch}{1.1}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{3.1cm}|p{1.0cm}|p{2.2cm}|p{0.6cm}|p{7.5cm}|}
 \hline
-\textbf{测试用例编号} & ORDER\_CORE\_001 \\
+\textbf{编号} & \textbf{测试项目} & \textbf{测试标题} & \textbf{级别} & \textbf{预期输出} \\
 \hline
-\textbf{测试项目} & 订单创建与支付流程 \\
+USER\_REG\_001 & 用户注册 & 正常注册新用户 & 高 & 注册成功，返回用户信息与Token \\
 \hline
-\textbf{测试标题} & 正常创建订单并完成支付 \\
+USER\_REG\_002 & 用户注册 & 重复用户名注册 & 高 & 返回400，提示用户名已存在 \\
 \hline
-\textbf{重要级别} & 高 \\
+USER\_REG\_003 & 用户注册 & 验证码错误注册 & 高 & 返回400，提示验证码错误 \\
 \hline
-\textbf{预置条件} & 买家已登录，商品在售且库存充足，买家有默认收货地址 \\
+USER\_LOGIN\_001 & 用户登录 & 用户名密码正确登录 & 高 & 登录成功，返回双Token \\
 \hline
-\textbf{输入} & 商品ID、数量1、收货地址ID \\
+USER\_LOGIN\_002 & 用户登录 & 密码错误登录 & 高 & 返回401，提示密码错误 \\
 \hline
-\textbf{操作步骤} & ① 调用创建订单接口；② 调用支付接口 \\
+USER\_LOGIN\_003 & 用户登录 & 已禁用账户登录 & 高 & 返回403，提示账户已禁用 \\
 \hline
-\textbf{预期输出} & 订单创建成功，状态为"待付款"；支付后状态变更为"待发货" \\
+USER\_TOKEN\_001 & Token刷新 & 正常刷新Token & 中 & 返回新的Access Token \\
+\hline
+USER\_RESET\_001 & 密码重置 & 正常重置密码 & 中 & 重置成功，可使用新密码登录 \\
+\hline
+USER\_INFO\_001 & 个人信息 & 获取个人信息 & 低 & 返回当前用户详细信息 \\
+\hline
+USER\_ADDR\_001 & 地址管理 & 新增地址（首个自动默认） & 中 & 地址添加成功，自动设为默认 \\
+\hline
+USER\_ADDR\_002 & 地址管理 & 删除非本人地址 & 中 & 返回403，无权操作 \\
+\hline
 \hline
 \end{tabular}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
-\caption{商品搜索测试用例}
-\label{tab:searchtest}
-\begin{tabular}{|p{3cm}|p{8cm}|}
+\caption{商品模块测试用例}
+\label{tab:test-product}
+\renewcommand{\arraystretch}{1.1}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{3.1cm}|p{1.0cm}|p{2.2cm}|p{0.6cm}|p{7.5cm}|}
 \hline
-\textbf{测试用例编号} & PRODUCT\_SEARCH\_001 \\
+\textbf{编号} & \textbf{测试项目} & \textbf{测试标题} & \textbf{级别} & \textbf{预期输出} \\
 \hline
-\textbf{测试项目} & 商品多条件组合搜索 \\
+PROD\_PUB\_001 & 商品发布 & 正常发布商品 & 高 & 发布成功，状态为"待审核" \\
 \hline
-\textbf{测试标题} & 按分类+价格区间+排序搜索商品 \\
+PROD\_PUB\_002 & 商品发布 & 未登录发布商品 & 高 & 返回401，提示未认证 \\
 \hline
-\textbf{重要级别} & 中 \\
+PROD\_LIST\_001 & 商品列表 & 分页查询商品列表 & 中 & 返回分页商品数据 \\
 \hline
-\textbf{预置条件} & 数据库中已存在多个分类的商品数据 \\
+PROD\_SEARCH\_001 & 商品搜索 & 按分类+价格+排序搜索 & 中 & 返回筛选排序后的商品列表 \\
 \hline
-\textbf{输入} & categoryId=1, minPrice=100, maxPrice=500, sortBy=price, order=asc \\
+PROD\_SEARCH\_002 & 商品搜索 & 关键词全文搜索 & 中 & 返回匹配关键词的商品列表 \\
 \hline
-\textbf{操作步骤} & 调用商品列表接口，传入上述参数 \\
+PROD\_FAV\_001 & 商品收藏 & 收藏商品 & 低 & 收藏成功，可查询收藏列表 \\
 \hline
-\textbf{预期输出} & 返回分类ID为1、价格在100--500元之间的商品列表，按价格升序排列 \\
+PROD\_FAV\_002 & 商品收藏 & 重复收藏同一商品 & 低 & 返回400，提示已收藏 \\
+\hline
+PROD\_EDIT\_001 & 商品编辑 & 卖家编辑自己商品 & 中 & 编辑成功，状态重置为待审核 \\
+\hline
+PROD\_DEL\_001 & 商品删除 & 卖家删除自己商品 & 中 & 删除成功（软删除） \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{购物车模块测试用例}
+\label{tab:test-cart}
+\renewcommand{\arraystretch}{1.1}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{3.1cm}|p{1.0cm}|p{2.2cm}|p{0.6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{测试项目} & \textbf{测试标题} & \textbf{级别} & \textbf{预期输出} \\
+\hline
+CART\_ADD\_001 & 添加购物车 & 正常添加商品到购物车 & 中 & 添加成功，返回购物车项 \\
+\hline
+CART\_ADD\_002 & 添加购物车 & 添加已存在的商品 & 中 & 数量增加，不重复创建 \\
+\hline
+CART\_LIST\_001 & 购物车列表 & 查询购物车列表 & 中 & 返回当前用户购物车列表 \\
+\hline
+CART\_UPDATE\_001 & 更新数量 & 修改购物车商品数量 & 低 & 更新成功 \\
+\hline
+CART\_DEL\_001 & 删除购物车项 & 删除购物车中商品 & 低 & 删除成功 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{订单模块测试用例}
+\label{tab:test-order}
+\renewcommand{\arraystretch}{1.1}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{3.1cm}|p{1.0cm}|p{2.2cm}|p{0.6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{测试项目} & \textbf{测试标题} & \textbf{级别} & \textbf{预期输出} \\
+\hline
+ORDER\_CREATE\_001 & 创建订单 & 正常创建订单 & 高 & 创建成功，状态为"待付款" \\
+\hline
+ORDER\_CREATE\_002 & 创建订单 & 商品不存在或已下架 & 高 & 返回404，商品不可购买 \\
+\hline
+ORDER\_PAY\_001 & 订单支付 & 正常完成支付 & 高 & 支付成功，状态变为"待发货" \\
+\hline
+ORDER\_PAY\_002 & 订单支付 & 重复支付已支付订单 & 中 & 返回400，订单状态异常 \\
+\hline
+ORDER\_SHIP\_001 & 卖家发货 & 录入物流信息发货 & 高 & 发货成功，状态变为"待收货" \\
+\hline
+ORDER\_RECV\_001 & 买家收货 & 确认收货 & 高 & 收货成功，状态变为"已完成" \\
+\hline
+ORDER\_CANCEL\_001 & 取消订单 & 待付款状态取消订单 & 中 & 取消成功，状态变为"已取消" \\
+\hline
+ORDER\_REVIEW\_001 & 订单评价 & 完成订单后评价 & 中 & 评价成功，状态变为"已评价" \\
+\hline
+ORDER\_LOG\_001 & 订单日志 & 查询订单操作日志 & 低 & 返回订单状态变更记录 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{消息模块测试用例}
+\label{tab:test-message}
+\renewcommand{\arraystretch}{1.1}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{3.1cm}|p{1.0cm}|p{2.2cm}|p{0.6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{测试项目} & \textbf{测试标题} & \textbf{级别} & \textbf{预期输出} \\
+\hline
+MSG\_SEND\_001 & 发送消息 & 发送文本消息 & 中 & 消息发送成功 \\
+\hline
+MSG\_SEND\_002 & 发送消息 & 给自己发送消息 & 低 & 发送成功（或提示不允许） \\
+\hline
+MSG\_LIST\_001 & 会话列表 & 查询用户会话列表 & 中 & 返回所有会话及最后一条消息 \\
+\hline
+MSG\_HIST\_001 & 聊天记录 & 分页查询聊天记录 & 中 & 返回分页消息记录 \\
+\hline
+MSG\_READ\_001 & 已读标记 & 标记消息为已读 & 低 & 标记成功，未读数减少 \\
+\hline
+NOTIF\_LIST\_001 & 通知列表 & 查询系统通知列表 & 低 & 返回通知列表 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{后台管理模块测试用例}
+\label{tab:test-admin}
+\renewcommand{\arraystretch}{1.1}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{3.1cm}|p{1.0cm}|p{2.2cm}|p{0.6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{测试项目} & \textbf{测试标题} & \textbf{级别} & \textbf{预期输出} \\
+\hline
+ADMIN\_USER\_001 & 用户管理 & 查询所有用户列表 & 中 & 返回分页用户列表 \\
+\hline
+ADMIN\_USER\_002 & 用户管理 & 禁用/启用用户 & 中 & 用户状态更新成功 \\
+\hline
+ADMIN\_PROD\_001 & 商品审核 & 审核通过商品 & 高 & 审核通过，商品状态变更为"在售" \\
+\hline
+ADMIN\_PROD\_002 & 商品审核 & 审核驳回商品 & 高 & 驳回成功，商品返回"审核不通过" \\
+\hline
+ADMIN\_ORDER\_001 & 订单管理 & 查询全部订单 & 中 & 返回分页订单列表 \\
+\hline
+ADMIN\_STAT\_001 & 数据统计 & 查看统计数据 & 低 & 返回用户量、商品量、成交量等统计 \\
+\hline
+ADMIN\_ANN\_001 & 公告管理 & 发布系统公告 & 低 & 公告发布成功，用户可查看 \\
+\hline
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{安全模块测试用例}
+\label{tab:test-security}
+\renewcommand{\arraystretch}{1.1}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{3.1cm}|p{1.0cm}|p{2.2cm}|p{0.6cm}|p{7.5cm}|}
+\hline
+\textbf{编号} & \textbf{测试项目} & \textbf{测试标题} & \textbf{级别} & \textbf{预期输出} \\
+\hline
+SEC\_AUTH\_001 & 权限控制 & 未认证访问需认证接口 & 高 & 返回401未认证 \\
+\hline
+SEC\_AUTH\_002 & 权限控制 & 普通用户访问管理接口 & 高 & 返回403无权限 \\
+\hline
+SEC\_AUTH\_003 & 权限控制 & 已认证用户访问公开接口 & 高 & 返回正常数据 \\
+\hline
+SEC\_TOKEN\_001 & Token校验 & 使用过期Token访问接口 & 高 & 返回401 Token过期 \\
+\hline
 \hline
 \end{tabular}
 \end{table}
@@ -457,7 +715,7 @@ private String extractToken(HttpServletRequest request) {
 \begin{enumerate}[nosep]
     \item \textbf{N+1查询问题}：商品列表每页加载41条SQL语句，通过批量加载分类和卖家信息优化至3条SQL，性能提升约13倍。
     \item \textbf{SQL注入漏洞}：`ProductMapper.xml`中排序字段直接拼接参数，改为白名单校验机制，仅允许预定义字段参与排序。
-    \item \textbf{数据库索引缺失}：新增4个复合索引优化消息会话查询（from\_user\_id+to\_user\_id+created\_at）、未读计数（to\_user\_id+is\_read）、收藏排序（user\_id+created\_at）和卖家商品筛选（user\_id+status）。
+    \item \textbf{数据库索引缺失}：新增4个复合索引，分别优化消息会话查询（\texttt{from\_user\_id+to\_user\_id+created\_at}）、未读计数（\texttt{to\_user\_id+is\_read}）、收藏排序（\texttt{user\_id+created\_at}）和卖家商品筛选（\texttt{user\_id+status}）。
     \item \textbf{逻辑错误}：`countProductByUser()`查错表，修正为正确的Mapper方法。
 \end{enumerate}
 

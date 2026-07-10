@@ -1,0 +1,55 @@
+@startuml
+!theme plain
+skinparam defaultFontName Microsoft YaHei
+skinparam activity {
+  BorderColor #333
+  BackgroundColor #FEFEFE
+  FontColor #000
+}
+skinparam swimlane {
+  BorderColor #555
+  BorderThickness 2
+  FontColor #000
+  FontSize 14
+  FontStyle bold
+}
+skinparam arrow {
+  Color #444
+  FontColor #444
+}
+
+title 消息与通知模块泳道图
+
+|#FFF3E0|用户A（买家/卖家）|
+start
+:查看商品详情;
+:点击"联系卖家/买家";
+:输入消息内容;
+:发送消息;
+|#E8F0FE|系统后端|
+:创建消息记录（状态: 未读）;
+if (接收方在线?) then (是)
+  :实时推送消息;
+else (否)
+  :存储为离线消息;
+endif
+:更新会话未读计数;
+
+|#FFECEE|用户B（买家/卖家）|
+:查看会话列表;
+:获取未读消息数;
+:进入会话;
+:读取消息内容;
+|#E8F0FE|系统后端|
+:标记消息为已读;
+:更新未读计数;
+
+|#E8F0FE|系统后端（通知）|
+:订单状态变更/审核结果;
+:创建系统通知记录;
+:推送通知给目标用户;
+|#FFF3E0|用户|
+:查看通知列表;
+:标记通知已读;
+stop
+@enduml

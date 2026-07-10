@@ -1,0 +1,69 @@
+@startuml
+!theme plain
+skinparam defaultFontName Microsoft YaHei
+skinparam activity {
+  BorderColor #333
+  BackgroundColor #FEFEFE
+  FontColor #000
+}
+skinparam swimlane {
+  BorderColor #555
+  BorderThickness 2
+  FontColor #000
+  FontSize 14
+  FontStyle bold
+}
+skinparam arrow {
+  Color #444
+  FontColor #444
+}
+
+title 后台管理模块泳道图
+
+|#FFECEE|管理员|
+start
+:登录后台管理系统;
+
+repeat
+  :选择管理功能;
+  fork
+    :用户管理;
+    :查看用户列表;
+    :搜索/筛选用户;
+    if (需操作?) then (禁用)
+      :禁用用户账户;
+    else (启用)
+      :启用用户账户;
+    endif
+  fork again
+    :商品审核;
+    :查看待审核列表;
+    :查看商品详情;
+    if (合规?) then (通过)
+      :商品上架;
+      :通知卖家;
+    else (驳回)
+      :填写驳回原因;
+      :退回商品;
+      :通知卖家;
+    endif
+  fork again
+    :订单管理;
+    :按状态/单号查询;
+    :查看订单详情;
+    :处理异常状态（可选）;
+  fork again
+    :数据统计;
+    :查看用户增长趋势;
+    :查看商品分类分布;
+    :查看订单成交量;
+  fork again
+    :公告管理;
+    :编写公告内容;
+    :发布公告;
+  end fork
+repeat while (继续管理?) is (是)
+->否;
+:退出管理系统;
+stop
+@enduml

@@ -1,0 +1,61 @@
+@startuml
+!theme plain
+skinparam defaultFontName Microsoft YaHei
+skinparam component {
+  BorderColor #333
+  BackgroundColor #F8F9FA
+  FontColor #000
+  FontSize 16
+  FontStyle bold
+}
+skinparam interface {
+  BorderColor #555
+  FontColor #444
+}
+skinparam arrow {
+  Color #444
+  FontColor #444
+  FontSize 11
+}
+skinparam rectangle {
+  BorderColor #888
+  BorderStyle dashed
+  BorderThickness 1.5
+  FontColor #000
+  FontSize 14
+  FontStyle bold
+}
+
+title 系统功能模块关系图
+
+rectangle "转转校园二手交易平台" {
+
+  [用户管理模块] as UserModule
+  [商品管理模块] as ProductModule
+  [购物车模块] as CartModule
+  [订单交易模块] as OrderModule
+  [消息通知模块] as MessageModule
+  [后台管理模块] as AdminModule
+
+}
+
+' 依赖关系
+UserModule --> ProductModule : 卖家发布商品
+UserModule --> CartModule : 买家管理购物车
+UserModule --> OrderModule : 买家/卖家交易
+UserModule --> MessageModule : 用户间通信
+
+ProductModule --> OrderModule : 商品被下单
+ProductModule --> CartModule : 商品被加入购物车
+
+CartModule --> OrderModule : 购物车结算生成订单
+
+OrderModule --> MessageModule : 订单状态变更通知
+ProductModule --> MessageModule : 审核结果通知
+
+AdminModule --> UserModule : 管理用户
+AdminModule --> ProductModule : 审核商品
+AdminModule --> OrderModule : 管理订单
+AdminModule --> MessageModule : 发送系统通知
+
+@enduml

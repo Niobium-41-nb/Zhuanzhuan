@@ -1,0 +1,62 @@
+@startuml
+!theme plain
+skinparam defaultFontName Microsoft YaHei
+skinparam activity {
+  BorderColor #333
+  BackgroundColor #FEFEFE
+  FontColor #000
+}
+skinparam swimlane {
+  BorderColor #555
+  BorderThickness 2
+  FontColor #000
+  FontSize 14
+  FontStyle bold
+}
+skinparam arrow {
+  Color #444
+  FontColor #444
+}
+
+title 商品管理模块泳道图
+
+|#FFF3E0|卖家|
+start
+:登录系统;
+:填写商品信息（标题/描述/价格/成色/图片）;
+:选择分类;
+:提交审核;
+|#E8F0FE|系统后端|
+:创建商品记录（状态: 待审核）;
+:通知管理员有新商品待审核;
+|#FFECEE|管理员|
+:查看待审核商品列表;
+:审核商品信息;
+if (审核通过?) then (是)
+  :更新商品状态为"在售";
+  :通知卖家审核通过;
+else (否)
+  :填写驳回原因;
+  :更新商品状态为"审核不通过";
+  :通知卖家驳回原因;
+endif
+
+|#FFF3E0|买家|
+:浏览商品列表;
+:按分类/价格/成色筛选;
+if (有关键词?) then (是)
+  :全文索引搜索;
+else (否)
+endif
+:查看商品详情;
+:收藏商品（可选）;
+|#FFF3E0|卖家|
+:管理我的商品;
+:编辑商品信息;
+if (需要编辑?) then (是)
+  :提交编辑;
+  :状态重置为"待审核";
+else
+endif
+stop
+@enduml

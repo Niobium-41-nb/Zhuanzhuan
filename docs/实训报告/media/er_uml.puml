@@ -1,0 +1,265 @@
+@startuml
+!theme plain
+skinparam defaultFontName Microsoft YaHei
+skinparam class {
+  BorderColor #333
+  ArrowColor #444
+  FontColor #000
+  BackgroundColor #FEFEFE
+}
+skinparam package {
+  BorderColor #888
+  BorderStyle dashed
+  BorderThickness 1.5
+  FontColor #000
+  FontSize 14
+  FontStyle bold
+}
+skinparam note {
+  BorderColor #aaa
+  FontColor #444
+}
+
+title 数据库UML类图（核心表）
+
+' ========== 实体定义 ==========
+
+class User {
+  - id: BIGINT (PK)
+  - username: VARCHAR(50) {unique}
+  - password_hash: VARCHAR(255)
+  - email: VARCHAR(100) {unique}
+  - phone: VARCHAR(20) {unique}
+  - avatar: VARCHAR(255)
+  - nickname: VARCHAR(50)
+  - bio: VARCHAR(200)
+  - gender: TINYINT
+  - role: ENUM('user','admin')
+  - credit_score: INT
+  - status: TINYINT
+  - last_login_at: DATETIME
+  - created_at: DATETIME
+  - updated_at: DATETIME
+  - deleted_at: DATETIME
+  ..
+  + register()
+  + login()
+  + updateProfile()
+  + changePassword()
+}
+
+class Category {
+  - id: BIGINT (PK)
+  - name: VARCHAR(50)
+  - parent_id: BIGINT (FK)
+  - level: INT
+  - icon: VARCHAR(255)
+  - sort_order: INT
+  - created_at: DATETIME
+  - updated_at: DATETIME
+  - deleted_at: DATETIME
+  ..
+  + getChildren()
+  + getParent()
+}
+
+class Product {
+  - id: BIGINT (PK)
+  - user_id: BIGINT (FK)
+  - category_id: BIGINT (FK)
+  - title: VARCHAR(100)
+  - description: TEXT
+  - price: DECIMAL(10,2)
+  - original_price: DECIMAL(10,2)
+  - condition: ENUM
+  - status: ENUM
+  - view_count: INT
+  - favorite_count: INT
+  - images: TEXT
+  - created_at: DATETIME
+  - updated_at: DATETIME
+  - deleted_at: DATETIME
+  ..
+  + publish()
+  + update()
+  + delete()
+  + search()
+}
+
+class ProductImage {
+  - id: BIGINT (PK)
+  - product_id: BIGINT (FK)
+  - url: VARCHAR(255)
+  - sort_order: INT
+  - created_at: DATETIME
+}
+
+class Address {
+  - id: BIGINT (PK)
+  - user_id: BIGINT (FK)
+  - receiver: VARCHAR(50)
+  - phone: VARCHAR(20)
+  - province: VARCHAR(50)
+  - city: VARCHAR(50)
+  - district: VARCHAR(50)
+  - detail: VARCHAR(200)
+  - is_default: TINYINT
+  - created_at: DATETIME
+  - updated_at: DATETIME
+  - deleted_at: DATETIME
+}
+
+class Cart {
+  - id: BIGINT (PK)
+  - user_id: BIGINT (FK)
+  - product_id: BIGINT (FK)
+  - quantity: INT
+  - created_at: DATETIME
+  - updated_at: DATETIME
+}
+
+class Order {
+  - id: BIGINT (PK)
+  - order_no: VARCHAR(32) {unique}
+  - buyer_id: BIGINT (FK)
+  - seller_id: BIGINT (FK)
+  - product_id: BIGINT (FK)
+  - quantity: INT
+  - total_price: DECIMAL(10,2)
+  - status: ENUM
+  - address_snapshot: TEXT
+  - payment_method: VARCHAR(50)
+  - paid_at: DATETIME
+  - shipped_at: DATETIME
+  - received_at: DATETIME
+  - created_at: DATETIME
+  - updated_at: DATETIME
+  - deleted_at: DATETIME
+  ..
+  + create()
+  + pay()
+  + ship()
+  + receive()
+  + cancel()
+}
+
+class OrderLog {
+  - id: BIGINT (PK)
+  - order_id: BIGINT (FK)
+  - from_status: VARCHAR(20)
+  - to_status: VARCHAR(20)
+  - operator: VARCHAR(50)
+  - remark: VARCHAR(500)
+  - created_at: DATETIME
+}
+
+class Favorite {
+  - id: BIGINT (PK)
+  - user_id: BIGINT (FK)
+  - product_id: BIGINT (FK)
+  - created_at: DATETIME
+}
+
+class Review {
+  - id: BIGINT (PK)
+  - order_id: BIGINT (FK)
+  - from_user_id: BIGINT (FK)
+  - to_user_id: BIGINT (FK)
+  - rating: TINYINT
+  - content: TEXT
+  - created_at: DATETIME
+  - deleted_at: DATETIME
+}
+
+class Message {
+  - id: BIGINT (PK)
+  - from_user_id: BIGINT (FK)
+  - to_user_id: BIGINT (FK)
+  - content: TEXT
+  - type: ENUM('text','image')
+  - is_read: TINYINT
+  - created_at: DATETIME
+}
+
+class Notification {
+  - id: BIGINT (PK)
+  - user_id: BIGINT (FK)
+  - title: VARCHAR(100)
+  - content: TEXT
+  - type: ENUM
+  - is_read: TINYINT
+  - related_id: BIGINT
+  - created_at: DATETIME
+}
+
+class Announcement {
+  - id: BIGINT (PK)
+  - admin_id: BIGINT (FK)
+  - title: VARCHAR(100)
+  - content: TEXT
+  - status: ENUM('draft','published')
+  - created_at: DATETIME
+  - updated_at: DATETIME
+  - deleted_at: DATETIME
+}
+
+' ========== 关联关系 ==========
+
+' User → Address (1:N)
+User "1" -- "0..*" Address : 拥有
+
+' User → Product (1:N)
+User "1" -- "0..*" Product : 发布
+
+' User → Favorite (1:N)
+User "1" -- "0..*" Favorite : 收藏
+
+' User → Cart (1:N)
+User "1" -- "0..*" Cart : 拥有
+
+' User → Order as Buyer (1:N)
+User "1" -- "0..*" Order : 购买
+
+' User → Order as Seller (1:N)
+User "1" -- "0..*" Order : 出售
+
+' User → Review (1:N)
+User "1" -- "0..*" Review : 评价
+
+' User → Message as Sender (1:N)
+User "1" -- "0..*" Message : 发送
+
+' User → Message as Receiver (1:N)
+User "1" -- "0..*" Message : 接收
+
+' User → Notification (1:N)
+User "1" -- "0..*" Notification : 接收
+
+' User → Announcement (1:N)
+User "1" -- "0..*" Announcement : 发布
+
+' Category → Product (1:N)
+Category "1" -- "0..*" Product : 包含
+
+' Category → Category (self-ref 1:N)
+Category "1" -- "0..*" Category : 父子分类
+
+' Product → ProductImage (1:N)
+Product "1" -- "0..*" ProductImage : 包含
+
+' Product → Favorite (1:N)
+Product "1" -- "0..*" Favorite : 被收藏
+
+' Product → Cart (1:N)
+Product "1" -- "0..*" Cart : 被加入
+
+' Product → Order (1:N)
+Product "1" -- "0..*" Order : 被购买
+
+' Order → OrderLog (1:N)
+Order "1" -- "0..*" OrderLog : 记录
+
+' Order → Review (1:1)
+Order "1" -- "0..1" Review : 评价
+
+@enduml

@@ -1,0 +1,65 @@
+@startuml
+!theme plain
+skinparam defaultFontName Microsoft YaHei
+skinparam activity {
+  BorderColor #333
+  BackgroundColor #FEFEFE
+  FontColor #000
+}
+skinparam swimlane {
+  BorderColor #555
+  BorderThickness 2
+  FontColor #000
+  FontSize 14
+  FontStyle bold
+}
+skinparam arrow {
+  Color #444
+  FontColor #444
+}
+
+title 用户认证模块泳道图
+
+|#E8F0FE|游客或用户|
+start
+:访问系统;
+:填写注册信息（用户名/邮箱/手机号）;
+:输入验证码;
+|#FFF3E0|系统后端|
+:验证码校验;
+if (验证码正确?) then (是)
+  :创建用户（BCrypt加密密码）;
+  :生成JWT双Token（Access+Refresh）;
+  :返回Token及用户信息;
+else (否)
+  :返回错误提示;
+  stop
+endif
+
+|#E8F0FE|游客或用户|
+:携带Token访问资源;
+|#FFF3E0|系统后端|
+:JWT认证过滤器校验Token;
+if (Token有效?) then (是，检查黑名单)
+  if (Token在黑名单?) then (否)
+    :解析用户ID与角色;
+    :设置SecurityContext;
+    :执行请求逻辑;
+    :返回请求结果;
+  else (是)
+    :返回401未认证;
+    stop
+  endif
+else (Token无效或过期)
+  :返回401未认证;
+  stop
+endif
+
+|#E8F0FE|游客或用户|
+:安全退出;
+|#FFF3E0|系统后端|
+:将Token加入Redis黑名单;
+:清除SecurityContext;
+:返回退出成功;
+stop
+@enduml

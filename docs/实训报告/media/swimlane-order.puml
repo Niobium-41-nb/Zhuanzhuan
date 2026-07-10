@@ -1,0 +1,71 @@
+@startuml
+!theme plain
+skinparam defaultFontName Microsoft YaHei
+skinparam activity {
+  BorderColor #333
+  BackgroundColor #FEFEFE
+  FontColor #000
+}
+skinparam swimlane {
+  BorderColor #555
+  BorderThickness 2
+  FontColor #000
+  FontSize 14
+  FontStyle bold
+}
+skinparam arrow {
+  Color #444
+  FontColor #444
+}
+
+title 订单交易模块泳道图
+
+|#FFF3E0|买家|
+start
+:浏览商品;
+:将商品加入购物车;
+:查看购物车;
+:选择商品提交订单;
+:选择收货地址;
+|#E8F0FE|系统后端|
+:创建订单（状态: 待付款）;
+:扣减商品库存;
+:记录订单日志;
+|#FFF3E0|买家|
+:执行模拟支付;
+|#E8F0FE|系统后端|
+:校验支付请求;
+if (支付成功?) then (是)
+  :更新订单状态为"待发货";
+  :记录支付时间;
+  :通知卖家有新订单;
+else (否)
+  :返回支付失败提示;
+  stop
+endif
+
+|#FFECEE|卖家|
+:查看待发货订单;
+:录入物流信息;
+:确认发货;
+|#E8F0FE|系统后端|
+:更新订单状态为"待收货";
+:记录发货时间;
+:通知买家已发货;
+
+|#FFF3E0|买家|
+:收到商品;
+:确认收货;
+|#E8F0FE|系统后端|
+:更新订单状态为"已完成";
+:记录收货时间;
+
+|#FFF3E0|买家|
+:对交易进行评价;
+:提交评分与评论;
+|#E8F0FE|系统后端|
+:创建评价记录;
+:更新订单状态为"已评价";
+:更新卖家信誉分;
+stop
+@enduml
