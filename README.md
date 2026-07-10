@@ -81,7 +81,7 @@ zhuanzhuan/
 
 ### 第一步：克隆项目
 
-```bash
+```powershell
 git clone https://github.com/Niobium-41-nb/Zhuanzhuan.git
 cd Zhuanzhuan
 ```
@@ -90,8 +90,8 @@ cd Zhuanzhuan
 
 将 `.env.example` 复制为 `.env`，并根据需要修改配置：
 
-```bash
-cp .env.example .env
+```powershell
+copy .env.example .env
 ```
 
 > **生产环境必须修改以下敏感配置：**
@@ -99,24 +99,26 @@ cp .env.example .env
 > | 变量 | 说明 | 生成建议 |
 > |------|------|----------|
 > | `JWT_SECRET` | JWT 签名密钥 | `openssl rand -base64 32` |
-> | `MYSQL_ROOT_PASSWORD` | MySQL root 密码 | 设置强密码 |
-> | `REDIS_PASSWORD` | Redis 密码 | 设置强密码 |
+| `MYSQL_ROOT_PASSWORD` | MySQL root 密码 | 设置强密码（默认 `root123`，仅限开发环境） |
+| `REDIS_PASSWORD` | Redis 密码 | 设置强密码（默认 `redis123`） |
 >
 > 邮件服务（`MAIL_*`）如需使用验证码功能才需配置，可暂不修改。
+>
+> 腾讯云 COS（`COS_*`）用于图片存储，如不配置则使用本地上传。
 
 ### 第三步：一键启动
 
 ```bash
 # 构建并启动所有服务
-docker-compose up -d --build
+docker compose up -d --build
 
 # 查看运行状态
-docker-compose ps
+docker compose ps
 
 # 首次启动等待约 30 秒，等待 MySQL 初始化完成
 # 可通过以下命令查看初始化进度：
-docker-compose logs --tail=50 mysql
-docker-compose logs --tail=50 backend
+docker compose logs --tail=50 mysql
+docker compose logs --tail=50 backend
 ```
 
 ### 第四步：访问服务
@@ -132,6 +134,125 @@ docker-compose logs --tail=50 backend
 |--------|------|------|------|
 | `admin` | `admin123` | 管理员 | 可访问管理后台 `/admin` |
 | `testuser` | `admin123` | 普通用户 | 可发布/购买商品 |
+| `xiaoming` | `admin123` | 普通用户 | 另有 `zhangdaxia`、`lilyflower`、`sophia_wang` 等 15 个预置用户 |
+
+---
+
+## 🐳 Docker 手动部署（不使用 Docker Compose）
+
+如果系统未安装 Docker Compose，或需要单独管理各容器，可使用以下 `docker run` 命令逐步部署。
+
+### 1. 创建 Docker 网络
+
+```bash
+docker network create zhuanzhuan-net
+```
+
+### 2. 启动 MySQL
+
+```bash
+docker run -d \
+  --name zhuanzhuan-mysql \
+  --network zhuanzhuan-net \
+  -e MYSQL_ROOT_PASSWORD=root123 \
+  -e MYSQL_DATABASE=zhuanzhuan \
+  -e MYSQL_USER=zhuanzhuan \
+  -e MYSQL_PASSWORD=zhuanzhuan123 \
+  -v mysql_data:/var/lib/mysql \
+  -v /e/Zhuanzhuan/deploy/mysql/my.cnf:/etc/mysql/conf.d/my.cnf \
+  -v /e/Zhuanzhuan/deploy/mysql/02-seed-data.sql:/docker-entrypoint-initdb.d/seed.sql \
+  mysql:8.0
+```
+
+> MySQL 启动时自动执行 `02-seed-data.sql` 初始化表结构和种子数据。等待约 20 秒后即可就绪。
+
+### 3. 启动 Redis
+
+```bash
+docker run -d \
+  --name zhuanzhuan-redis \
+  --network zhuanzhuan-net \
+  -e REDIS_PASSWORD=redis123 \
+  -v redis_data:/data \
+  -v /e/Zhuanzhuan/deploy/redis/redis.conf:/usr/local/etc/redis/redis.conf \
+  redis:7-alpine redis-server /usr/local/etc/redis/redis.conf
+```
+
+### 4. 构建并启动后端
+
+```bash
+# 构建后端镜像
+cd /e/Zhuanzhuan/zhuanzhuan-backend
+docker build -t zhuanzhuan-backend .
+
+# 启动后端容器
+docker run -d \
+  --name zhuanzhuan-backend \
+  --network zhuanzhuan-net \
+  -p 8080:8080 \
+  -e MYSQL_ROOT_PASSWORD=root123 \
+  -e REDIS_PASSWORD=redis123 \
+  -e JWT_SECRET=cbqFwXbkNh01dTpTHEi3D+FDfpwqFMMU4zmdW8CXMUQ= \
+  -v upload_data:/app/uploads \
+  zhuanzhuan-backend
+```
+
+### 5. 构建并启动前端（含 Nginx）
+
+```bash
+# 构建前端镜像
+cd /e/Zhuanzhuan/zhuanzhuan-frontend
+docker build -t zhuanzhuan-frontend .
+
+# 启动前端 + Nginx 反向代理
+docker run -d \
+  --name zhuanzhuan-frontend \
+  --network zhuanzhuan-net \
+  -p 3000:80 \
+  zhuanzhuan-frontend
+```
+
+### 6. （可选）启动 phpMyAdmin
+
+```bash
+docker run -d \
+  --name zhuanzhuan-phpmyadmin \
+  --network zhuanzhuan-net \
+  -e PMA_HOST=zhuanzhuan-mysql \
+  -e PMA_PORT=3306 \
+  -e UPLOAD_LIMIT=64M \
+  -p 3001:80 \
+  phpmyadmin:latest
+```
+
+### 7. 验证部署
+
+```bash
+# 查看所有容器状态
+docker ps
+
+# 查看后端日志
+docker logs zhuanzhuan-backend
+
+# 确认服务正常
+curl http://localhost:3000/api/v1/index/recommend
+```
+
+### 8. 停止与清理
+
+```bash
+# 停止所有容器
+docker stop zhuanzhuan-frontend zhuanzhuan-backend zhuanzhuan-redis zhuanzhuan-mysql
+
+# 删除容器（保留数据卷）
+docker rm zhuanzhuan-frontend zhuanzhuan-backend zhuanzhuan-redis zhuanzhuan-mysql
+
+# 完全清理（⚠️ 会删除数据库数据）
+docker stop zhuanzhuan-phpmyadmin
+docker rm zhuanzhuan-phpmyadmin
+docker volume rm mysql_data redis_data upload_data
+docker network rm zhuanzhuan-net
+```
 
 ---
 
@@ -344,10 +465,10 @@ npm run dev
 
 ```bash
 # 只启动 MySQL 和 Redis，不启动应用服务
-docker-compose up -d mysql redis
+docker compose up -d mysql redis
 
 # 等待 MySQL 就绪（约 30 秒，通过 SQL 脚本自动初始化数据库和测试数据）
-docker-compose logs --tail=10 mysql
+docker compose logs --tail=10 mysql
 ```
 
 #### 方式二：使用本地安装的服务
@@ -383,8 +504,8 @@ java -jar target/zhuanzhuan-backend-1.0.0.jar
 
 > **注意：** 本地开发默认连接 `localhost:3306` 的 MySQL 和 `localhost:6379` 的 Redis。
 > 可在 `application-dev.yml` 中修改数据库/Redis 连接信息，或通过环境变量覆盖：
-> ```bash
-> MYSQL_ROOT_PASSWORD=your_password REDIS_PASSWORD=your_password mvn spring-boot:run
+> ```powershell
+> $env:MYSQL_ROOT_PASSWORD="your_password"; $env:REDIS_PASSWORD="your_password"; mvn spring-boot:run
 > ```
 
 启动成功后，后端 API 访问地址：http://localhost:8080
@@ -413,25 +534,25 @@ Vite 开发服务器已配置代理（`vite.config.ts`），会自动将 `/api` 
 
 ```bash
 # 全部重新构建
-docker-compose up -d --build
+docker compose up -d --build
 
 # 仅构建并重启后端
-docker-compose up -d --build backend
+docker compose up -d --build backend
 
 # 仅构建并重启前端
-docker-compose up -d --build frontend
+docker compose up -d --build frontend
 
 # 查看实时日志
-docker-compose logs -f
+docker compose logs -f
 
 # 查看指定服务日志（最近 100 行）
-docker-compose logs --tail=100 backend
+docker compose logs --tail=100 backend
 
 # 停止所有服务
-docker-compose down
+docker compose down
 
 # 停止并删除所有数据卷（⚠️ 会清空数据库和上传文件）
-docker-compose down -v
+docker compose down -v
 ```
 
 ### 本地环境
@@ -473,8 +594,8 @@ npm run test:watch  # 监听模式
 
 | 测试 | 数量 | 覆盖内容 |
 |------|------|---------|
-| 后端单元测试 | 14 | Result/JWT/UserService/应用上下文 |
-| 前端单元测试 | 8 | 工具函数/组件渲染/API 格式 |
+| 后端单元测试 | 37 | Result/JWT/UserService/AddressService/控制器集成 |
+| 前端单元测试 | 13 | 认证工具/组件渲染/API 格式/Pinia Store |
 
 ---
 
@@ -482,27 +603,22 @@ npm run test:watch  # 监听模式
 
 ### 内置数据
 
-项目包含预设的测试数据（20 件商品、3 个公告、3 条订单等），首次启动时通过 SQL 脚本自动初始化。如果使用 Docker Compose，MySQL 容器启动时即自动导入 `docs/数据库设计/zhuanzhuan.sql`。
+Docker 首次启动时通过 `deploy/mysql/` 下的 SQL 脚本自动初始化数据库，包含以下预设数据：
 
-### 数据生成工具
+| 数据 | 数量 |
+|------|:---:|
+| 用户 | 18 个（含 1 管理员 + 17 普通用户） |
+| 商品 | 49 个（覆盖手机、电脑、平板、耳机、书籍等分类） |
+| 分类 | 25 个（6 个一级 + 19 个二级分类） |
+| 收藏 | 16 条 |
+| 公告 | 1 条 |
 
-`scripts/scraper.py` 可生成大量测试数据：
+### 图片生成工具
+
+`gen_images.py` 可为商品生成占位图片：
 
 ```bash
-cd scripts
-
-# 安装依赖
-pip install requests beautifulsoup4 pymysql
-
-# 生成 30 条带图片的商品并导入数据库
-python3 scraper.py --count 30 --images-dir ../test-data -o /tmp/data.sql
-docker exec -i zhuanzhuan-mysql mysql -uroot -proot123 zhuanzhuan < /tmp/data.sql
-
-# 指定卖家用户 ID
-python3 scraper.py --count 10 --user-id 2 --images-dir ../test-data -o data.sql
-
-# 指定随机种子（可复现数据）
-python3 scraper.py --seed 42 --images-dir ../test-data -o data.sql
+python gen_images.py
 ```
 
 ---
