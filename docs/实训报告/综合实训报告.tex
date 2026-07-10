@@ -105,9 +105,9 @@
 
 \subsection{实训内容}
 
-本项目"转转"是一个面向高校学生的C2C二手物品交易Web应用系统，旨在解决校园闲置物品循环利用的需求。系统采用前后端分离架构，后端基于Spring Boot 3 + Spring Security + JWT实现RESTful API，前端基于Vue 3 + TypeScript + Element Plus构建用户界面，使用MySQL存储业务数据，Redis提供缓存加速。
+本项目"转转"是一个面向高校学生的C2C二手物品交易Web应用系统，旨在解决校园闲置物品循环利用的需求。系统采用前后端分离架构，后端基于Spring Boot 3.2.0 + Spring Security + JWT + MyBatis-Plus 3.5.5实现RESTful API，JDK 17运行环境；前端基于Vue 3.4 + TypeScript 5.3 + Vite 5 + Element Plus 2.5构建用户界面；使用MySQL 8.0存储业务数据，Redis 7提供缓存加速，全容器化Docker Compose一键部署。
 
-系统实现了完整的交易闭环，包括用户管理、商品管理、购物车与订单交易、站内消息沟通、后台管理五大核心模块，并提供Docker Compose一键部署方案。
+系统实现了完整的交易闭环，包括用户管理、商品管理、购物车与订单交易、站内消息沟通、后台管理五大核心模块，共计60余个RESTful API和20余个前端页面，并提供Docker Compose一键部署方案。
 
 \subsection{实训安排}
 
@@ -188,10 +188,10 @@
 \subsection{非功能需求}
 
 \begin{itemize}[nosep]
-    \item \textbf{安全性}：密码BCrypt加密存储，JWT无状态认证，接口RBAC权限控制，SQL注入防护（参数白名单校验），XSS防护。
-    \item \textbf{性能}：Redis缓存热点商品数据，数据库复合索引优化，N+1查询问题修复，前端Gzip压缩与路由懒加载。
-    \item \textbf{可用性}：响应式UI设计，统一异常处理与友好的错误提示，Token自动刷新机制保证会话连续性。
-    \item \textbf{可维护性}：前后端分离架构，RESTful API规范，统一返回结果封装，完善的订单日志审计。
+    \item \textbf{安全性}：密码BCrypt加密存储，JWT双Token无状态认证，接口RBAC权限控制，SQL注入防护（排序字段白名单校验），Nginx安全响应头配置（X-Frame-Options/XSS-Protection/Content-Type-Options），API限流防护（全局30r/s、登录接口10r/m）。
+    \item \textbf{性能}：Redis缓存验证码、黑名单Token及热点商品数据，数据库4个复合索引优化高频查询，N+1查询问题修复，前端Gzip压缩与路由懒加载。
+    \item \textbf{可用性}：响应式UI设计兼容移动端与桌面端，统一异常处理与友好的错误提示，Token自动刷新机制保证会话连续性，Docker Compose一键部署与恢复。
+    \item \textbf{可维护性}：前后端分离架构，RESTful API规范，Knife4j自动生成接口文档，统一返回结果封装，完善的订单日志审计。
 \end{itemize}
 
 % ====== 第3章 系统设计 ======
@@ -210,23 +210,23 @@
 
 \subsubsection{前端架构}
 
-前端基于Vue 3 + TypeScript + Vite构建，采用组合式API开发模式。使用Element Plus提供UI组件，Pinia管理全局状态，Vue Router实现路由控制。Axios封装请求拦截器自动携带JWT Token，响应拦截器统一处理错误并支持Token自动刷新。前端构建通过Vite插件实现Element Plus按需导入、Gzip压缩和代码分割。
+前端基于Vue 3.4 + TypeScript 5.3 + Vite 5构建，采用组合式API（Composition API）开发模式。使用Element Plus 2.5提供UI组件库，Pinia 2.1（结合持久化插件pinia-plugin-persistedstate）管理全局状态，Vue Router 4.2实现路由控制，共配置21条路由，全部采用懒加载方式。Axios封装请求拦截器自动携带JWT Token，响应拦截器统一处理错误并支持Token无感自动刷新。前端构建通过unplugin-auto-import和unplugin-vue-components实现Element Plus按需自动导入，使用vite-plugin-compression开启Gzip压缩。
 
 \subsubsection{后端架构}
 
-后端采用Spring Boot 3 + MyBatis-Plus + Spring Security技术栈，遵循经典的三层架构设计：
+后端采用Spring Boot 3.2.0 + MyBatis-Plus 3.5.5 + Spring Security技术栈，JDK 17运行环境，遵循经典的三层架构设计：
 
 \begin{itemize}[nosep]
-    \item \textbf{Controller层}：接收HTTP请求，参数校验，调用Service层处理业务，返回统一封装的Result对象。
+    \item \textbf{Controller层}：接收HTTP请求，参数校验，调用Service层处理业务，返回统一封装的Result对象。API文档通过Knife4j（Swagger增强）自动生成。
     \item \textbf{Service层}：业务逻辑处理，包括用户认证、商品管理、订单流转、消息通信等核心业务。
-    \item \textbf{DAO层}：基于MyBatis-Plus操作数据库，支持Lambda查询和分页插件。
+    \item \textbf{DAO层}：基于MyBatis-Plus操作数据库，支持LambdaQueryWrapper动态条件查询和MyBatis-Plus分页插件。
 \end{itemize}
 
-安全方面，Spring Security配置为无状态会话模式，通过JwtAuthenticationFilter拦截请求，从请求头提取Token解析用户信息并设置SecurityContext。Redis用于缓存验证码、黑名单Token、热点商品数据等。
+安全方面，Spring Security配置为无状态会话模式，通过JwtAuthenticationFilter拦截请求，从请求头提取Token，验证有效性并检查Redis黑名单后设置SecurityContext。项目使用Hutool工具库（5.8.25）提供通用工具方法，Lombok简化实体代码。
 
 \subsubsection{部署架构}
 
-系统采用Docker Compose编排四容器架构：Nginx（前端静态资源服务与反向代理）、Spring Boot后端、MySQL 8.0数据库、Redis 7缓存。所有服务通过内部网络通信，MySQL和Redis不对外暴露端口，后端仅通过Nginx反向代理对外暴露。
+系统采用Docker Compose编排五容器架构：Nginx（前端静态资源服务与反向代理，映射端口3000）、Spring Boot后端、MySQL 8.0数据库、Redis 7缓存以及phpMyAdmin数据库管理工具（映射端口3001）。所有服务通过内部桥接网络通信，MySQL和Redis不对外暴露端口，后端仅通过Nginx反向代理对外暴露。使用数据卷持久化MySQL数据和Redis数据，确保容器重启不丢失。
 
 \subsection{数据设计}
 
@@ -292,29 +292,50 @@ announcement & 公告表 & admin\_id, title, content, status \\
 \begin{lstlisting}[caption=JWT认证过滤器核心逻辑, language=Java]
 @Override
 protected void doFilterInternal(HttpServletRequest request,
-        HttpServletResponse response, FilterChain chain) {
-    String authHeader = request.getHeader("Authorization");
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-        String token = authHeader.substring(7);
+        HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
+    String token = extractToken(request);
+    if (StringUtils.hasText(token) && jwtUtil.validateToken(token)
+            && !jwtUtil.isRefreshToken(token)) {
+        Long userId = jwtUtil.getUserIdFromToken(token);
         // check blacklist
-        if (redisTemplate.hasKey("blacklist:token:" + 
-                jwtUtil.getId(token))) {
-            chain.doFilter(request, response);
+        String tokenId = jwtUtil.getTokenId(token);
+        if (tokenId != null && Boolean.TRUE.equals(
+                redisTemplate.hasKey("blacklist:token:" + tokenId))) {
+            filterChain.doFilter(request, response);
             return;
         }
-        // parse token and set authentication
-        Claims claims = jwtUtil.parseToken(token);
-        SecurityContextHolder.getContext().setAuthentication(
-            new UsernamePasswordAuthenticationToken(
-                claims.getSubject(), null, authorities));
+        // reload user from database for role verification
+        User user = userMapper.selectById(userId);
+        if (user == null || user.getStatus() == 0) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        // set authentication with DB role
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                    userId, null,
+                    Collections.singletonList(
+                        () -> "ROLE_" + user.getRole().toUpperCase()));
+        SecurityContextHolder.getContext()
+                .setAuthentication(authentication);
     }
-    chain.doFilter(request, response);
+    filterChain.doFilter(request, response);
+}
+
+private String extractToken(HttpServletRequest request) {
+    String bearerToken = request.getHeader("Authorization");
+    if (StringUtils.hasText(bearerToken)
+            && bearerToken.startsWith("Bearer ")) {
+        return bearerToken.substring(7);
+    }
+    return null;
 }
 \end{lstlisting}
 
 \subsection{订单状态流转引擎}
 
-订单模块是整个系统的核心业务，涉及多个状态的流转和数据一致性。采用状态模式设计，每个状态变更均记录日志，关键操作（创建订单扣减库存）通过@Transactional保证原子性。
+订单模块是整个系统的核心业务，涉及多个状态的流转和数据一致性。采用状态模式设计，每个状态变更均记录订单日志（order\_log表），关键操作（创建订单扣减库存）通过@Transactional保证原子性。此外，系统采用模拟支付流程，无需接入真实第三方支付即可完整体验交易闭环。
 
 \begin{figure}[htbp]
 \centering
@@ -406,7 +427,7 @@ protected void doFilterInternal(HttpServletRequest request,
 
 \subsubsection{单元测试}
 
-后端共完成14个单元测试，覆盖Result工具类、JwtUtil工具类、UserServiceImpl、AddressServiceImpl以及Controller集成测试；前端共完成8个单元测试，覆盖auth工具函数、组件渲染、Result数据格式以及Pinia Store。全部22个测试均通过，成功率100\%。
+后端共完成37个单元测试，覆盖Result工具类（7个）、JwtUtil工具类（3个）、UserServiceImpl（16个）、AddressServiceImpl（8个）、Controller集成测试（2个）以及上下文加载测试（1个）；前端共完成13个单元测试，覆盖auth认证工具函数（3个）、组件渲染（2个）、Result数据格式（3个）以及Pinia Store状态管理（5个）。全部50个测试均通过，成功率100\%。
 
 \begin{table}[H]
 \centering
@@ -416,11 +437,11 @@ protected void doFilterInternal(HttpServletRequest request,
 \hline
 \textbf{测试范围} & \textbf{测试数} & \textbf{通过} & \textbf{通过率} \\
 \hline
-后端单元测试 & 14 & 14 & 100\% \\
+后端单元测试 & 37 & 37 & 100\% \\
 \hline
-前端单元测试 & 8 & 8 & 100\% \\
+前端单元测试 & 13 & 13 & 100\% \\
 \hline
-\textbf{总计} & \textbf{22} & \textbf{22} & \textbf{100\%} \\
+\textbf{总计} & \textbf{50} & \textbf{50} & \textbf{100\%} \\
 \hline
 \end{tabular}
 \end{table}
@@ -435,8 +456,8 @@ protected void doFilterInternal(HttpServletRequest request,
 
 \begin{enumerate}[nosep]
     \item \textbf{N+1查询问题}：商品列表每页加载41条SQL语句，通过批量加载分类和卖家信息优化至3条SQL，性能提升约13倍。
-    \item \textbf{SQL注入漏洞}：`ProductMapper.xml`中排序字段直接拼接参数，改为白名单校验机制。
-    \item \textbf{数据库索引缺失}：新增4个复合索引优化消息会话查询、未读计数、收藏排序和卖家商品筛选。
+    \item \textbf{SQL注入漏洞}：`ProductMapper.xml`中排序字段直接拼接参数，改为白名单校验机制，仅允许预定义字段参与排序。
+    \item \textbf{数据库索引缺失}：新增4个复合索引优化消息会话查询（from\_user\_id+to\_user\_id+created\_at）、未读计数（to\_user\_id+is\_read）、收藏排序（user\_id+created\_at）和卖家商品筛选（user\_id+status）。
     \item \textbf{逻辑错误}：`countProductByUser()`查错表，修正为正确的Mapper方法。
 \end{enumerate}
 
@@ -445,7 +466,7 @@ protected void doFilterInternal(HttpServletRequest request,
 
 \subsection{结论}
 
-经过为期一周的集中开发与测试，"转转"校园二手物品交易平台已成功实现全部预设功能。系统基于Spring Boot 3 + Vue 3前后端分离架构，实现了用户管理、商品管理、购物车与订单交易、站内消息通信、后台管理五大核心模块，共计60+个RESTful API和15个前端页面。系统通过了22个单元测试和全量Postman接口测试，成功率为100\%，并已通过Docker Compose实现一键部署。
+经过为期一周的集中开发与测试，"转转"校园二手物品交易平台已成功实现全部预设功能。系统基于Spring Boot 3.2.0 + Vue 3.4前后端分离架构，实现了用户管理、商品管理、购物车与订单交易、站内消息通信、后台管理五大核心模块，共计60余个RESTful API和23个前端页面（21条路由）。系统通过了50个单元测试（后端37个、前端13个）和全量Postman接口测试，成功率为100\%，并已通过Docker Compose实现五容器一键部署。
 
 项目的核心成果包括：实现了基于JWT双Token机制的安全认证体系，保障了接口访问安全；设计了完整的订单状态流转引擎，支持从下单到评价的全流程闭环；构建了基于Redis的缓存加速机制，提升了系统响应性能；同时修复了N+1查询、SQL注入等关键质量和安全问题。
 
@@ -478,12 +499,14 @@ protected void doFilterInternal(HttpServletRequest request,
 
 \begin{enumerate}[nosep]
     \item 尤雨溪. Vue.js 3设计与实现[M]. 北京: 人民邮电出版社, 2023.
-    \item Walls C. SpringBoot实战[M]. 第4版. 北京: 人民邮电出版社, 2022.
+    \item Walls C. Spring Boot实战[M]. 第4版. 北京: 人民邮电出版社, 2022.
     \item Widenius M. MySQL必知必会[M]. 北京: 人民邮电出版社, 2020.
     \item 黄健宏. Redis设计与实现[M]. 北京: 机械工业出版社, 2014.
     \item Richardson L, Ruby S. RESTful Web APIs[M]. O'Reilly Media, 2013.
     \item 王松. Spring Boot整合开发实战[M]. 北京: 清华大学出版社, 2023.
     \item 张卫朋. Vue.js 3从入门到精通[M]. 北京: 人民邮电出版社, 2024.
+    \item 孙宏明. MyBatis-Plus从入门到精通[M]. 北京: 清华大学出版社, 2023.
+    \item 李刚. 轻量级Java EE企业应用实战[M]. 第6版. 北京: 电子工业出版社, 2024.
 \end{enumerate}
 
 \end{document}
