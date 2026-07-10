@@ -76,6 +76,8 @@ Thumbs.db
 *.ipr
 .vscode/
 .settings/
+.github/
+.claude/
 .project
 .classpath
 .factorypath
